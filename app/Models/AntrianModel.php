@@ -18,7 +18,9 @@ class AntrianModel extends Model
         'no_antrian',
         'no_rm',
         'id_poli',
-        'status'
+        'status',
+        'created_at',
+        'updated_at'
     ];
 
     protected bool $allowEmptyInserts = false;

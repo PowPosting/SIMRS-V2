@@ -18,6 +18,9 @@
                     <p class="text-muted">Silakan menuju ke Nurse Station untuk pemeriksaan awal</p>
                     <hr>
                     <div class="mt-4">
+                        <a href="<?= base_url('exportword/antrian/' . $no_antrian) ?>" class="btn btn-success mr-2" target="_blank">
+                            <i class="fas fa-print mr-1"></i> Cetak Nomor Antrian
+                        </a>
                         <a href="<?= base_url('admisi/registrasi-pasien') ?>" class="btn btn-outline-primary mr-2">
                             <i class="fas fa-user-plus mr-1"></i> Daftar Pasien Baru
                         </a>

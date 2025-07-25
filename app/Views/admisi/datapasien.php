@@ -42,7 +42,13 @@
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="icon-bg-primary rounded-circle p-2 d-flex align-items-center justify-content-center">
-                                                    <i class="fas fa-user text-primary"></i>
+                                                    <?php if (isset($p['jenis_kelamin']) && strtoupper($p['jenis_kelamin']) == 'L'): ?>
+                                                        <i class="fas fa-mars" style="color:#1781FF;"></i>
+                                                    <?php elseif (isset($p['jenis_kelamin']) && strtoupper($p['jenis_kelamin']) == 'P'): ?>
+                                                        <i class="fas fa-venus" style="color:#e61e1e;"></i>
+                                                    <?php else: ?>
+                                                        <i class="fas fa-user text-primary"></i>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div>
                                                     <div class="fw-semibold"><?= esc($p['nama_lengkap']) ?></div>
@@ -134,6 +140,38 @@
 </div>
 
 <script>
+// Fitur pencarian tabel pasien
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[name="table_search"]');
+    var searchBtn = document.querySelector('.input-group button[type="submit"]');
+    var table = document.querySelector('table.table');
+    if (!searchInput || !table) return;
+
+    function filterTable() {
+        var keyword = searchInput.value.toLowerCase();
+        var rows = table.querySelectorAll('tbody tr');
+        rows.forEach(function(row) {
+            var nama = row.querySelector('td:nth-child(2) .fw-semibold');
+            var noRM = row.querySelector('td:nth-child(2) small');
+            var text = '';
+            if (nama) text += nama.textContent.toLowerCase();
+            if (noRM) text += ' ' + noRM.textContent.toLowerCase();
+            if (text.includes(keyword)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            filterTable();
+        });
+    }
+});
 var deletePasienId = null;
 
 function editPasien(pasienId) {
@@ -190,75 +228,121 @@ document.getElementById('btnConfirmDelete').addEventListener('click', function()
 
 // Fungsi untuk menampilkan modal detail pasien
 function lihatDetail(pasienId) {
+    //
     // Optional: tampilkan loading di modal
     $('#modalDetailPasienBaru').modal('show');
     // Kosongkan dulu isi modal
     isiModalDetailPasien({});
     // Ambil data pasien via AJAX
-    fetch('<?= base_url('shared/get-detail-pasien') ?>/' + pasienId, {
+    var url = '<?= base_url('admisi/get-detail-pasien') ?>/' + pasienId;
+    console.log('[DEBUG] Fetch URL:', url);
+    fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('[DEBUG] Response status:', response.status);
+        return response.json();
+    })
     .then(data => {
-        if (data.success && data.data) {
-            isiModalDetailPasien(data.data);
+        console.log('[DEBUG] Data diterima:', data);
+        if (data.pasien) {
+            // Gabungkan data pasien utama dengan alamat, kontak, info medis, info tambahan (ambil index 0 jika ada)
+            var p = data.pasien || {};
+            if (Array.isArray(data.alamat) && data.alamat.length > 0) {
+                Object.assign(p, data.alamat[0]);
+            }
+            if (Array.isArray(data.kontak) && data.kontak.length > 0) {
+                Object.assign(p, data.kontak[0]);
+            }
+            if (Array.isArray(data.info_medis) && data.info_medis.length > 0) {
+                Object.assign(p, data.info_medis[0]);
+            }
+            if (Array.isArray(data.info_tambahan) && data.info_tambahan.length > 0) {
+                Object.assign(p, data.info_tambahan[0]);
+            }
+            isiModalDetailPasien(p);
         } else {
-            alert('Data pasien tidak ditemukan!');
+            // alert('[DEBUG] Data pasien tidak ditemukan! Response: ' + JSON.stringify(data));
         }
     })
     .catch(error => {
-        alert('Gagal mengambil data pasien!');
+        console.error('[DEBUG] Error fetch:', error);
+        alert('[DEBUG] Gagal mengambil data pasien! Error: ' + error);
     });
 }
 
 // Fungsi untuk mengisi data modal detail pasien
 function isiModalDetailPasien(p) {
     p = p || {};
+    // Debug: tampilkan seluruh objek hasil response backend ke console browser
+    console.log('Detail pasien response:', p);
+    // Log khusus info medis & tambahan
+    console.log('Info Medis:', p.golongan_darah);
+    console.log('Info Tambahan:', {
+        agama: p.agama,
+        pendidikan_terakhir: p.pendidikan_terakhir,
+        pekerjaan: p.pekerjaan,
+        kewarganegaraan: p.kewarganegaraan,
+        suku: p.suku
+    });
+
+    // Helper format tanggal (YYYY-MM-DD ke DD-MM-YYYY)
+    function formatTanggal(tgl) {
+        if (!tgl) return '-';
+        var arr = tgl.split('-');
+        if (arr.length === 3) return arr[2] + '-' + arr[1] + '-' + arr[0];
+        return tgl;
+    }
+    // Set foto identitas (panggil fungsi di modal)
+    if (typeof setFotoIdentitasModal === 'function') {
+        setFotoIdentitasModal(p.foto_identitas || '');
+    }
     // Header
-    document.getElementById('detail_no_rm').textContent = p.no_rekam_medis || '-';
-    document.getElementById('detail_nama').textContent = p.nama_lengkap || '-';
-
+    function safeSet(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+        } else {
+            console.warn('[DEBUG] Element id not found:', id);
+        }
+    }
+    safeSet('detail_no_rm', p.no_rekam_medis || '-');
+    safeSet('detail_nama', p.nama_lengkap || '-');
     // Identitas Pasien
-    document.getElementById('detail_no_rm2').textContent = p.no_rekam_medis || '-';
-    document.getElementById('detail_no_identitas').textContent = p.nomor_identitas || '-';
-    document.getElementById('detail_status_aktif').textContent = p.status_aktif_text || '-';
-    document.getElementById('detail_nama2').textContent = p.nama_lengkap || '-';
-    document.getElementById('detail_title').textContent = p.title || '-';
-    document.getElementById('detail_jk2').textContent = p.jenis_kelamin_text || '-';
-    document.getElementById('detail_ttl').textContent = (p.tempat_lahir ? p.tempat_lahir + ', ' : '') + (p.tanggal_lahir_formatted || '-');
-    document.getElementById('detail_umur').textContent = (p.umur ? p.umur.tahun + ' Tahun ' + (p.umur.bulan || 0) + ' Bulan ' + (p.umur.hari || 0) + ' Hari' : '-');
-    document.getElementById('detail_status_perkawinan').textContent = p.status_perkawinan || '-';
-
+    safeSet('detail_no_rm2', p.no_rekam_medis || '-');
+    safeSet('detail_no_identitas', p.nomor_identitas || '-');
+    safeSet('detail_status_aktif', p.status_aktif || '-');
+    safeSet('detail_nama2', p.nama_lengkap || '-');
+    safeSet('detail_title', p.title || '-');
+    safeSet('detail_jk2', p.jenis_kelamin || '-');
+    safeSet('detail_ttl', (p.tempat_lahir ? p.tempat_lahir + ', ' : '') + formatTanggal(p.tanggal_lahir));
+    safeSet('detail_status_perkawinan', p.status_perkawinan || '-');
     // Alamat Pasien
-    document.getElementById('detail_alamat').textContent = p.alamat_lengkap || '-';
-    document.getElementById('detail_kelurahan').textContent = p.kelurahan || '-';
-    document.getElementById('detail_kecamatan').textContent = p.kecamatan || '-';
-    document.getElementById('detail_kabupaten').textContent = p.kabupaten_kota || '-';
-    document.getElementById('detail_provinsi').textContent = p.provinsi || '-';
-    document.getElementById('detail_kode_pos').textContent = p.kode_pos || '-';
-
+    safeSet('detail_alamat', p.alamat_lengkap || '-');
+    safeSet('detail_kelurahan', p.kelurahan || '-');
+    safeSet('detail_kecamatan', p.kecamatan || '-');
+    safeSet('detail_kabupaten', p.kabupaten_kota || '-');
+    safeSet('detail_provinsi', p.provinsi || '-');
+    safeSet('detail_kode_pos', p.kode_pos || '-');
     // Kontak Darurat
-    document.getElementById('detail_nama_kontak_darurat').textContent = p.nama_kontak_darurat || '-';
-    document.getElementById('detail_hubungan_kontak_darurat').textContent = p.hubungan_kontak_darurat || '-';
-    document.getElementById('detail_nomor_hp_kontak_darurat').textContent = p.nomor_hp_kontak_darurat || '-';
-    document.getElementById('detail_alamat_kontak_darurat').textContent = p.alamat_kontak_darurat || '-';
-
+    safeSet('detail_nama_kontak_darurat', p.nama_kontak || '-');
+    safeSet('detail_hubungan_kontak_darurat', p.hubungan || '-');
+    safeSet('detail_nomor_hp_kontak_darurat', p.nomor_hp || '-');
+    safeSet('detail_alamat_kontak_darurat', p.alamat || '-');
     // Informasi Medis
-    document.getElementById('detail_golongan_darah').textContent = p.golongan_darah || '-';
-
+    safeSet('detail_golongan_darah', p.golongan_darah || '-');
     // Informasi Tambahan
-    document.getElementById('detail_agama').textContent = p.agama || '-';
-    document.getElementById('detail_pendidikan_terakhir').textContent = p.pendidikan_terakhir || '-';
-    document.getElementById('detail_pekerjaan').textContent = p.pekerjaan || '-';
-    document.getElementById('detail_kewarganegaraan').textContent = p.kewarganegaraan || '-';
-    document.getElementById('detail_suku').textContent = p.suku || '-';
-    document.getElementById('detail_bahasa').textContent = p.bahasa || '-';
+    safeSet('detail_agama', p.agama || '-');
+    safeSet('detail_pendidikan_terakhir', p.pendidikan_terakhir || '-');
+    safeSet('detail_pekerjaan', p.pekerjaan || '-');
+    safeSet('detail_kewarganegaraan', p.kewarganegaraan || '-');
+    safeSet('detail_suku', p.suku || '-');
 }
-}
+
 </script>
 
 <?= $this->endSection() ?>

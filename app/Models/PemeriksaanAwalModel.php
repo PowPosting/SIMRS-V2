@@ -11,7 +11,7 @@ class PemeriksaanAwalModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
-    protected $allowedFields = ['id_antrian', 'tekanan_darah', 'suhu_tubuh', 'berat_badan', 'tinggi_badan', 'keluhan'];
+    protected $allowedFields = ['id_antrian', 'tekanan_darah', 'detak_jantung', 'suhu_tubuh','pernafasan', 'berat_badan', 'tinggi_badan', 'keluhan'];
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';

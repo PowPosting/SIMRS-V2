@@ -1,0 +1,33 @@
+Surat Keterangan Identitas Pasien
+
+Nama Pasien: ${nama}
+No. RM: ${no_rm}
+Nomor Identitas: ${no_identitas}
+Status Aktif: ${status_aktif}
+Nama Lengkap: ${nama_lengkap}
+Gelar: ${gelar}
+Jenis Kelamin: ${jenis_kelamin}
+Tempat, Tanggal Lahir: ${ttl}
+Status Perkawinan: ${status_perkawinan}
+Alamat Lengkap: ${alamat}
+Kelurahan: ${kelurahan}
+Kecamatan: ${kecamatan}
+Kabupaten/Kota: ${kabupaten}
+Provinsi: ${provinsi}
+Kode Pos: ${kode_pos}
+Nama Kontak Darurat: ${nama_kontak_darurat}
+Hubungan Kontak Darurat: ${hubungan_kontak_darurat}
+No HP Kontak Darurat: ${nomor_hp_kontak_darurat}
+Alamat Kontak Darurat: ${alamat_kontak_darurat}
+Golongan Darah: ${golongan_darah}
+Agama: ${agama}
+Pendidikan: ${pendidikan}
+Pekerjaan: ${pekerjaan}
+Kewarganegaraan: ${kewarganegaraan}
+Suku: ${suku}
+
+Tanggal Cetak: ${tanggal_cetak}
+
+---
+
+*Silakan edit file ini di Word dan simpan sebagai .docx, lalu upload ke folder app/Templates/word/pasien_template.docx*

@@ -120,7 +120,6 @@ class Admisi extends BaseController
     // Simpan data step 1
     public function save()
     {
-        log_message('debug', 'POST data step 1: ' . json_encode($this->request->getPost()));
         $rules = [
             'title' => 'required',
             'nama_lengkap' => 'required|min_length[3]',
@@ -128,13 +127,43 @@ class Admisi extends BaseController
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|valid_date',
             'status_perkawinan' => 'required',
-            'nomor_identitas' => 'required'
+            'nomor_identitas' => 'required',
         ];
+
+        // Validasi file upload
+        $file = $this->request->getFile('foto-identitas');
+        $validation = \Config\Services::validation();
+        $errors = [];
+        log_message('debug', '[REGISTRASI] Mulai validasi file upload. Ada file? ' . ($file ? 'YA' : 'TIDAK'));
+        if (!$file || !$file->isValid()) {
+            log_message('error', '[REGISTRASI] File tidak valid atau tidak ada. isValid: ' . ($file ? ($file->isValid() ? 'YA' : 'TIDAK') : 'N/A'));
+            $errors['foto-identitas'] = 'Dokumen identitas wajib diupload';
+        } elseif (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
+            log_message('error', '[REGISTRASI] Format file salah: ' . $file->getMimeType());
+            $errors['foto-identitas'] = 'Format file harus JPG, PNG, atau PDF';
+        } elseif ($file->getSize() > 2 * 1024 * 1024) { // 2MB
+            log_message('error', '[REGISTRASI] File terlalu besar: ' . $file->getSize());
+            $errors['foto-identitas'] = 'Ukuran file maksimal 2MB';
+        } else {
+            log_message('debug', '[REGISTRASI] File upload valid: ' . $file->getName() . ', size: ' . $file->getSize() . ', type: ' . $file->getMimeType());
+        }
+        if (!empty($errors)) {
+            log_message('error', '[REGISTRASI] Error validasi file: ' . json_encode($errors));
+            return redirect()->back()->withInput()->with('errors', $errors);
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         log_message('debug', 'POST data step 1 after validation: ' . json_encode($this->request->getPost()));
+
+        // Simpan file ke folder writable/uploads
+        $newName = uniqid('identitas_') . '.' . $file->getExtension();
+        $uploadPath = FCPATH . 'uploads/';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+        $file->move($uploadPath, $newName);
 
         $data = [
             'title' => $this->request->getPost('title'),
@@ -146,7 +175,7 @@ class Admisi extends BaseController
             'nomor_identitas' => $this->request->getPost('nomor_identitas'),
             'email' => $this->request->getPost('email'),
             'nomor_hp' => $this->request->getPost('nomor_hp'),
-            'catatan' => $this->request->getPost('catatan')
+            'foto_identitas' => $newName
         ];
 
         $this->session->set('pasien_step1', $data);
@@ -356,7 +385,8 @@ class Admisi extends BaseController
                 'status_perkawinan' => $pasienData['status_perkawinan'] ?? null,
                 'nomor_identitas' => $pasienData['nomor_identitas'] ?? null,
                 'email' => $pasienData['email'] ?? null,
-                'nomor_hp' => $pasienData['nomor_hp'] ?? null
+                'nomor_hp' => $pasienData['nomor_hp'] ?? null,
+                'foto_identitas' => $pasienData['foto_identitas'] ?? null
             ];
 
             // Tambahkan data alamat ke tabel terpisah
@@ -654,5 +684,27 @@ class Admisi extends BaseController
         }
     }
 
+    public function getDetailPasien($id)
+    {
+        $pasienModel = new \App\Models\PasienModel();
+        $alamatModel = new \App\Models\AlamatPasienModel();
+        $kontakModel = new \App\Models\KontakDaruratModel();
+        $infoMedisModel = new \App\Models\InfoMedisPasienModel();
+        $infoTambahanModel = new \App\Models\InfoTambahanPasienModel();
+
+        $pasien = $pasienModel->find($id);
+        $alamat = $alamatModel->where('pasien_id', $id)->findAll();
+        $kontak = $kontakModel->where('pasien_id', $id)->findAll();
+        $infoMedis = $infoMedisModel->where('pasien_id', $id)->findAll();
+        $infoTambahan = $infoTambahanModel->where('pasien_id', $id)->findAll();
+
+        return $this->response->setJSON([
+            'pasien' => $pasien,
+            'alamat' => $alamat,
+            'kontak' => $kontak,
+            'info_medis' => $infoMedis,
+            'info_tambahan' => $infoTambahan
+        ]);
+    }
 }
 

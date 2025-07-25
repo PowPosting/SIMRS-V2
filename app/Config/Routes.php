@@ -75,6 +75,7 @@ $routes->group('admisi', ['filter' => 'auth'], function($routes) {
     // Data Pasien
     $routes->get('datapasien', 'Admisi::datapasien');
     $routes->get('pasien-hari-ini', 'Admisi::pasienHariIni');
+    $routes->get('get-detail-pasien/(:num)', 'Admisi::getDetailPasien/$1');
     $routes->get('edit-pasien/(:num)', 'Admisi::editPasien/$1');
     $routes->post('update-pasien/(:num)', 'Admisi::updatePasien/$1');
     $routes->delete('delete-pasien/(:num)', 'Admisi::deletePasien/$1');
@@ -114,6 +115,7 @@ $routes->group('perawat', function($routes) {
     // Catatan Pemeriksaan
     $routes->get('catatan-pemeriksaan', 'Perawat::catatanPemeriksaan');
     $routes->get('detail-pemeriksaan/(:num)', 'Perawat::detailPemeriksaan/$1');
+    $routes->get('tandavitalpasien/(:num)', 'Perawat::tandavitalpasien/$1');
 });
 
 // Farmasi Routes
@@ -149,6 +151,10 @@ $routes->group('manajemen', function($routes) {
     $routes->get('reports', 'Manajemen::reports');
     $routes->get('statistics', 'Manajemen::statistics');
 });
+
+// Export Routes
+$routes->get('exportword/pasien/(:segment)', 'ExportWord::pasien/$1');
+$routes->get('exportword/antrian/(:segment)', 'ExportWord::antrian/$1');
 
 
 

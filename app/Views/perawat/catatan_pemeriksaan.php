@@ -25,7 +25,25 @@
                                 <td><?= $no++ ?></td>
                                 <td><span class="badge bg-light text-primary"><?= esc($row['no_rm']) ?></span></td>
                                 <td><?= esc($row['nama_lengkap']) ?></td>
-                                <td><?= esc($row['created_at']) ?></td>
+                                <td>
+                                    <?php
+                                    // Format tanggal ke WIB dan format Indonesia
+                                    $createdAt = $row['created_at'];
+                                    try {
+                                        $dt = new DateTime($createdAt, new DateTimeZone('UTC'));
+                                        $dt->setTimezone(new DateTimeZone('Asia/Jakarta'));
+                                        $bulan = [1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                                        $tgl = (int)$dt->format('d');
+                                        $bln = $bulan[(int)$dt->format('m')];
+                                        $thn = $dt->format('Y');
+                                    $jam = $dt->format('H:i');
+                                    $tanggalWIB = $tgl . ' ' . $bln . ' ' . $thn . ' ' . $jam ;
+                                    echo esc($tanggalWIB);
+                                    } catch (Exception $e) {
+                                        echo esc($createdAt);
+                                    }
+                                    ?>
+                                </td>
                                 <td><button class="btn btn-info btn-sm btnDetail" data-id="<?= esc($row['id']) ?>"><i class="fas fa-eye"></i> Lihat Detail</button></td>
                             </tr>
                         <?php endforeach; else: ?>

@@ -88,6 +88,10 @@
     background-color: #28a745;
 }
 
+.form-group {
+    margin-bottom: 1rem;
+}
+
 @media (max-width: 768px) {
     .step-container {
         width: 95%;
@@ -175,7 +179,7 @@
                         </div>
                     <?php endif; ?>
                     
-                    <form action="<?= base_url('admisi/registrasi-pasien/save') ?>" method="post">
+                    <form action="<?= base_url('admisi/registrasi-pasien/save') ?>" method="post" enctype="multipart/form-data">
                         <?= csrf_field() ?>
                         
                         <div class="row">
@@ -264,12 +268,11 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="catatan">Catatan</label>
-                                    <textarea class="form-control" id="catatan" name="catatan" rows="3"></textarea>
+                                  <label for="foto-identitas">Upload Dokumen Identitas <span class="text-danger">*</span></label>
+                                  <input type="file" class="form-control" id="foto-identitas" name="foto-identitas" required>
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-arrow-right mr-2"></i>

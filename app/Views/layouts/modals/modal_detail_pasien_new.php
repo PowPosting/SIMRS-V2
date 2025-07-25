@@ -4,10 +4,17 @@
       <div class="modal-header bg-white border-0 pb-0">
         <div class="d-flex align-items-center w-100">
           <div class="mr-3">
-            <span class="badge badge-pill badge-info p-3" id="detail_no_rm" style="font-size:1.3em; letter-spacing:2px;">-</span>
+            <span class="badge badge-pill badge-info p-1" id="detail_no_rm" style="font-size:1.3em; letter-spacing:2px;">-</span>
           </div>
-          <div class="flex-grow-1">
-            <h4 class="mb-0" id="detail_nama">-</h4>
+          <div class="flex-grow-1 d-flex align-items-center">
+            <i class="fa-solid fa-id-card text-primary">  </i>
+            <h4 class="mb-0 mr-3" id="detail_nama">-</h4>
+            <button id="btnLihatDokumenIdentitas" class="btn btn-sm btn-outline-primary ml-2" style="white-space:nowrap;" type="button">
+              <i class="fas fa-file-alt"></i> Dokumen Identitas
+            </button>
+            <button id="btnExportWordDetailPasien" class="btn btn-sm btn-outline-primary ml-2" type="button">
+              <i class="fas fa-file-word"></i> Export Word
+            </button>
           </div>
         </div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -17,7 +24,7 @@
       <div class="modal-body pt-0">
         <!-- SECTION: Identitas Pasien -->
         <div class="mb-4">
-          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary">Identitas Pasien</h5>
+          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary"><i class="fa-solid fa-user"></i>  Identitas Pasien</h5>
           <div class="row g-2">
             <div class="col-md-3 col-6 mb-2">
               <span class="text-muted small">No. RM</span><br>
@@ -48,10 +55,6 @@
               <span id="detail_ttl">-</span>
             </div>
             <div class="col-md-3 col-6 mb-2">
-              <span class="text-muted small">Umur</span><br>
-              <span id="detail_umur">-</span>
-            </div>
-            <div class="col-md-3 col-6 mb-2">
               <span class="text-muted small">Status Perkawinan</span><br>
               <span id="detail_status_perkawinan">-</span>
             </div>
@@ -60,7 +63,7 @@
 
         <!-- SECTION: Alamat Pasien -->
         <div class="mb-4">
-          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary">Alamat Pasien</h5>
+          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary"><i class="fa-solid fa-house-user"></i> Alamat Pasien</h5>
           <div class="row g-2">
             <div class="col-md-4 col-12 mb-2">
               <span class="text-muted small">Alamat Lengkap</span><br>
@@ -91,7 +94,7 @@
 
         <!-- SECTION: Kontak Darurat -->
         <div class="mb-4">
-          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary">Kontak Darurat</h5>
+          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary"><i class="fa-solid fa-address-book"></i> Kontak Darurat</h5>
           <div class="row g-2">
             <div class="col-md-4 col-12 mb-2">
               <span class="text-muted small">Nama Kontak</span><br>
@@ -114,7 +117,7 @@
 
         <!-- SECTION: Informasi Medis -->
         <div class="mb-4">
-          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary">Informasi Medis</h5>
+          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary"><i class="fa-solid fa-notes-medical"></i> Informasi Medis</h5>
           <div class="row g-2">
             <div class="col-md-3 col-6 mb-2">
               <span class="text-muted small">Golongan Darah</span><br>
@@ -125,7 +128,7 @@
 
         <!-- SECTION: Informasi Tambahan -->
         <div class="mb-2">
-          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary">Informasi Tambahan</h5>
+          <h5 class="border-bottom pb-2 mb-3 font-weight-bold text-primary"><i class="fa-solid fa-circle-info"></i> Informasi Tambahan</h5>
           <div class="row g-2">
             <div class="col-md-2 col-6 mb-2">
               <span class="text-muted small">Agama</span><br>
@@ -153,3 +156,42 @@
     </div>
   </div>
 </div>
+<script>
+function setFotoIdentitasModal(foto_identitas) {
+    var btn = document.getElementById('btnLihatDokumenIdentitas');
+    if (btn) {
+      if (foto_identitas && foto_identitas !== '-') {
+          btn.disabled = false;
+          btn.onclick = function() {
+              var ext = foto_identitas.split('.').pop().toLowerCase();
+              var url = '<?= base_url('uploads/') ?>' + foto_identitas;
+              window.open(url, '_blank');
+          };
+      } else {
+          btn.disabled = false;
+          btn.onclick = function() {
+              alert('Dokumen identitas belum diupload.');
+          };
+      }
+    }
+    var btnPrint = document.getElementById('btnPrintDetailPasien');
+    if (btnPrint) {
+      btnPrint.onclick = function() {
+        window.print();
+      };
+    }
+}
+// Export modal content as Word (docx)
+document.getElementById('btnExportWordDetailPasien').onclick = function() {
+    var noRM = document.getElementById('detail_no_rm').textContent.trim();
+    if (!noRM || noRM === '-') {
+        alert('No. RM tidak ditemukan!');
+        return;
+    }
+    // Ganti URL sesuai route CodeIgniter Anda jika perlu
+    var url = '/exportword/pasien/' + encodeURIComponent(noRM);
+    window.open(url, '_blank');
+};
+
+</script>
+

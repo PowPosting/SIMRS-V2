@@ -45,6 +45,7 @@ const loadAntrianData = () => {
             });
 
             // Initialize timeago
+            jQuery.timeago.settings.lang = "id";
             $("time.timeago").timeago();
         },
         error: function(xhr, status, error) {
@@ -136,7 +137,7 @@ $(document).ready(function() {
     // Handle modal button clicks
     $(document).on('click', '.btn-mulai-pemeriksaan', function() {
         const id = $(this).data('id');
-        window.location.href = '/perawat/triase/' + id;
+        window.location.href = '/perawat/tandavitalpasien/' + id;
     });
 
     // Auto refresh every 30 seconds
