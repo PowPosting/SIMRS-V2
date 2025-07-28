@@ -147,11 +147,44 @@ class Perawat extends ResourceController
             $this->db->table('antrian')
                 ->where('id', $data['id_antrian'])
                 ->update(['status' => 'Menunggu Dokter']);
+
+            // Ambil data antrian lama
+            $antrianLama = $this->db->table('antrian')->where('id', $data['id_antrian'])->get()->getRowArray();
+            if ($antrianLama) {
+                // Generate nomor antrian poli dengan prefix kode poli
+                $idPoli = $antrianLama['id_poli'];
+                $date = date('Y-m-d');
+                // Ambil kode poli dari tabel poliklinik
+                $poliRow = $this->db->table('poliklinik')->where('id', $idPoli)->get()->getRowArray();
+                $kodePoli = isset($poliRow['kode']) ? $poliRow['kode'] : 'X';
+                $lastAntrianPoli = $this->db->table('antrian_poli')
+                    ->where('id_poli', $idPoli)
+                    ->where('DATE(created_at)', $date)
+                    ->orderBy('created_at', 'DESC')
+                    ->get()->getRowArray();
+                $counter = 1;
+                if ($lastAntrianPoli && isset($lastAntrianPoli['no_antrian'])) {
+                    $lastNo = (int)preg_replace('/[^0-9]/', '', $lastAntrianPoli['no_antrian']);
+                    $counter = $lastNo + 1;
+                }
+                $noAntrianPoli = $kodePoli . str_pad($counter, 4, '0', STR_PAD_LEFT);
+
+                // Insert ke antrian_poli
+                $this->db->table('antrian_poli')->insert([
+                    'no_antrian' => $noAntrianPoli,
+                    'no_rm' => $antrianLama['no_rm'],
+                    'id_poli' => $idPoli,
+                    'id_antrian_perawat' => $antrianLama['id'],
+                    'status' => 'Menunggu Pemeriksaan',
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
             $this->db->transCommit();
             if ($this->request->isAJAX()) {
-                return $this->response->setJSON(['success' => true]);
+                return $this->response->setJSON(['success' => true, 'no_antrian_poli' => $noAntrianPoli ?? null]);
             } else {
-                return redirect()->to(base_url('perawat/antrian-pendaftaran'))->with('success', 'Tanda vital berhasil disimpan');
+                // Redirect ke halaman sukses antrian poli
+                return redirect()->to(base_url('perawat/antrian-poli-sukses?no_antrian=' . ($noAntrianPoli ?? '')));
             }
         } catch (\Exception $e) {
             $this->db->transRollback();
@@ -271,5 +304,13 @@ class Perawat extends ResourceController
         $html .= '<div class="col-md-12 mb-2"><span class="text-muted small"><i class="fas fa-notes-medical mr-1"></i> Keluhan</span><br><span style="color:#1781FF;font-weight:400;">' . esc($row['keluhan']) . '</span></div>';
         $html .= '</div></div>';
         return $html;
+    }
+
+
+     // Halaman sukses antrian poli
+    public function antrianPoliSukses()
+    {
+        $noAntrian = $this->request->getGet('no_antrian');
+        return view('perawat/antrian_poli_sukses', ['no_antrian' => $noAntrian]);
     }
 }

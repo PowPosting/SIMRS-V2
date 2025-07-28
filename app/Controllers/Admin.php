@@ -66,19 +66,19 @@ class Admin extends BaseController
             'pageTitle' => 'Tambah User Baru',
             'roles' => ['admin', 'farmasi', 'kasir', 'dokter', 'perawat', 'admisi', 'manajemen'],
             'specializations' => [
-                'Umum',
-                'Anak', 
-                'Jantung', 
-                'Mata', 
-                'Kandungan', 
-                'Bedah', 
-                'Kulit dan Kelamin', 
-                'Gigi', 
-                'Ortopedi', 
-                'Saraf', 
-                'Penyakit Dalam', 
-                'THT', 
-                'Radiologi'
+                'Dokter Umum',
+                'Dokter Anak', 
+                'Dokter Jantung', 
+                'Dokter Mata', 
+                'Dokter Kandungan', 
+                'Dokter Bedah', 
+                'Dokter Kulit dan Kelamin', 
+                'Dokter Gigi', 
+                'Dokter Ortopedi', 
+                'Dokter Saraf', 
+                'Dokter Penyakit Dalam', 
+                'Dokter THT', 
+                'Dokter Radiologi'
             ]
         ];
 
@@ -102,7 +102,7 @@ class Admin extends BaseController
         // Add specialization validation if role is dokter
         $role = $this->request->getPost('role');
         if ($role === 'dokter') {
-            $rules['spesialisasi'] = 'required|in_list[Umum,Anak,Jantung,Mata,Kandungan,Bedah,Kulit dan Kelamin,Gigi,Ortopedi,Saraf,Penyakit Dalam,THT,Radiologi]';
+            $rules['spesialisasi'] = 'required|in_list[Dokter Umum,Dokter Anak,Dokter Jantung,Dokter Mata,Dokter Kandungan,Dokter Bedah,Dokter Kulit dan Kelamin,Dokter Gigi,Dokter Ortopedi,Dokter Saraf,Dokter Penyakit Dalam,Dokter THT,Dokter Radiologi]';
         }
         
         $validation->setRules($rules);
@@ -151,19 +151,19 @@ class Admin extends BaseController
             'user' => $user,
             'roles' => ['admin', 'farmasi', 'kasir', 'dokter', 'perawat', 'admisi', 'manajemen'],
             'specializations' => [
-                'Umum',
-                'Anak', 
-                'Jantung', 
-                'Mata', 
-                'Kandungan', 
-                'Bedah', 
-                'Kulit dan Kelamin', 
-                'Gigi', 
-                'Ortopedi', 
-                'Saraf', 
-                'Penyakit Dalam', 
-                'THT', 
-                'Radiologi'
+                'Dokter Umum',
+                'Dokter Anak', 
+                'Dokter Jantung', 
+                'Dokter Mata', 
+                'Dokter Kandungan', 
+                'Dokter Bedah', 
+                'Dokter Kulit dan Kelamin', 
+                'Dokter Gigi', 
+                'Dokter Ortopedi', 
+                'Dokter Saraf', 
+                'Dokter Penyakit Dalam', 
+                'Dokter THT', 
+                'Dokter Radiologi'
             ]
         ];
 
@@ -196,7 +196,7 @@ class Admin extends BaseController
         // Add specialization validation if role is dokter
         $role = $this->request->getPost('role');
         if ($role === 'dokter') {
-            $rules['spesialisasi'] = 'required|in_list[Umum,Anak,Jantung,Mata,Kandungan,Bedah,Kulit dan Kelamin,Gigi,Ortopedi,Saraf,Penyakit Dalam,THT,Radiologi]';
+            $rules['spesialisasi'] = 'required|in_list[Dokter Umum,Dokter Anak,Dokter Jantung,Dokter Mata,Dokter Kandungan,Dokter Bedah,Dokter Kulit dan Kelamin,Dokter Gigi,Dokter Ortopedi,Dokter Saraf,Dokter Penyakit Dalam,Dokter THT,Dokter Radiologi]';
         }
 
         $validation->setRules($rules);
@@ -350,4 +350,157 @@ class Admin extends BaseController
         return redirect()->to('/admisi/datapasien');
     }
     
+
+    // Tampilkan daftar dokter dan jadwal praktik
+    public function datadokter()
+    {
+        $db = \Config\Database::connect();
+        // Ambil semua dokter
+        $dokterList = $this->userModel->where('role', 'dokter')->findAll();
+        // Ambil jadwal praktik dokter
+        $jadwalList = [];
+        if (!empty($dokterList)) {
+            $dokterIds = array_column($dokterList, 'id');
+            // Join ke poliklinik untuk ambil nama poliklinik
+            $jadwalRows = $db->table('dokter_jadwal')
+                ->select('dokter_jadwal.*, poliklinik.nama AS nama_poli')
+                ->whereIn('dokter_jadwal.dokter_id', $dokterIds)
+                ->join('poliklinik', 'poliklinik.id = dokter_jadwal.poliklinik_id')
+                ->orderBy('hari', 'asc')
+                ->orderBy('jam_mulai', 'asc')
+                ->get()->getResultArray();
+            foreach ($jadwalRows as $jadwal) {
+                $jadwalList[$jadwal['dokter_id']][] = $jadwal;
+            }
+        }
+        $data = [
+            'title' => 'Daftar Dokter & Jadwal Praktik',
+            'pageTitle' => 'Daftar Dokter',
+            'dokterList' => $dokterList,
+            'jadwalList' => $jadwalList
+        ];
+        return view('admin/datadokter', $data);
+    }
+
+    // Tampilkan form tambah jadwal praktik dokter
+    public function tambahJadwalDokter()
+    {
+        $dokterList = $this->userModel->where('role', 'dokter')->findAll();
+        $db = \Config\Database::connect();
+        $poliklinikList = $db->table('poliklinik')->get()->getResultArray();
+        $data = [
+            'title' => 'Tambah Jadwal Praktik Dokter',
+            'pageTitle' => 'Tambah Jadwal Dokter',
+            'dokterList' => $dokterList,
+            'poliklinikList' => $poliklinikList
+        ];
+        return view('admin/tambah_jadwal_dokter', $data);
+    }
+
+    // Proses simpan jadwal praktik dokter
+    public function saveJadwalDokter()
+    {
+        $validation = \Config\Services::validation();
+        $rules = [
+            'dokter_id' => 'required|is_natural_no_zero',
+            'hari' => 'required|in_list[Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu]',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+        ];
+        $validation->setRules($rules);
+        if (!$validation->withRequest($this->request)->run()) {
+            $this->session->setFlashdata('errors', $validation->getErrors());
+            return redirect()->back()->withInput();
+        }
+        $db = \Config\Database::connect();
+        $data = [
+            'dokter_id' => $this->request->getPost('dokter_id'),
+            'poliklinik_id' => $this->request->getPost('poliklinik_id'),
+            'hari' => $this->request->getPost('hari'),
+            'jam_mulai' => $this->request->getPost('jam_mulai'),
+            'jam_selesai' => $this->request->getPost('jam_selesai'),
+            'keterangan' => $this->request->getPost('keterangan'),
+        ];
+        if ($db->table('dokter_jadwal')->insert($data)) {
+            $this->session->setFlashdata('success', 'Jadwal praktik dokter berhasil ditambahkan');
+        } else {
+            $this->session->setFlashdata('error', 'Gagal menambahkan jadwal praktik dokter');
+        }
+        return redirect()->to('/admin/datadokter');
+    }
+
+    // Tampilkan form edit jadwal praktik dokter
+    public function editJadwalDokter()
+    {
+        $db = \Config\Database::connect();
+        $dokterId = $this->request->getGet('dokter_id');
+        $hari = $this->request->getGet('hari');
+        $poliId = $this->request->getGet('poli');
+        $jadwalRow = $db->table('dokter_jadwal')
+            ->where('dokter_id', $dokterId)
+            ->where('hari', $hari)
+            ->where('poliklinik_id', $poliId)
+            ->get()->getFirstRow('array');
+
+        $errorMsg = '';
+        if (!$jadwalRow) {
+            $errorMsg = 'Jadwal tidak ditemukan. Pastikan parameter dokter, hari, dan poliklinik sesuai.';
+        }
+
+        // Ambil nama dokter
+        $dokter = $db->table('users')->where('id', $dokterId)->get()->getFirstRow('array');
+        $namaDokter = $dokter ? $dokter['nama_lengkap'] : '';
+
+        // Ambil nama poliklinik
+        $poliklinik = $db->table('poliklinik')->where('id', $poliId)->get()->getFirstRow('array');
+        $namaPoli = $poliklinik ? $poliklinik['nama'] : '';
+
+        // Ambil daftar poliklinik untuk dropdown
+        $poliklinikList = $db->table('poliklinik')->get()->getResultArray();
+
+        $data = [
+            'title' => 'Edit Jadwal Praktik Dokter',
+            'jadwal' => $jadwalRow,
+            'namaDokter' => $namaDokter,
+            'namaPoli' => $namaPoli,
+            'poliklinikList' => $poliklinikList,
+            'errorMsg' => $errorMsg
+        ];
+        return view('admin/edit_jadwal_dokter', $data);
+    }
+
+    // Proses update jadwal praktik dokter
+    public function updateJadwalDokter()
+    {
+        $db = \Config\Database::connect();
+        $dokterId = $this->request->getPost('dokter_id');
+        $hari = $this->request->getPost('hari');
+        $poliId = $this->request->getPost('poli'); // pastikan input form 'poli' adalah poliklinik_id
+        $jamMulai = $this->request->getPost('jam_mulai');
+        $jamSelesai = $this->request->getPost('jam_selesai');
+        $keterangan = $this->request->getPost('keterangan');
+        $db->table('dokter_jadwal')
+            ->where('dokter_id', $dokterId)
+            ->where('hari', $hari)
+            ->where('poliklinik_id', $poliId)
+            ->update([
+                'jam_mulai' => $jamMulai,
+                'jam_selesai' => $jamSelesai,
+                'keterangan' => $keterangan
+            ]);
+        return redirect()->to(base_url('admin/datadokter'))->with('success', 'Jadwal berhasil diupdate');
+    }
+
+    // Proses hapus jadwal praktik dokter
+    public function hapusJadwalDokter()
+    {
+        $db = \Config\Database::connect();
+        $jadwalId = $this->request->getGet('id');
+        if ($jadwalId) {
+            $db->table('dokter_jadwal')->where('id', $jadwalId)->delete();
+            return redirect()->to(base_url('admin/datadokter'))->with('success', 'Jadwal berhasil dihapus');
+        } else {
+            return redirect()->to(base_url('admin/datadokter'))->with('error', 'ID jadwal tidak ditemukan');
+        }
+    }
 }

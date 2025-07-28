@@ -54,6 +54,7 @@ class Auth extends BaseController
 
             // Set session data
             $sessionData = [
+                'id' => $user['id'],
                 'user_id' => $user['id'],
                 'username' => $user['username'],
                 'email' => $user['email'],

@@ -31,6 +31,14 @@ class Admisi extends BaseController
             exit();
         }
     }
+    public function index()
+    {
+        // Redirect to the main admisi page
+        $data = [
+            'title' => 'Registrasi Pasien - SIMRS',
+        ];
+        return redirect()->to('admisi/registrasi-pasien');
+    }
 
     public function cariKodepos()
     {

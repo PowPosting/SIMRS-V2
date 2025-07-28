@@ -85,6 +85,7 @@ $routes->group('admisi', ['filter' => 'auth'], function($routes) {
 $routes->group('admin', function($routes) {
     $routes->get('/', 'Admin::index');
     $routes->get('dashboard', 'Admin::index');
+    //users
     $routes->get('users', 'Admin::users');
     $routes->get('users/add', 'Admin::addUser');
     $routes->post('users/save', 'Admin::saveUser');
@@ -94,9 +95,16 @@ $routes->group('admin', function($routes) {
     $routes->post('users/toggle-status/(:num)', 'Admin::toggleUserStatus/$1');
     $routes->get('database', 'Admin::database');
     $routes->get('datapasien/delete/(:num)', 'Admisi::deletePasien/$1');
+    //dokter
+    $routes->get('datadokter', 'Admin::datadokter');
+    $routes->get('tambahjadwaldokter', 'Admin::tambahJadwalDokter');
+    $routes->post('tambahjadwaldokter/save', 'Admin::saveJadwalDokter');
+    $routes->get('editjadwaldokter', 'Admin::editJadwalDokter');
+    $routes->post('updatejadwaldokter', 'Admin::updateJadwalDokter');
+    $routes->get('hapusjadwaldokter', 'Admin::hapusJadwalDokter');
 });
 
-// Perawat Routes
+
 // Perawat Routes
 $routes->group('perawat', function($routes) {
     $routes->get('triase/(:num)', 'Perawat::triase/$1');
@@ -116,6 +124,7 @@ $routes->group('perawat', function($routes) {
     $routes->get('catatan-pemeriksaan', 'Perawat::catatanPemeriksaan');
     $routes->get('detail-pemeriksaan/(:num)', 'Perawat::detailPemeriksaan/$1');
     $routes->get('tandavitalpasien/(:num)', 'Perawat::tandavitalpasien/$1');
+    $routes->get('antrian-poli-sukses', 'Perawat::antrianPoliSukses');
 });
 
 // Farmasi Routes
@@ -139,9 +148,9 @@ $routes->group('kasir', function($routes) {
 // Dokter Routes
 $routes->group('dokter', function($routes) {
     $routes->get('/', 'Dokter::index');
-    $routes->get('dashboard', 'Dokter::index');
-    $routes->get('schedule', 'Dokter::schedule');
-    $routes->get('patients', 'Dokter::patients');
+    $routes->get('antrian-poli', 'Dokter::antrianPoli');
+    $routes->get('pemeriksaan/(:num)', 'Dokter::pemeriksaanDokter/$1');
+    $routes->get('hasil-pemeriksaan-dokter', 'Dokter::hasilPemeriksaanDokter');
 });
 
 // Manajemen Routes
@@ -152,10 +161,8 @@ $routes->group('manajemen', function($routes) {
     $routes->get('statistics', 'Manajemen::statistics');
 });
 
-// Export Routes
+// ExportWord routes
 $routes->get('exportword/pasien/(:segment)', 'ExportWord::pasien/$1');
 $routes->get('exportword/antrian/(:segment)', 'ExportWord::antrian/$1');
-
-
-
-
+$routes->get('exportword/pemeriksaan/(:num)', 'ExportWord::pemeriksaan/$1');
+$routes->get('exportword/antrian-poli/(:segment)', 'ExportWord::antrianPoli/$1');

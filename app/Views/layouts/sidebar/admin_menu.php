@@ -67,6 +67,7 @@
 </li>
 
 
+
 <!-- Sub Header - Divisi Dokter -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> SOAP Dokter</li>
 
@@ -78,23 +79,33 @@
         <i class="fas fa-chevron-down submenu-arrow"></i>
     </a>
     <ul class="submenu">
-        <!-- Data Pasien -->
+        <!-- Antrian Dokter -->
         <li class="submenu-item">
-            <a href="<?= base_url('patients') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Data Pasien">
-                <i class="fas fa-user-injured submenu-icon"></i>
-                <span class="submenu-text">Data Pasien</span>
+            <a href="<?= base_url('dokter/antrian-poli') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Antrian Poli">
+                <i class="fas fa-calendar-alt submenu-icon"></i>
+                <span class="submenu-text">Antrian Poli</span>
             </a>
         </li>
-        
-        <!-- Jadwal Dokter -->
+
+        <!-- Hasil Pemeriksaan -->
         <li class="submenu-item">
-            <a href="<?= base_url('doctor-schedule') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Jadwal Dokter">
-                <i class="fas fa-calendar-alt submenu-icon"></i>
-                <span class="submenu-text">Jadwal Dokter</span>
+            <a href="<?= base_url('dokter/hasil-pemeriksaan-dokter') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Hasil Pemeriksaan dokter">
+                <i class="fas fa-user-injured submenu-icon"></i>
+                <span class="submenu-text">Hasil Pemeriksaan</span>
+            </a>
+        </li>
+        <!-- Daftar Dokter -->
+        <li class="submenu-item">
+            <a href="<?= base_url('admin/datadokter') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Data Dokter">
+               <i class="fa-solid fa-list-ul"></i>
+                <span class="submenu-text">Data Dokter</span>
             </a>
         </li>
     </ul>
 </li>
+
+
+
 
 <!-- Sub Header - Divisi Farmasi -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Farmasi</li>

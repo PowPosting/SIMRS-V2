@@ -1,18 +1,21 @@
-<!-- Dokter Menu -->
-<!-- Data Pasien -->
+<!--Antrian pasien Poliklinik-->
 <li class="nav-item">
-    <a href="<?= base_url('dokter/patients') ?>" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Data Pasien">
-        <i class="fas fa-user-injured nav-icon"></i>
-        <span class="nav-text">Data Pasien</span>
+    <a href="<?= base_url('dokter/antrian-poli') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Antrian Poli">
+        <i class="fas fa-calendar-alt nav-icon"></i>
+        <span class="nav-text">Antrian Poli</span>
     </a>
 </li>
-
-<!-- Jadwal Praktik Saya -->
+<!-- Hasil Pemeriksaan SOAP -->
 <li class="nav-item">
-    <a href="<?= base_url('dokter/schedule') ?>" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Jadwal Praktik Saya">
-        <i class="fas fa-calendar-check nav-icon"></i>
-        <span class="nav-text">Jadwal Praktik</span>
+    <a href="<?= base_url('dokter/hasil-pemeriksaan-dokter') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Hasil Pemeriksaan SOAP">
+        <i class="fas fa-notes-medical nav-icon"></i>
+        <span class="nav-text">Hasil Pemeriksaan SOAP</span>
     </a>
 </li>
+<!-- Daftar Dokter -->
+<li class="nav-item">
+    <a href="<?= base_url('admin/datadokter') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Data Dokter">
+        <i class="fa-solid fa-list-ul nav-icon"></i>
+        <span class="nav-text">Data Dokter</span>
     </a>
 </li>

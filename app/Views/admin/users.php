@@ -33,14 +33,14 @@
     <!-- Filter dan Search -->
     <div class="card mb-4">
         <div class="card-body">
-            <div class="row g-3">
+            <div class="row g-3 align-items-end" style="gap: 0.5rem;">
                 <div class="col-md-4">
                     <label class="form-label">Cari User</label>
                     <input type="text" class="form-control" id="searchUser" placeholder="Username, Email, Nama...">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label class="form-label">Role</label>
-                    <select class="form-select" id="filterRole">
+                    <select class="form-select w-100" id="filterRole">
                         <option value="">Semua Role</option>
                         <option value="admin">Admin</option>
                         <option value="farmasi">Farmasi</option>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Spesialisasi</label>
-                    <select class="form-select" id="filterSpecialization">
+                    <select class="form-select w-100" id="filterSpecialization">
                         <option value="">Semua Spesialisasi</option>
                         <?php if (isset($specializations) && !empty($specializations)): ?>
                             <?php foreach ($specializations as $spec): ?>
@@ -78,13 +78,12 @@
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Status</label>
-                    <select class="form-select" id="filterStatus">
+                    <select class="form-select w-100" id="filterStatus">
                         <option value="">Semua Status</option>
                         <option value="1">Aktif</option>
                         <option value="0">Tidak Aktif</option>
                     </select>
                 </div>
-                
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalDetailPasienBaru" tabindex="-1" role="dialog" aria-labelledby="modalDetailPasienBaruLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-    <div class="modal-content">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document" style="height:100vh;">
+    <div class="modal-content" >
       <div class="modal-header bg-white border-0 pb-0">
         <div class="d-flex align-items-center w-100">
           <div class="mr-3">

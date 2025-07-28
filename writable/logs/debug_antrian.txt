@@ -1,0 +1,36 @@
+userId: 1
+idPoliList: Array
+(
+)
+
+Hasil antrianPoli: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [no_antrian] => POLI01001
+            [no_rm] => RM2025070016
+            [id_poli] => 1
+            [id_antrian_perawat] => 38
+            [status] => Menunggu Pemeriksaan
+            [created_at] => 2025-07-28 02:46:58
+            [updated_at] => 
+            [nama_pasien] => Dora
+            [poli_tujuan] => Poli Umum
+        )
+
+    [1] => Array
+        (
+            [id] => 3
+            [no_antrian] => POLI02001
+            [no_rm] => RM2025070017
+            [id_poli] => 2
+            [id_antrian_perawat] => 39
+            [status] => Menunggu Pemeriksaan
+            [created_at] => 2025-07-28 03:22:17
+            [updated_at] => 
+            [nama_pasien] => buts
+            [poli_tujuan] => Poli Gigi
+        )
+
+)

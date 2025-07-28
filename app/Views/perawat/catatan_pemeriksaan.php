@@ -9,6 +9,16 @@
                     <h3 class="card-title">Catatan Pemeriksaan Pasien</h3>
                 </div>
                 <div class="card-body table-responsive">
+                    <div class="mb-3 row justify-content-start align-items-center">
+                        <div class="col-auto">
+                            <div class="input-group">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Cari data pemeriksaan..." style="width: 220px;">
+                                <div class="input-group-append">
+                                    <span class="input-group-text bg-white border-left-0"><i class="fas fa-search"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered table-hover" id="tabelCatatan">
                         <thead class="thead-light">
                             <tr>
@@ -71,6 +81,13 @@
                 <!-- Konten detail akan dimuat di sini -->
                 <div class="text-center text-muted">Pilih pasien untuk melihat detail hasil pemeriksaan.</div>
             </div>
+            <div class="modal-footer justify-content-end">
+                <div id="exportBtnContainer" style="display:none;">
+                    <a href="#" id="btnExportWord" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-file-word mr-1"></i> Export Word
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -80,14 +97,25 @@
 <?= $this->section('scripts') ?>
 <script>
 $(document).ready(function() {
+    // Filter manual tanpa DataTables
+    $('#searchInput').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('#tabelCatatan tbody tr').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
     // Handler tombol detail dinamis (delegasi event)
     $('#tabelCatatan').on('click', '.btnDetail', function() {
         var id = $(this).data('id');
         $('#detailBody').html('<div class="text-center text-muted">Memuat data...</div>');
         $.get('/perawat/detail-pemeriksaan/' + id, function(res) {
             $('#detailBody').html(res);
+            // Tampilkan tombol export jika id ada
+            $('#exportBtnContainer').show();
+            $('#btnExportWord').attr('href', '/exportword/pemeriksaan/' + id);
         }).fail(function() {
             $('#detailBody').html('<div class="alert alert-danger">Gagal memuat detail pemeriksaan.</div>');
+            $('#exportBtnContainer').hide();
         });
         $('#modalDetailPemeriksaan').modal('show');
     });
