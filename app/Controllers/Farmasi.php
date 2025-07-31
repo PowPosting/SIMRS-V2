@@ -147,4 +147,15 @@ class Farmasi extends BaseController
         return redirect()->to('/farmasi/data-master-obat')->with('success', 'Obat berhasil diperbarui');
     }
    
+
+    //permintaan obat
+    public function permintaanObat()
+    {        
+        $data = [
+            'title' => 'Permintaan Obat - SIMRS',
+            'pageTitle' => 'Permintaan Obat',
+        ];
+        return view('farmasi/permintaan_obat', $data);
+    }
+
 }
