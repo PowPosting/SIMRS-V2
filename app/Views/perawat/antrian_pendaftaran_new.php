@@ -12,8 +12,9 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h3 class="font-weight-bold text-primary mb-0">
-                                <i class="fas fa-list-alt mr-2"></i>Daftar Antrian Pasien
+                            <h3 class="font-weight-bold mb-0" style="color: #000;">
+                                <i class="fas fa-calendar-day text-dark mr-2 fa-lg"></i>
+                                Daftar Antrian Pasien
                             </h3>
                             <p class="text-muted small mb-0 mt-1">Daftar pasien yang sedang menunggu pemeriksaan</p>
                         </div>
@@ -21,8 +22,8 @@
                             <div class="search-box mr-2">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-light border-right-0">
-                                            <i class="fas fa-search text-primary"></i>
+                                        <span class="input-group-text bg-primary">
+                                            <i class="fas fa-search text-white"></i>
                                         </span>
                                     </div>
                                     <input type="text" class="form-control border-left-0" id="searchInput" placeholder="Cari pasien...">
@@ -58,10 +59,11 @@
                         </div>
                         <div class="flex-grow-1 ml-3">
                             <h5 class="mb-1 font-weight-bold text-dark">{{nama_pasien}}</h5>
-                            <p class="mb-0 text-muted small">
-                                <span class="badge badge-light mr-2">RM: {{no_rm}}</span>
-                                <span class="badge badge-primary">No. {{no_antrian}}</span>
-                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge badge-light">RM: {{no_rm}}</span>
+                                <span class="badge badge-primary" style="border-radius: 20px;">No. {{no_antrian}}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="patient-details p-3 bg-light rounded mb-3">

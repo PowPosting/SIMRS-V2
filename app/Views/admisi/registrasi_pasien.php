@@ -233,7 +233,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nomor_identitas">Nomor KTP/SIM/Passport <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nomor_identitas" name="nomor_identitas" required>
+                                    <input type="text" class="form-control" id="nomor_identitas" name="nomor_identitas" required autocomplete="off">
+                                    <small id="nomor_identitas_feedback" class="form-text"></small>
                                 </div>
                             </div>
                         </div>
@@ -288,28 +289,48 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    
-    // Debug: Check for any elements with name 'status'
-    const statusElements = document.querySelectorAll('[name*="status"]');
-    console.log('All elements with name containing "status":', statusElements);
-    
-    // Debug: Check specific field
-    const statusPerkawinanField = document.querySelector('[name="status_perkawinan"]');
-    console.log('status_perkawinan field:', statusPerkawinanField);
-    
-    form.addEventListener('submit', function(e) {
-        const formData = new FormData(this);
-        console.log('Form Data being submitted:');
-        for (let [key, value] of formData.entries()) {
-            console.log(key + ': ' + value);
+    // Validasi AJAX nomor identitas unik
+    const nomorIdentitasInput = document.getElementById('nomor_identitas');
+    const feedback = document.getElementById('nomor_identitas_feedback');
+    let lastCheck = '';
+    nomorIdentitasInput.addEventListener('input', function() {
+        const val = nomorIdentitasInput.value.trim();
+        feedback.textContent = '';
+        feedback.className = 'form-text';
+        if (val.length < 8) {
+            feedback.textContent = 'Minimal 8 karakter.';
+            feedback.classList.add('text-danger');
+            nomorIdentitasInput.setCustomValidity('Nomor identitas terlalu pendek');
+            return;
         }
-        console.log('Status Perkawinan specifically:', formData.get('status_perkawinan'));
-        console.log('Status field (should not exist):', formData.get('status'));
-        
-        // Debug: Check if status_perkawinan field has value
-        const statusPerkawinanValue = document.querySelector('[name="status_perkawinan"]').value;
-        console.log('Direct field value:', statusPerkawinanValue);
+        if (val === lastCheck) return;
+        lastCheck = val;
+        fetch('<?= base_url('admisi/registrasi-pasien/cek-nomor-identitas') ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('input[name=csrf_token]')?.value || ''
+            },
+            body: 'nomor_identitas=' + encodeURIComponent(val)
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.exists) {
+                feedback.textContent = 'Nomor identitas sudah terdaftar.';
+                feedback.classList.add('text-danger');
+                nomorIdentitasInput.setCustomValidity('Nomor identitas sudah terdaftar');
+            } else {
+                feedback.textContent = 'Nomor identitas tersedia.';
+                feedback.classList.add('text-success');
+                nomorIdentitasInput.setCustomValidity('');
+            }
+        })
+        .catch(() => {
+            feedback.textContent = 'Gagal cek ke server.';
+            feedback.classList.add('text-danger');
+            nomorIdentitasInput.setCustomValidity('Gagal cek ke server');
+        });
     });
 });
 </script>

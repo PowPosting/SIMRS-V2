@@ -69,7 +69,7 @@
 
 
 <!-- Sub Header - Divisi Dokter -->
-<li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> SOAP Dokter</li>
+<li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> Poliklinik</li>
 
 <!-- Dashboard Dokter dengan Dropdown -->
 <li class="nav-item has-submenu">
@@ -90,7 +90,7 @@
         <!-- Hasil Pemeriksaan -->
         <li class="submenu-item">
             <a href="<?= base_url('dokter/hasil-pemeriksaan-dokter') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Hasil Pemeriksaan dokter">
-                <i class="fas fa-user-injured submenu-icon"></i>
+               <i class="fas fa-notes-medical nav-icon"></i>
                 <span class="submenu-text">Hasil Pemeriksaan</span>
             </a>
         </li>
@@ -120,9 +120,9 @@
     <ul class="submenu">
         <!-- Stok Obat -->
         <li class="submenu-item">
-            <a href="<?= base_url('farmasi/stok-obat') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Stok Obat">
+            <a href="<?= base_url('farmasi/data-master-obat') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Data Master Obat">
                 <i class="fas fa-boxes submenu-icon"></i>
-                <span class="submenu-text">Stok Obat</span>
+                <span class="submenu-text">Data Master Obat</span>
             </a>
         </li>
         

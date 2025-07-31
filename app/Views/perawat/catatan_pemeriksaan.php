@@ -1,6 +1,17 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
+<style>
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+        margin-top: 2rem;
+    }
+    .badge {
+        font-size: 0.875rem !important;
+    }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -33,7 +44,7 @@
                         <?php if (!empty($list_pemeriksaan)): $no=1; foreach($list_pemeriksaan as $row): ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><span class="badge bg-light text-primary"><?= esc($row['no_rm']) ?></span></td>
+                                <td><span class="badge bg-light text-dark"><?= esc($row['no_rm']) ?></span></td>
                                 <td><?= esc($row['nama_lengkap']) ?></td>
                                 <td>
                                     <?php
@@ -54,7 +65,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td><button class="btn btn-info btn-sm btnDetail" data-id="<?= esc($row['id']) ?>"><i class="fas fa-eye"></i> Lihat Detail</button></td>
+                                <td><button class="btn btn-primary btn-sm btnDetail" data-id="<?= esc($row['id']) ?>"><i class="fas fa-eye"></i> Lihat Detail</button></td>
                             </tr>
                         <?php endforeach; else: ?>
                             <tr><td colspan="5" class="text-center text-muted">Belum ada data pemeriksaan.</td></tr>

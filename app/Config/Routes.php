@@ -32,6 +32,7 @@ $routes->group('admisi', function($routes) {
     $routes->post('registrasi-pasien/save-step4', 'Admisi::saveStep4');
     $routes->get('registrasi-pasien/step5', 'Admisi::registrasiPasienStep5');
     $routes->post('registrasi-pasien/save-step5', 'Admisi::saveStep5');
+    $routes->post('registrasi-pasien/cek-nomor-identitas', 'Admisi::cekNomorIdentitas');
     $routes->get('registrasi-sukses', 'Admisi::registrasiSukses');
 });
 
@@ -58,6 +59,7 @@ $routes->group('admisi', ['filter' => 'auth'], function($routes) {
     $routes->get('registrasi-pasien/step3', 'Admisi::registrasipasienStep3');
     $routes->get('registrasi-pasien/step4', 'Admisi::registrasipasienStep4');
     $routes->get('registrasi-pasien/step5', 'Admisi::registrasipasienStep5');
+    $routes->post('admisi/daftar-ulang-pasien', 'Admisi::daftarUlangPasien');
     
     // Proses Penyimpanan Data
     $routes->post('registrasi-pasien/save-step1', 'Admisi::saveStep1');
@@ -130,10 +132,13 @@ $routes->group('perawat', function($routes) {
 // Farmasi Routes
 $routes->group('farmasi', function($routes) {
     $routes->get('/', 'Farmasi::index');
-    $routes->get('dashboard', 'Farmasi::index');
-    $routes->get('prescriptions', 'Farmasi::prescriptions');
-    $routes->get('medicine-stock', 'Farmasi::medicineStock');
-    $routes->get('reports', 'Farmasi::reports');
+    $routes->get('data-master-obat', 'Farmasi::stokObat');
+    $routes->get('tambah-obat', 'Farmasi::tambahObat');
+    $routes->post('simpan-obat', 'Farmasi::simpanObat');
+    $routes->get('edit-obat/(:num)', 'Farmasi::editObat/$1');
+    $routes->post('update-obat/(:num)', 'Farmasi::updateObat/$1');
+    $routes->get('delete-obat/(:num)', 'Farmasi::deleteObat/$1');
+
 });
 
 // Kasir Routes
@@ -151,6 +156,11 @@ $routes->group('dokter', function($routes) {
     $routes->get('antrian-poli', 'Dokter::antrianPoli');
     $routes->get('pemeriksaan/(:num)', 'Dokter::pemeriksaanDokter/$1');
     $routes->get('hasil-pemeriksaan-dokter', 'Dokter::hasilPemeriksaanDokter');
+    $routes->post('simpanPemeriksaanSoap', 'Dokter::simpanPemeriksaanSoap');
+    $routes->get('pemeriksaasn_soap_sukses', function() {
+        return view('dokter/pemeriksaasn_soap_sukses');
+    });
+    $routes->get('detailpemeriksaanpasien/(:num)', 'Dokter::detailPemeriksaanPasien/$1');
 });
 
 // Manajemen Routes
@@ -166,3 +176,7 @@ $routes->get('exportword/pasien/(:segment)', 'ExportWord::pasien/$1');
 $routes->get('exportword/antrian/(:segment)', 'ExportWord::antrian/$1');
 $routes->get('exportword/pemeriksaan/(:num)', 'ExportWord::pemeriksaan/$1');
 $routes->get('exportword/antrian-poli/(:segment)', 'ExportWord::antrianPoli/$1');
+$routes->get('exportword/pemeriksaansoap/(:num)', 'ExportWord::pemeriksaansoap/$1');
+
+$routes->get('admisi/get-poli-list', 'Admisi::getPoliList');
+$routes->post('admisi/daftar-ulang-pasien', 'Admisi::daftarUlangPasien');

@@ -110,8 +110,8 @@
                                 <th>Nama Lengkap Pasien</th>
                                 <th>Nurs Station</th>
                                 <th>SOAP</th>
-                                <th>Farmasi</th>
                                 <th>Kasir</th>
+                                <th>Farmasi</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -123,44 +123,53 @@
                                         <td><span class="badge bg-light text-primary"><?= esc($p['no_rekam_medis']) ?></span></td>
                                         <td><strong><?= esc($p['title']) ?> <?= esc($p['nama_lengkap']) ?></strong></td>
                                         <td>
-                                            <?php if (isset($p['status']) && ($p['status'] === 'Menunggu Dokter' || $p['status'] === 'Selesai Triase' || $p['status'] === 'Menunggu SOAP' || $p['status'] === 'Selesai SOAP' || $p['status'] === 'Menunggu Farmasi' || $p['status'] === 'Selesai Farmasi' || $p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai Kasir')): ?>
-                                                <span class="badge bg-success text-white" style="font-size:1em;"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                            <?php
+                                            $nursSelesai = in_array($p['status'], [
+                                                'Menunggu Dokter', 'Dalam Pemeriksaan', 'Menunggu Kasir', 'Menunggu Farmasi', 'Selesai'
+                                            ]);
+                                            ?>
+                                            <?php if ($nursSelesai): ?>
+                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
                                             <?php else: ?>
                                                 <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php endif; ?>
                                         </td>
-                                        <!-- SOAP -->
                                         <td>
-                                            <?php if (isset($p['status']) && ($p['status'] === 'Menunggu SOAP' || $p['status'] === 'Selesai SOAP' || $p['status'] === 'Menunggu Farmasi' || $p['status'] === 'Selesai Farmasi' || $p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai Kasir')): ?>
-                                                <?php if ($p['status'] === 'Selesai SOAP' || $p['status'] === 'Menunggu Farmasi' || $p['status'] === 'Selesai Farmasi' || $p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai Kasir'): ?>
-                                                    <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-info text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
-                                                <?php endif; ?>
+                                            <?php
+                                            $soapSelesai = in_array($p['status'], [
+                                                'Menunggu Kasir', 'Menunggu Farmasi', 'Selesai'
+                                            ]);
+                                            ?>
+                                            <?php if ($soapSelesai): ?>
+                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
                                             <?php else: ?>
                                                 <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php endif; ?>
                                         </td>
-                                        <!-- Farmasi -->
                                         <td>
-                                            <?php if (isset($p['status']) && ($p['status'] === 'Menunggu Farmasi' || $p['status'] === 'Selesai Farmasi' || $p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai Kasir')): ?>
-                                                <?php if ($p['status'] === 'Selesai Farmasi' || $p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai Kasir'): ?>
-                                                    <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-info text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
-                                                <?php endif; ?>
+                                            <?php
+                                            $kasirSelesai = in_array($p['status'], [
+                                                'Menunggu Farmasi', 'Selesai'
+                                            ]);
+                                            $kasirProses = ($p['status'] === 'Menunggu Kasir');
+                                            ?>
+                                            <?php if ($kasirSelesai): ?>
+                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                            <?php elseif ($kasirProses): ?>
+                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php else: ?>
                                                 <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php endif; ?>
                                         </td>
-                                        <!-- Kasir -->
                                         <td>
-                                            <?php if (isset($p['status']) && ($p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai Kasir')): ?>
-                                                <?php if ($p['status'] === 'Selesai Kasir'): ?>
-                                                    <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-info text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
-                                                <?php endif; ?>
+                                            <?php
+                                            $farmasiSelesai = ($p['status'] === 'Selesai');
+                                            $farmasiProses = ($p['status'] === 'Menunggu Farmasi');
+                                            ?>
+                                            <?php if ($farmasiSelesai): ?>
+                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                            <?php elseif ($farmasiProses): ?>
+                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php else: ?>
                                                 <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php endif; ?>

@@ -1,43 +1,50 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<div class="container mt-4">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex align-items-center">
-            <i class="fas fa-notes-medical fa-lg mr-2"></i>
-            <h4 class="mb-0">Hasil Pemeriksaan Dokter</h4>
+<div class="container mt-4" style="max-width: 1200px;">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-clipboard2-check me-2"></i>Daftar Pasien Sudah Diperiksa</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover table-bordered">
+                <table class="table table-hover mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center">No</th>
+                            <th>No</th>
+                            <th>No. RM</th>
                             <th>Nama Pasien</th>
-                            <th>Poliklinik</th>
-                            <th>Tanggal Pemeriksaan</th>
+                            <th>Poli</th>
                             <th>Dokter</th>
-                            <th>Diagnosa</th>
-                            <th>Tindakan</th>
-                            <th>Resep</th>
+                            <th>Waktu</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Contoh data dummy, ganti dengan data dari controller -->
-                        <tr>
-                            <td class="text-center">1</td>
-                            <td>Andi Wijaya</td>
-                            <td>Poli Gigi</td>
-                            <td>28 Juli 2025</td>
-                            <td>dr. Siti</td>
-                            <td>Karies gigi</td>
-                            <td>Tambal gigi</td>
-                            <td>Paracetamol 500mg</td>
-                        </tr>
+                        <?php if (!empty($list_pemeriksaan) && is_array($list_pemeriksaan)): ?>
+                            <?php $no=1; foreach ($list_pemeriksaan as $row): ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><span class="badge bg-light text-primary"><?= esc($row['no_rekam_medis']) ?></span></td>
+                                    <td>
+                                        <a href="<?= base_url('dokter/detailpemeriksaanpasien/' . $row['id_pemeriksaan']) ?>" class="text-primary fw-bold">
+                                            <?= esc($row['nama_lengkap']) ?>
+                                        </a>
+                                    </td>
+                                    <td><?= esc($row['poli'] ?? '-') ?></td>
+                                    <td><?= esc($row['dokter'] ?? '-') ?></td>
+                                    <td><?= esc($row['waktu_pemeriksaan'] ?? '-') ?></td>
+                                    <td>
+                                        <a href="<?= base_url('dokter/detailpemeriksaanpasien/' . $row['id_pemeriksaan']) ?>" class="btn btn-sm btn-info">Detail</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="7" class="text-center py-4 text-muted">Belum ada pasien yang diperiksa</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-</div>
 <?= $this->endSection() ?>

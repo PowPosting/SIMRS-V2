@@ -68,7 +68,7 @@
                                                     <span class="small">Menunggu sejak <?= esc($antrian['created_at'] ?? '-') ?></span>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-success btn-block btn-mulai-pemeriksaan-dokter" onclick="window.location.href='/dokter/pemeriksaan/<?= esc($antrian['id']) ?>'">
+                                                <button class="btn btn-success btn-block btn-mulai-pemeriksaan-dokter" onclick="window.location.href='/dokter/pemeriksaan/<?= esc($antrian['id']) ?>'">
                                                 <i class="fas fa-user-md mr-2"></i>Mulai Pemeriksaan Dokter
                                             </button>
                                         </div>

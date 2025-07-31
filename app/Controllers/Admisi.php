@@ -54,9 +54,6 @@ class Admisi extends BaseController
         try {
             $data = $this->postalCodeModel->findByPostalCode($kodePos);
             
-            log_message('debug', 'Pencarian kode pos: ' . $kodePos);
-            log_message('debug', 'Hasil query: ' . json_encode($data));
-            
 
             // Mapping kode provinsi ke nama provinsi
             $provinsiMap = [
@@ -84,7 +81,6 @@ class Admisi extends BaseController
                 '63' => 'Kalimantan Selatan',
                 '64' => 'Kalimantan Timur',
                 '65' => 'Kalimantan Utara',
-                '71' => 'Sulawesi Utara',
                 '72' => 'Sulawesi Tengah',
                 '73' => 'Sulawesi Selatan',
                 '74' => 'Sulawesi Tenggara',
@@ -587,11 +583,16 @@ class Admisi extends BaseController
     public function pasienHariIni()
     {
         $today = date('Y-m-d');
-        // Ambil data pasien hari ini beserta status antrian
-        $builder = $this->db->table('pasien')
-            ->select('pasien.*, antrian.status')
-            ->join('antrian', 'antrian.no_rm = pasien.no_rekam_medis AND DATE(antrian.created_at) = "' . $today . '"', 'left')
-            ->where('DATE(pasien.created_at)', $today);
+        // Ambil semua pasien yang ada di antrian hari ini (registrasi baru & daftar ulang)
+        $subquery = $this->db->table('antrian')
+            ->select('no_rm, MAX(id) as max_id')
+            ->where('DATE(created_at)', $today)
+            ->groupBy('no_rm');
+
+        $builder = $this->db->table('antrian')
+            ->select('antrian.*, pasien.title, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis')
+            ->join('pasien', 'pasien.no_rekam_medis = antrian.no_rm', 'left')
+            ->join('(' . $subquery->getCompiledSelect() . ') as latest_antrian', 'latest_antrian.max_id = antrian.id', 'inner');
         $pasien_hari_ini = $builder->get()->getResultArray();
 
         // Summary cards
@@ -714,5 +715,89 @@ class Admisi extends BaseController
             'info_tambahan' => $infoTambahan
         ]);
     }
+
+
+     // API: Daftarkan ulang pasien ke antrian hari ini
+    public function daftarUlangPasien()
+    {
+        if (!$this->request->isAJAX() && !$this->request->is('post')) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Permintaan tidak valid.'
+            ]);
+        }
+        $data = $this->request->getJSON(true);
+        $no_rm = $data['no_rm'] ?? null;
+        $id_poli = $data['id_poli'] ?? null;
+        if (!$no_rm || !$id_poli) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'No. RM atau poli tidak valid.'
+            ]);
+        }
+        $today = date('Y-m-d');
+        // Cek apakah sudah terdaftar hari ini di poli yang sama atau ada data antrian dengan created_at NULL
+        $cek = $this->antrianModel
+            ->where('no_rm', $no_rm)
+            ->where('id_poli', $id_poli)
+            ->groupStart()
+                ->where("DATE(created_at) = ", $today, false)
+                ->orWhere('created_at IS NULL', null, false)
+            ->groupEnd()
+            ->first();
+        if ($cek) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Pasien sudah terdaftar di antrian hari ini pada poli ini.'
+            ]);
+        }
+        // Generate nomor antrian untuk poli terpilih
+        $no_antrian = $this->generateNoAntrian($id_poli);
+        $antrianData = [
+            'no_antrian' => $no_antrian,
+            'no_rm' => $no_rm,
+            'id_poli' => $id_poli,
+            'status' => 'Menunggu Pemeriksaan',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        if (!$this->antrianModel->insert($antrianData)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Gagal menyimpan data antrian.'
+            ]);
+        }
+        return $this->response->setJSON([
+            'success' => true,
+            'no_antrian' => $no_antrian
+        ]);
+    }
+
+    // API: Ambil daftar poli untuk dropdown daftar ulang
+    public function getPoliList()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Permintaan tidak valid.'
+            ]);
+        }
+        $poli = $this->poliModel->select('id, nama, kode')->findAll();
+        return $this->response->setJSON([
+            'success' => true,
+            'poli' => $poli
+        ]);
+    }
+
+      // AJAX: Cek nomor identitas unik
+    public function cekNomorIdentitas()
+    {
+        $nomorIdentitas = $this->request->getPost('nomor_identitas');
+        $exists = false;
+        if ($nomorIdentitas) {
+            $exists = $this->pasienModel->where('nomor_identitas', $nomorIdentitas)->countAllResults() > 0;
+        }
+        return $this->response->setJSON(['exists' => $exists]);
+    }
+
 }
 

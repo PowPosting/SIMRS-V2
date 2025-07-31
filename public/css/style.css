@@ -26,13 +26,13 @@
     --pastel-indigo: #F5F0FF;
     
     /* Darker Variants for Text/Icons - More Subtle */
-    --soft-blue: #006891;
-    --soft-green: #3edc09;
+    --soft-blue: #00438a;
+    --soft-green: #28a745;
     --soft-purple: #DDA0DD;
     --soft-orange: #ff7700;
     --soft-pink: #e61e1e;
     --soft-yellow: #F0E68C;
-    --soft-cyan: #10ecec;
+    --soft-cyan: #d7c529;
     --soft-indigo: #B19CD9;
     
     /* Neutral Colors */
@@ -70,7 +70,7 @@
 .sidebar .logo-container {
     position: sticky;
     top: 0;
-    background: linear-gradient(135deg, #2b3280 0%, #2d8ba6 100%);
+    background: linear-gradient(135deg, #201F5A 0%, #2d8ba6 100%);
     padding: 1rem;
     z-index: 1001;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -102,9 +102,27 @@
 .sidebar.collapsed .sidebar-header {
     padding: 1rem;
     min-height: 83.33px;
-    width: 70px;
+}
+.sidebar.collapsed .logo-container {
+    justify-content: center;
+}
+.sidebar.collapsed .logo-container span, 
+.sidebar.collapsed .sidebar-header span,
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+/* Ikon tetap ditampilkan saat collapse */
+.sidebar .icon {
+    font-size: 1.5rem;
+    display: inline-block;
 }
 
+/* Tambahkan agar tinggi header tetap sama */
+.sidebar .logo-container,
+.sidebar-header {
+    min-height: 83.33px;
+    height: 83.33px;
+}
 /* Navbar Dropdown Styles */
 .dropdown-menu {
     padding: 10px 10px;

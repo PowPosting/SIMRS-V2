@@ -9,11 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
             background-color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -31,7 +33,8 @@
         .login-card {
             background: #ffffff;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15),
+                        0 5px 15px rgba(0, 0, 0, 0.08);
             border: 1px solid #e9ecef;
             max-width: 400px;
             width: 100%;
@@ -44,9 +47,10 @@
         }
         
         .logo-container img {
-            max-width: 120px;
+            max-width: 230px;  /* Ukuran gambar diubah dari 120px menjadi 150px */
             height: auto;
             margin-bottom: 20px;
+            object-fit: contain; /* Memastikan rasio aspek gambar terjaga */
         }
         
         .login-title {
@@ -69,6 +73,24 @@
             transition: all 0.3s ease;
         }
         
+        .form-control:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #1EACA8;
+        }
+
+        .input-group:focus-within .input-group-text {
+            border-color: #1EACA8;
+        }
+
+        .input-group:focus-within .form-control {
+            border-color: #1EACA8;
+        }
+
+        .input-group:focus-within .password-toggle {
+            border-color: #1EACA8;
+        }
+        
         .form-label {
             font-weight: 500;
             color: #495057;
@@ -76,7 +98,7 @@
         }
         
         .btn-login {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            background: linear-gradient(135deg, #1EACA8 0%, #201F5A 100%);
             border: none;
             border-radius: 10px;
             padding: 12px;
@@ -90,9 +112,9 @@
         }
         
         .btn-login:hover {
-            background: linear-gradient(135deg, #869ab0ff 0%, #004085 100%);
+            background: linear-gradient(135deg, #189693 0%, #151440 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(30, 172, 168, 0.4);
             color: white;
         }
         
@@ -352,7 +374,7 @@
             // Jika validasi berhasil, submit form ke server
             // loading 
             loginBtn.disabled = true;
-            loginText.textContent = 'Memproses...';
+            loginText.textContent = 'Mohon tunggu...';
             loginSpinner.classList.remove('d-none');
             
             // Form akan di-submit secara normal ke server

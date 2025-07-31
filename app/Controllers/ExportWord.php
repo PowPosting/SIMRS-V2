@@ -186,4 +186,112 @@ class ExportWord extends Controller
         $templateProcessor->saveAs('php://output');
         exit;
     }
+
+    // Export hasil pemeriksaan SOAP ke Word dengan template pemeriksaansoap_template.docx
+    public function pemeriksaansoap($id)
+    {
+        $soapModel = model('App\\Models\\PemeriksaanSoapModel');
+        $data = $soapModel->find($id);
+        if (!$data) {
+            return $this->response->setStatusCode(404)->setBody('Data pemeriksaan SOAP tidak ditemukan');
+        }
+        $no_rm = $data['no_rm'] ?? '-';
+        // Ambil data pasien untuk dapatkan nama pasien
+        $pasienModel = model('App\\Models\\PasienModel');
+        $pasien = $pasienModel->where('no_rekam_medis', $no_rm)->first();
+        $nama_pasien = $pasien['nama_lengkap'] ?? '-';
+        // Ambil data dokter pemeriksa
+        $dokter_nama = '-';
+        if (!empty($data['id_dokter'])) {
+            $db = \Config\Database::connect();
+            $dokter = $db->table('users')->where('id', $data['id_dokter'])->get()->getRowArray();
+            if ($dokter && !empty($dokter['nama_lengkap'])) {
+                $dokter_nama = $dokter['nama_lengkap'];
+            } elseif ($dokter && !empty($dokter['fullname'])) {
+                $dokter_nama = $dokter['fullname'];
+            } elseif ($dokter && !empty($dokter['nama'])) {
+                $dokter_nama = $dokter['nama'];
+            }
+        }
+        // Format obat_manual dan obat_db menjadi string nama obat
+        $db = \Config\Database::connect();
+        // Obat manual: decode json, gabung jadi string
+        $obat_manual_str = '-';
+        if (!empty($data['obat_manual'])) {
+            $obat_manual = json_decode($data['obat_manual'], true);
+            if (is_array($obat_manual) && count($obat_manual) > 0) {
+                $obat_manual = array_filter(array_map('trim', $obat_manual));
+                if (count($obat_manual) > 0) {
+                    $obat_manual_str = implode(", ", $obat_manual);
+                }
+            }
+        }
+
+        // Obat db: decode json, ambil nama dari tabel obat
+        $obat_db_str = '-';
+        if (!empty($data['obat_db'])) {
+            $obat_db = json_decode($data['obat_db'], true);
+            if (is_array($obat_db) && count($obat_db) > 0) {
+                $obatRows = $db->table('obat')->whereIn('id_obat', $obat_db)->get()->getResultArray();
+                $obatMap = [];
+                foreach ($obatRows as $ob) {
+                    $obatMap[$ob['id_obat']] = $ob['nama_obat'];
+                }
+                $obatNames = [];
+                foreach ($obat_db as $oid) {
+                    if (isset($obatMap[$oid])) {
+                        $obatNames[] = $obatMap[$oid];
+                    }
+                }
+                if (count($obatNames) > 0) {
+                    $obat_db_str = implode(", ", $obatNames);
+                }
+            }
+        }
+
+        // Format tanggal pemeriksaan ke format Indonesia (30 Juli 2025 14:30 WIB)
+        function indo_datetime($datetime) {
+            $bulan = [1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            $ts = strtotime($datetime);
+            $tgl = date('d', $ts);
+            $bln = $bulan[(int)date('m', $ts)];
+            $thn = date('Y', $ts);
+            return "$tgl $bln $thn";
+        }
+
+        $replace = [
+            'no_rm' => $no_rm,
+            'nama_pasien' => $nama_pasien,
+            'tanggal_pemeriksaan' => isset($data['created_at']) ? indo_datetime($data['created_at']) : '-',
+            'keluhan_utama' => $data['keluhan_utama'] ?? '-',
+            'riwayat_penyakit' => $data['riwayat_penyakit'] ?? '-',
+            'tekanan_darah' => $data['tekanan_darah'] ?? '-',
+            'denyut_nadi' => $data['denyut_nadi'] ?? '-',
+            'suhu_tubuh' => $data['suhu_tubuh'] ?? '-',
+            'respirasi' => $data['respirasi'] ?? '-',
+            'pemeriksaan_fisik' => $data['pemeriksaan_fisik'] ?? '-',
+            'diagnosis' => $data['diagnosis'] ?? '-',
+            'prognosis' => $data['prognosis'] ?? '-',
+            'obat_manual' => $obat_manual_str,
+            'obat_db' => $obat_db_str,
+            'edukasi' => $data['edukasi'] ?? '-',
+            'id_dokter' => $dokter_nama,
+            'tanggal_cetak' => date('d-m-Y'),
+            'jam_cetak' => date('H:i'),
+        ];
+        $templatePath = APPPATH . 'Templates/word/pemeriksaansoap_template.docx';
+        if (!file_exists($templatePath)) {
+            return $this->response->setStatusCode(500)->setBody('Template Word SOAP tidak ditemukan');
+        }
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+        foreach ($replace as $key => $val) {
+            $templateProcessor->setValue($key, $val);
+        }
+        $filename = 'Pemeriksaan_SOAP_' . $replace['no_rm'] . '.docx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        $templateProcessor->saveAs('php://output');
+        exit;
+    }
 }

@@ -14,6 +14,17 @@
     transition: all 0.3s ease;
 }
 
+.card {
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+.card-body .position-relative {
+    position: relative;
+    border: #3030302b 1px solid;
+    border-radius: 16px;
+    padding-bottom: 0px;
+}
 /* Avatar Initial */
 .avatar-initial {
     width: 48px;
@@ -36,8 +47,8 @@
     border-radius: 30px;
     font-size: 0.75rem;
     font-weight: 500;
-    background-color: rgba(255, 193, 7, 0.1);
-    color: #ffc107;
+    background-color: rgb(255, 193, 7);
+    color: #000000;
     border: 1px solid rgba(255, 193, 7, 0.2);
 }
 
@@ -79,8 +90,14 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.5rem;
+    color: #00438a;
+    border-color: #00438a;
 }
-
+.btn-refresh:hover {
+    background-color: #00438a;
+    color: #ffffff;
+    border-color: #00438a;
+}
 .btn-refresh i {
     transition: transform 0.3s ease;
 }
