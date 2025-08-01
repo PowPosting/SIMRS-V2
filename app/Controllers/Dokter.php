@@ -260,13 +260,20 @@ class Dokter extends BaseController
 
         // Simpan ke database
         try {
+            $db->transStart();
+            
+            // Simpan pemeriksaan SOAP
             $db->table('pemeriksaan_soap')->insert($data);
+            $id_pemeriksaan = $db->insertID();
+
+            // Simpan resep obat ke tabel resep untuk farmasi
+            $this->simpanResepObat($id_pemeriksaan, $data['no_rm'], $obat_manual, $obat_db, $id_dokter);
 
             // Update status antrian jika id_antrian dikirim
             $id_antrian = $this->request->getPost('id_antrian');
             if ($id_antrian) {
                 // Update di antrian_poli
-                $db->table('antrian_poli')->where('id', $id_antrian)->update(['status' => 'Menunggu Kasir']);
+                $db->table('antrian_poli')->where('id', $id_antrian)->update(['status' => 'Menunggu Farmasi']);
                 // Update juga di antrian utama jika ada (untuk sinkronisasi dashboard admisi)
                 $antrianPoli = $db->table('antrian_poli')->where('id', $id_antrian)->get()->getFirstRow('array');
                 if ($antrianPoli && isset($antrianPoli['no_rm'])) {
@@ -279,9 +286,15 @@ class Dokter extends BaseController
                     if ($antrianUtama && in_array($antrianUtama['status'], ['Menunggu Dokter', 'Dalam Pemeriksaan', 'Menunggu Pemeriksaan'])) {
                         $db->table('antrian')
                             ->where('id', $antrianUtama['id'])
-                            ->update(['status' => 'Menunggu Kasir']);
+                            ->update(['status' => 'Menunggu Farmasi']);
                     }
                 }
+            }
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Gagal menyimpan data ke database');
             }
 
             // Redirect ke halaman sukses
@@ -289,6 +302,75 @@ class Dokter extends BaseController
         } catch (\Exception $e) {
             session()->setFlashdata('error', 'Gagal menyimpan data: ' . $e->getMessage());
             return redirect()->back();
+        }
+    }
+
+    // Method untuk menyimpan resep obat ke tabel resep
+    private function simpanResepObat($id_pemeriksaan, $no_rm, $obat_manual, $obat_db, $id_dokter)
+    {
+        $db = \Config\Database::connect();
+        
+        // Ambil data pasien
+        $pasien = $db->table('pasien')->where('no_rekam_medis', $no_rm)->get()->getFirstRow('array');
+        if (!$pasien) {
+            log_message('warning', 'Pasien tidak ditemukan untuk no_rm: ' . $no_rm);
+            return;
+        }
+
+        // Ambil data tambahan dari POST
+        $jumlah_obat = $this->request->getPost('jumlah_obat');
+        $instruksi_obat = $this->request->getPost('instruksi_obat');
+
+        // Simpan obat manual
+        if (!empty($obat_manual) && is_array($obat_manual)) {
+            foreach ($obat_manual as $index => $obat) {
+                if (trim($obat)) {
+                    $jumlah = isset($jumlah_obat[$index]) && $jumlah_obat[$index] ? $jumlah_obat[$index] : 1;
+                    $instruksi = isset($instruksi_obat[$index]) && $instruksi_obat[$index] ? $instruksi_obat[$index] : 'Sesuai instruksi dokter';
+                    
+                    $resepData = [
+                        'id_pasien' => $pasien['id'],
+                        'id_dokter' => $id_dokter,
+                        'id_obat' => null, // Manual obat tidak punya id_obat
+                        'nama_obat' => trim($obat),
+                        'jumlah' => $jumlah,
+                        'satuan' => 'pcs',
+                        'instruksi' => $instruksi,
+                        'status' => 'pending',
+                        'tanggal_resep' => date('Y-m-d H:i:s'),
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    $db->table('resep')->insert($resepData);
+                }
+            }
+        }
+
+        // Simpan obat dari database
+        if (!empty($obat_db) && is_array($obat_db)) {
+            foreach ($obat_db as $index => $id_obat) {
+                if ($id_obat) {
+                    // Ambil data obat
+                    $obat = $db->table('obat')->where('id_obat', $id_obat)->get()->getFirstRow('array');
+                    if ($obat) {
+                        $jumlah = isset($jumlah_obat[$index]) && $jumlah_obat[$index] ? $jumlah_obat[$index] : 1;
+                        $instruksi = isset($instruksi_obat[$index]) && $instruksi_obat[$index] ? $instruksi_obat[$index] : 'Sesuai instruksi dokter';
+                        
+                        $resepData = [
+                            'id_pasien' => $pasien['id'],
+                            'id_dokter' => $id_dokter,
+                            'id_obat' => $id_obat,
+                            'nama_obat' => $obat['nama_obat'],
+                            'jumlah' => $jumlah,
+                            'satuan' => $obat['satuan'] ?? 'pcs',
+                            'instruksi' => $instruksi,
+                            'status' => 'pending',
+                            'tanggal_resep' => date('Y-m-d H:i:s'),
+                            'created_at' => date('Y-m-d H:i:s')
+                        ];
+                        $db->table('resep')->insert($resepData);
+                    }
+                }
+            }
         }
     }
 

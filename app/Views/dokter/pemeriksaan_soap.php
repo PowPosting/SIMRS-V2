@@ -192,6 +192,44 @@ select.form-control {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
 }
+
+/* Autocomplete Styling */
+.autocomplete-list {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    border: 1px solid #e0e6ed !important;
+}
+
+.autocomplete-item {
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+}
+
+.autocomplete-item:hover {
+    background-color: #e3f2fd !important;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none !important;
+}
+
+.stok-obat {
+    white-space: nowrap;
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+    border-radius: 10px !important;
+}
+
+/* Obat Row Hover Effects */
+.obat-row {
+    transition: all 0.3s ease;
+}
+
+.obat-row:hover {
+    border-color: #007bff !important;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+}
 </style>
 
 <div class="container mt-4" style="max-width:1400px;">
@@ -223,64 +261,97 @@ select.form-control {
             <div class="card-body p-4 p-md-5" style="margin-top: -10px;">
                 
                 <!-- HEADER PASIEN -->
-                <div class="mb-5 pb-4 border-bottom">
+                <div class="mb-5 pb-4" style="background: #ffffff; border: 1px solid #e9ecef; border-radius: 1rem; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
                     <div class="row g-4 align-items-center">
-                        <div class="col-lg-2 col-md-3 col-12 d-flex justify-content-center">
-                            <span class="info-badge badge-info" style="font-size:1rem; font-weight:600; background:#007bff; color:#fff; border-radius:0.9rem; padding:10px 22px; box-shadow:0 2px 8px rgba(0,123,255,0.10); display:inline-block; min-width:70px; max-width:120px; overflow-wrap:anywhere; text-align:center; border:none; letter-spacing:1px;">
-                                <?php
-                                $no_rm = isset($pasien['no_rekam_medis']) ? $pasien['no_rekam_medis'] : (isset($pasien['no_rm']) ? $pasien['no_rm'] : 'RM-001');
-                                $no_rm = str_replace(["\r", "\n"], ' ', $no_rm);
-                                echo esc($no_rm);
-                                ?>
-                            </span>
-                        </div>
-                        <div class="col-lg-6 col-md-5 col-12">
-                            <h2 class="gradient-text mb-2" style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;">
-                                <?= isset($pasien['nama_lengkap']) ? esc($pasien['nama_lengkap']) : 'Nama Pasien' ?>
-                            </h2>
-                            <div class="d-flex flex-wrap gap-2 mb-3">
-                                <div class="d-flex gap-2 mb-3" style="flex-wrap:nowrap;overflow-x:auto;">
-                                    <span class="info-badge badge-info">
-                                    <i class="bi bi-person"></i>
-                                    <?= isset($pasien['jenis_kelamin']) ? esc($pasien['jenis_kelamin']) : '-' ?>
-                                </span>
-                                    <span class="info-badge badge-warning">
-                                    <i class="bi bi-calendar-heart"></i>
+                        <!-- Nomor Rekam Medis -->
+                        <div class="col-lg-2 col-md-3 col-12 text-center">
+                            <div style="background: #007bff; color: #fff; border-radius: 0.75rem; padding: 16px; box-shadow: 0 2px 6px rgba(0,123,255,0.2);">
+                                <div style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 4px;">No. RM</div>
+                                <div style="font-size: 1.1rem; font-weight: 700;">
                                     <?php
-                                    if (isset($pasien['usia']) && $pasien['usia']) {
-                                        echo esc($pasien['usia']) . ' Tahun';
-                                    } elseif (isset($pasien['tgl_lahir']) && $pasien['tgl_lahir']) {
-                                        $lahir = new DateTime($pasien['tgl_lahir']);
-                                        $today = new DateTime();
-                                        $umur = $today->diff($lahir)->y;
-                                        echo $umur . ' Tahun';
-                                    } else {
-                                        echo '0 Tahun';
-                                    }
+                                    $no_rm = isset($pasien['no_rekam_medis']) ? $pasien['no_rekam_medis'] : (isset($pasien['no_rm']) ? $pasien['no_rm'] : 'RM-001');
+                                    $no_rm = str_replace(["\r", "\n"], ' ', $no_rm);
+                                    echo esc($no_rm);
                                     ?>
-                                    </span>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- Data Pasien -->
+                        <div class="col-lg-6 col-md-5 col-12">
+                            <h2 style="color: #2d3748; font-size: 1.5rem; font-weight: 700; margin-bottom: 16px;">
+                                <?= isset($pasien['nama_lengkap']) ? esc($pasien['nama_lengkap']) : 'Nama Pasien' ?>
+                            </h2>
+                            
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span style="background: #e3f2fd; color: #1976d2; padding: 6px 12px; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600;">
+                                    <i class="bi bi-person me-1"></i>
+                                    <?= isset($pasien['jenis_kelamin']) ? esc($pasien['jenis_kelamin']) : '-' ?>
+                                </span>
+                                <span style="background: #fff3e0; color: #f57c00; padding: 6px 12px; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600;">
+                                    <i class="bi bi-calendar-heart me-1"></i>
+                                    <?php
+                                    $umur = 0;
+                                    $debug_info = '';
+                                    
+                                    // Debug: cek data yang ada
+                                    if (isset($pasien['usia'])) {
+                                        $debug_info .= "Usia field: '" . $pasien['usia'] . "' ";
+                                    }
+                                    if (isset($pasien['tgl_lahir'])) {
+                                        $debug_info .= "Tgl lahir: '" . $pasien['tgl_lahir'] . "' ";
+                                    }
+                                    
+                                    if (isset($pasien['usia']) && !empty($pasien['usia']) && $pasien['usia'] > 0) {
+                                        $umur = (int)$pasien['usia'];
+                                    } elseif (isset($pasien['tgl_lahir']) && !empty($pasien['tgl_lahir'])) {
+                                        try {
+                                            $lahir = new DateTime($pasien['tgl_lahir']);
+                                            $today = new DateTime();
+                                            $umur = $today->diff($lahir)->y;
+                                        } catch (Exception $e) {
+                                            $umur = 0;
+                                            $debug_info .= "Error: " . $e->getMessage();
+                                        }
+                                    }
+                                    
+                                    echo $umur . ' Tahun';
+                                    // Tampilkan debug info sementara
+                                    if ($umur == 0 && !empty($debug_info)) {
+                                        echo '<small style="display:block;font-size:0.7rem;color:#999;margin-top:2px;">' . $debug_info . '</small>';
+                                    }
+                                    ?>
+                                </span>
+                            </div>
+                            
                             <?php if(isset($pasien['tgl_lahir']) && $pasien['tgl_lahir']): ?>
-                            <div style="color: #6b7280; font-size: 14px;">
-                                <i class="bi bi-cake2"></i> <?= esc($pasien['tgl_lahir']) ?>
+                            <div style="color: #718096; font-size: 0.9rem;">
+                                <i class="bi bi-cake2 me-1"></i>
+                                <span><?= esc($pasien['tgl_lahir']) ?></span>
                             </div>
                             <?php endif; ?>
                         </div>
+                        
+                        <!-- Info Pemeriksaan -->
                         <div class="col-lg-4 col-md-4 col-12">
-                            <div class="d-flex flex-column gap-2">
-                                <span class="info-badge badge-success">
-                                    <i class="bi bi-clock"></i>
-                                    <?= isset($waktu_pemeriksaan) ? esc($waktu_pemeriksaan) : date('d-m-Y H:i') ?>
-                                </span>
-                                <span class="info-badge badge-warning">
-                                    <i class="bi bi-hospital"></i>
-                                    <?= isset($poli) ? esc($poli) : 'Poli Umum' ?>
-                                </span>
-                                <span class="info-badge badge-info">
-                                    <i class="bi bi-person-badge"></i>
-                                    <?= isset($dokter) ? esc($dokter) : 'dr. Dokter' ?>
-                                </span>
+                            <div style="background: #f8f9fa; border-radius: 0.75rem; padding: 16px;">
+                                <h6 style="color: #4a5568; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 12px;">
+                                    Info Pemeriksaan
+                                </h6>
+                                <div class="d-flex flex-column gap-2">
+                                    <div style="font-size: 0.85rem;">
+                                        <i class="bi bi-clock me-2" style="color: #28a745;"></i>
+                                        <span style="color: #4a5568;"><?= isset($waktu_pemeriksaan) ? esc($waktu_pemeriksaan) : date('d-m-Y H:i') ?></span>
+                                    </div>
+                                    <div style="font-size: 0.85rem;">
+                                        <i class="bi bi-hospital me-2" style="color: #ffc107;"></i>
+                                        <span style="color: #4a5568;"><?= isset($poli) ? esc($poli) : 'Poli Umum' ?></span>
+                                    </div>
+                                    <div style="font-size: 0.85rem;">
+                                        <i class="bi bi-person-badge me-2" style="color: #007bff;"></i>
+                                        <span style="color: #4a5568;"><?= isset($dokter) ? esc($dokter) : 'dr. Dokter' ?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -409,25 +480,37 @@ select.form-control {
                     <div class="row g-4 align-items-stretch">
                         <div class="col-md-6 d-flex flex-column justify-content-between">
                             <div class="form-group h-100 d-flex flex-column">
-                                <label class="form-label mb-2">
-                                    <i class="bi bi-capsule me-2"></i>Resep Obat
+                                <label class="form-label mb-3">
+                                    <i class="bi bi-capsule mr-2"></i>Resep Obat
                                 </label>
                                 <div id="obat-list" class="flex-grow-1">
                                     <div class="obat-row">
-                                        <div class="form-row align-items-center">
-                                            <div class="col-12 col-md-6 mb-2 mb-md-0">
-                                                <span>Tambah obat Manual</span>
-                                                <textarea class="form-control" name="obat_manual[]" rows="2" placeholder="Nama obat + dosis + frekuensi"></textarea>
+                                        <div class="row align-items-end">
+                                            <div class="col-12 mb-3">
+                                                <label class="small text-muted mb-1">Obat Manual</label>
+                                                <textarea class="form-control" name="obat_manual[]" rows="2" placeholder="Nama obat + dosis + frekuensi&#10;Contoh: Paracetamol 500mg 3x1 sehari"></textarea>
                                             </div>
-                                            <div class="col-12 col-md-5 mb-2 mb-md-0 position-relative">
-                                                <span>Cari Obat dari database</span>
-                                                <input type="text" class="form-control obat-autocomplete" placeholder="Cari obat..." autocomplete="off" style="border-radius:0.75rem; min-height:40px; font-size:15px;" oninput="cariObat(this)">
+                                            <div class="col-4 mb-3 position-relative">
+                                                <label class="small text-muted mb-1">Cari dari Database</label>
+                                                <input type="text" class="form-control obat-autocomplete" placeholder="Cari obat..." autocomplete="off" oninput="cariObat(this)">
                                                 <input type="hidden" name="obat_db[]">
-                                                <div class="autocomplete-list shadow-sm" style="position:absolute;top:100%;left:0;right:0;z-index:10;background:#fff;border-radius:0.5rem;max-height:180px;overflow-y:auto;display:none;"></div>
+                                                <div class="autocomplete-list shadow-sm" style="position:absolute;top:100%;left:0;right:0;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:0.5rem;max-height:200px;overflow-y:auto;display:none;"></div>
                                             </div>
-                                            <div class="col-12 col-md-1 d-flex justify-content-end align-items-center">
-                                                <span class="stok-obat badge bg-info text-dark me-2" style="font-size:13px;display:none;"></span>
-                                                <button type="button" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-0" style="width:36px; height:36px; font-size:22px;" onclick="tambahObat()" title="Tambah baris obat"><i class="bi bi-plus-lg"></i></button>
+                                            <div class="col-3 mb-3">
+                                                <label class="small text-muted mb-1">Jumlah</label>
+                                                <input type="number" class="form-control" name="jumlah_obat[]" placeholder="1" min="1" value="1">
+                                            </div>
+                                            <div class="col-3 mb-3">
+                                                <label class="small text-muted mb-1">Instruksi</label>
+                                                <input type="text" class="form-control" name="instruksi_obat[]" placeholder="3x1/hari">
+                                            </div>
+                                            <div class="col-2 mb-3 text-center">
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="stok-obat badge badge-info mb-1" style="font-size:10px;display:none;"></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width:32px; height:32px; padding:0;" onclick="tambahObat()" title="Tambah baris obat">
+                                                        <i class="bi bi-plus-lg"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -469,9 +552,16 @@ select.form-control {
 const obatList = <?php echo json_encode($list_obat ?? []); ?>;
 
 function cariObat(input) {
-    const wrapper = input.closest('.col-12.col-md-5');
+    const wrapper = input.closest('.col-4');
+    
+    if (!wrapper) {
+        console.error('Wrapper tidak ditemukan! Periksa class col-4');
+        return;
+    }
+    
     const list = wrapper.querySelector('.autocomplete-list');
     const hidden = wrapper.querySelector('input[type=hidden]');
+    
     // Cari .stok-obat di baris yang sama
     let stokSpan = null;
     let parent = wrapper.parentElement;
@@ -479,14 +569,20 @@ function cariObat(input) {
         stokSpan = parent.querySelector('.stok-obat');
         parent = parent.parentElement;
     }
+    
     const val = input.value.trim().toLowerCase();
     list.innerHTML = '';
+    
     if (!val) {
         list.style.display = 'none';
         hidden.value = '';
-        if(stokSpan) { stokSpan.style.display = 'none'; stokSpan.textContent = ''; }
+        if(stokSpan) { 
+            stokSpan.style.display = 'none'; 
+            stokSpan.textContent = ''; 
+        }
         return;
     }
+    
     let found = false;
     obatList.forEach(obat => {
         if (obat.nama_obat.toLowerCase().includes(val)) {
@@ -495,17 +591,43 @@ function cariObat(input) {
             item.className = 'autocomplete-item';
             item.style.padding = '8px 14px';
             item.style.cursor = 'pointer';
-            item.innerHTML = `<b>${obat.nama_obat}</b> <span class='badge bg-light text-dark ms-2'>Stok: ${obat.stok}</span>`;
+            item.style.borderBottom = '1px solid #eee';
+            item.innerHTML = `<strong>${obat.nama_obat}</strong> <span class='badge badge-light text-dark ml-2' style='font-size:11px;'>Stok: ${obat.stok}</span>`;
+            
+            item.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            item.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '#fff';
+            });
+            
             item.onclick = function() {
                 input.value = obat.nama_obat;
                 hidden.value = obat.id_obat;
                 list.style.display = 'none';
-                if(stokSpan) { stokSpan.textContent = 'Stok: ' + obat.stok; stokSpan.style.display = 'inline-block'; }
+                if(stokSpan) { 
+                    stokSpan.textContent = 'Stok: ' + obat.stok; 
+                    stokSpan.style.display = 'inline-block'; 
+                    stokSpan.className = 'badge badge-success mb-1';
+                    stokSpan.style.fontSize = '10px';
+                    stokSpan.style.padding = '2px 6px';
+                    
+                    // Color coding based on stock level
+                    if (obat.stok <= 10) {
+                        stokSpan.className = 'badge badge-danger mb-1';
+                    } else if (obat.stok <= 50) {
+                        stokSpan.className = 'badge badge-warning mb-1';
+                    } else {
+                        stokSpan.className = 'badge badge-success mb-1';
+                    }
+                }
             };
             list.appendChild(item);
         }
     });
+    
     list.style.display = found ? 'block' : 'none';
+    
     if (!found) {
         const item = document.createElement('div');
         item.className = 'autocomplete-item';
@@ -514,14 +636,29 @@ function cariObat(input) {
         item.textContent = 'Obat tidak ditemukan';
         list.appendChild(item);
         list.style.display = 'block';
-        if(stokSpan) { stokSpan.style.display = 'none'; stokSpan.textContent = ''; }
+        if(stokSpan) { 
+            stokSpan.style.display = 'none'; 
+            stokSpan.textContent = ''; 
+        }
     }
+    
     // Jika user ketik nama yang match, langsung tampilkan stok (tanpa klik)
     const match = obatList.find(obat => obat.nama_obat.toLowerCase() === val);
     if(match && stokSpan) {
         stokSpan.textContent = 'Stok: ' + match.stok;
         stokSpan.style.display = 'inline-block';
-    } else if(stokSpan) {
+        stokSpan.style.fontSize = '10px';
+        stokSpan.style.padding = '2px 6px';
+        
+        // Color coding based on stock level
+        if (match.stok <= 10) {
+            stokSpan.className = 'badge badge-danger mb-1';
+        } else if (match.stok <= 50) {
+            stokSpan.className = 'badge badge-warning mb-1';
+        } else {
+            stokSpan.className = 'badge badge-success mb-1';
+        }
+    } else if(stokSpan && !found) {
         stokSpan.style.display = 'none';
         stokSpan.textContent = '';
     }
@@ -530,19 +667,33 @@ function cariObat(input) {
 // Tambah baris obat dinamis
 function tambahObat() {
     const html = `
-        <div class=\"obat-row\">
-            <div class=\"form-row align-items-center\">
-                <div class=\"col-12 col-md-6 mb-2 mb-md-0\">
-                    <textarea class=\"form-control\" name=\"obat_manual[]\" rows=\"2\" placeholder=\"Nama obat + dosis + frekuensi\"></textarea>
+        <div class="obat-row">
+            <div class="row align-items-end">
+                <div class="col-12 mb-3">
+                    <label class="small text-muted mb-1">Obat Manual</label>
+                    <textarea class="form-control" name="obat_manual[]" rows="2" placeholder="Nama obat + dosis + frekuensi&#10;Contoh: Paracetamol 500mg 3x1 sehari"></textarea>
                 </div>
-                <div class=\"col-12 col-md-5 mb-2 mb-md-0 position-relative\">
-                    <input type=\"text\" class=\"form-control obat-autocomplete\" placeholder=\"Cari obat...\" autocomplete=\"off\" style=\"border-radius:0.75rem; min-height:40px; font-size:15px;\" oninput=\"cariObat(this)\">
-                    <input type=\"hidden\" name=\"obat_db[]\">
-                    <div class=\"autocomplete-list shadow-sm\" style=\"position:absolute;top:100%;left:0;right:0;z-index:10;background:#fff;border-radius:0.5rem;max-height:180px;overflow-y:auto;display:none;\"></div>
+                <div class="col-4 mb-3 position-relative">
+                    <label class="small text-muted mb-1">Cari dari Database</label>
+                    <input type="text" class="form-control obat-autocomplete" placeholder="Cari obat..." autocomplete="off" oninput="cariObat(this)">
+                    <input type="hidden" name="obat_db[]">
+                    <div class="autocomplete-list shadow-sm" style="position:absolute;top:100%;left:0;right:0;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:0.5rem;max-height:200px;overflow-y:auto;display:none;"></div>
                 </div>
-                <div class=\"col-12 col-md-1 d-flex justify-content-end align-items-center\">
-                    <span class=\"stok-obat badge bg-info text-dark me-2\" style=\"font-size:13px;display:none;\"></span>
-                    <button type=\"button\" class=\"btn btn-danger btn-sm\" style=\"width:36px; height:36px; font-size:22px;\" onclick=\"this.closest('.obat-row').remove(); updateObatButtons();\" title=\"Hapus baris obat\"><i class=\"bi bi-trash\"></i></button>
+                <div class="col-3 mb-3">
+                    <label class="small text-muted mb-1">Jumlah</label>
+                    <input type="number" class="form-control" name="jumlah_obat[]" placeholder="1" min="1" value="1">
+                </div>
+                <div class="col-3 mb-3">
+                    <label class="small text-muted mb-1">Instruksi</label>
+                    <input type="text" class="form-control" name="instruksi_obat[]" placeholder="3x1/hari">
+                </div>
+                <div class="col-2 mb-3 text-center">
+                    <div class="d-flex flex-column align-items-center">
+                        <span class="stok-obat badge badge-info mb-1" style="font-size:10px;display:none;"></span>
+                        <button type="button" class="btn btn-danger btn-sm" style="width:32px; height:32px; padding:0;" onclick="this.closest('.obat-row').remove(); updateObatButtons();" title="Hapus baris obat">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -554,13 +705,26 @@ function tambahObat() {
 function updateObatButtons() {
     const rows = document.querySelectorAll('#obat-list .obat-row');
     rows.forEach((row, idx) => {
-        const btnCol = row.querySelector('.col-12.col-md-1');
-        if (!btnCol) return;
-        btnCol.innerHTML = '';
+        const btnDiv = row.querySelector('.col-2 .d-flex');
+        if (!btnDiv) return;
+        
+        // Keep the stok span
+        const stokSpan = btnDiv.querySelector('.stok-obat');
+        btnDiv.innerHTML = '';
+        if (stokSpan) btnDiv.appendChild(stokSpan);
+        
         if (idx === 0) {
-            btnCol.innerHTML = `<button type="button" class="btn btn-success btn-sm" style="min-width:36px; min-height:36px; display:flex; align-items:center; justify-content:center;" onclick="tambahObat()" title="Tambah baris obat"><i class="bi bi-plus-lg"></i></button>`;
+            btnDiv.insertAdjacentHTML('beforeend', `
+                <button type="button" class="btn btn-success btn-sm" style="width:32px; height:32px; padding:0;" onclick="tambahObat()" title="Tambah baris obat">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            `);
         } else {
-            btnCol.innerHTML = `<button type="button" class="btn btn-danger btn-sm" style="min-width:36px; min-height:36px; display:flex; align-items:center; justify-content:center;" onclick="this.closest('.obat-row').remove(); updateObatButtons();" title="Hapus baris obat"><i class="bi bi-trash"></i></button>`;
+            btnDiv.insertAdjacentHTML('beforeend', `
+                <button type="button" class="btn btn-danger btn-sm" style="width:32px; height:32px; padding:0;" onclick="this.closest('.obat-row').remove(); updateObatButtons();" title="Hapus baris obat">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `);
         }
     });
 }
@@ -575,6 +739,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     updateObatButtons();
+    
+    // Close autocomplete when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.position-relative')) {
+            document.querySelectorAll('.autocomplete-list').forEach(list => {
+                list.style.display = 'none';
+            });
+        }
+    });
+    
+    // Prevent autocomplete close when clicking inside
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.autocomplete-list')) {
+            e.stopPropagation();
+        }
+    });
 });
 
 // Form validation

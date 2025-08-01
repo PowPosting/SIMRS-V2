@@ -306,22 +306,53 @@ class Admisi extends BaseController
         }
 
         $data['poli_list'] = $this->poliModel->select('id, nama, kode')->findAll();
+
+        // Ambil semua dokter aktif (join ke users, role dokter)
+        $db = \Config\Database::connect();
+        $dokterRows = $db->table('dokter_jadwal')
+            ->select('dokter_jadwal.dokter_id as id, users.nama_lengkap, users.spesialisasi')
+            ->join('users', 'users.id = dokter_jadwal.dokter_id', 'left')
+            ->where('users.role', 'dokter')
+            ->groupBy('dokter_jadwal.dokter_id')
+            ->get()->getResultArray();
+        // Gunakan nama_lengkap saja, jika kosong fallback ke [Tanpa Nama]
+        foreach ($dokterRows as &$dok) {
+            $nama = isset($dok['nama_lengkap']) && !empty($dok['nama_lengkap']) ? $dok['nama_lengkap'] : '[Tanpa Nama]';
+            $dok['nama'] = $nama;
+            $dok['nama_lengkap'] = $nama;
+        }
+        unset($dok);
+        $data['dokterList'] = $dokterRows;
+
+        // Ambil jadwal praktik dokter (group by dokter dan poliklinik)
+        $jadwalModel = new \App\Models\DokterJadwalModel();
+        $jadwalAll = $jadwalModel->select('id, dokter_id, poliklinik_id, hari, jam_mulai, jam_selesai, keterangan')
+            ->where('status', 1)
+            ->findAll();
+        $data['jadwalList'] = [];
+        foreach ($jadwalAll as $jadwal) {
+            $data['jadwalList'][$jadwal['dokter_id']][] = $jadwal;
+        }
+
+        // Tambahan: mapping jadwal per poliklinik untuk dropdown dokter
+        $data['jadwalListByPoli'] = [];
+        foreach ($jadwalAll as $jadwal) {
+            $data['jadwalListByPoli'][$jadwal['poliklinik_id']][] = $jadwal;
+        }
+
         return view('admisi/registrasi_pasien_step5', $data);
     }
 
     // Finalisasi pendaftaran
     public function saveStep5()
     {
-        // Debug: Print langsung ke output
-        echo "Debug: Memulai proses saveStep5<br>";
-        
+        // Hapus debug output agar tidak tampil di browser
         $rules = [
             'id_poli' => 'required|numeric',
             'konfirmasi_data' => 'required|in_list[1]'
         ];
         
-        // Debug: Print POST data
-        echo "Debug: POST data: " . json_encode($this->request->getPost()) . "<br>";
+        //
 
         // Log data yang diterima
         log_message('debug', '=== START SAVING STEP 5 ===');
@@ -335,6 +366,7 @@ class Admisi extends BaseController
             log_message('error', 'Validation Errors: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+    
 
         // Periksa apakah semua data session tersedia
         if (!$this->session->has('pasien_step1') || 
@@ -532,6 +564,7 @@ class Admisi extends BaseController
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
         }
     }
+
 
     // Halaman sukses registrasi
     public function registrasiSukses()

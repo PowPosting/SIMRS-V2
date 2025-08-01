@@ -138,16 +138,20 @@ $routes->group('farmasi', function($routes) {
     $routes->get('edit-obat/(:num)', 'Farmasi::editObat/$1');
     $routes->post('update-obat/(:num)', 'Farmasi::updateObat/$1');
     $routes->get('delete-obat/(:num)', 'Farmasi::deleteObat/$1');
+    $routes->get('permintaan-obat', 'Farmasi::permintaanObat');
+    
+    // Routes untuk workflow permintaan obat
+    $routes->get('proses-permintaan/(:num)', 'Farmasi::prosesPermintaan/$1');
+    $routes->get('selesai-permintaan/(:num)', 'Farmasi::selesaiPermintaan/$1');
+    $routes->get('batal-permintaan/(:num)', 'Farmasi::batalPermintaan/$1');
+    $routes->get('detail-permintaan/(:num)', 'Farmasi::detailPermintaan/$1');
 
 });
 
 // Kasir Routes
 $routes->group('kasir', function($routes) {
     $routes->get('/', 'Kasir::index');
-    $routes->get('dashboard', 'Kasir::index');
-    $routes->get('payments', 'Kasir::payments');
-    $routes->get('billing', 'Kasir::billing');
-    $routes->get('reports', 'Kasir::reports');
+    $routes->get('kasir', 'Kasir::index');
 });
 
 // Dokter Routes

@@ -11,141 +11,272 @@
         </div>
         <div class="card-body p-4">
             <!-- Data Pasien (Header) -->
-            <div class="mb-4 pb-3 border-bottom">
-                <div class="row g-0 align-items-center">
-                    <div class="col-12 col-md-7 d-flex flex-row align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                        <span class="info-badge badge-info mr-3 mb-0" style="font-size:1.15rem; font-weight:500; background:#007bff; color:#fff; border-radius:1.2rem; padding:12px 24px; box-shadow:0 2px 8px rgba(0,123,255,0.10); min-width:120px; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center; border:none; letter-spacing:1.2px;">
-                            <?= esc($pemeriksaan['no_rekam_medis'] ?? '-') ?>
-                        </span>
-                        <h3 class="gradient-text mb-0 ml-2" style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;">
-                            <?= esc($pemeriksaan['nama_lengkap'] ?? '-') ?>
-                        </h3>
-                        <button class="btn btn-sm btn-outline-primary ml-3" id="btnExportWordSOAP" type="button" style="white-space:nowrap;">
-                            <i class="fas fa-file-word"></i> Export Word
-                        </button>
-                        <!-- Modal Error ID Pemeriksaan -->
-                        <div class="modal fade" id="modalIdPemeriksaanNotFound" tabindex="-1" aria-labelledby="modalIdPemeriksaanNotFoundLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header bg-danger text-white">
-                                <h5 class="modal-title" id="modalIdPemeriksaanNotFoundLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Data Tidak Ditemukan</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                ID Pemeriksaan tidak ditemukan!
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                              </div>
+            <div class="mb-4 pb-4" style="background: #f8f9fa; border-radius: 1rem; padding: 24px; border: 1px solid #e9ecef;">
+                <div class="row g-4 align-items-center">
+                    <!-- Nomor RM dan Nama -->
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <div class="d-flex align-items-center mb-3">
+                            <div style="background: #007bff; color: #fff; border-radius: 0.75rem; padding: 12px 16px; margin-right: 16px; box-shadow: 0 2px 6px rgba(0,123,255,0.2);">
+                                <div style="font-size: 0.7rem; opacity: 0.9; margin-bottom: 2px;">No. RM</div>
+                                <div style="font-size: 1rem; font-weight: 700;">
+                                    <?= esc($pemeriksaan['no_rekam_medis'] ?? '-') ?>
+                                </div>
                             </div>
-                          </div>
+                            <div>
+                                <h3 style="color: #2d3748; font-size: 1.4rem; font-weight: 700; margin: 0;">
+                                    <?= esc($pemeriksaan['nama_lengkap'] ?? '-') ?>
+                                </h3>
+                            </div>
                         </div>
-                        <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            var btn = document.getElementById('btnExportWordSOAP');
-                            if (btn) {
-                                btn.onclick = function() {
-                                    var idPemeriksaan = "<?= isset($pemeriksaan['id']) ? esc($pemeriksaan['id']) : '' ?>";
-                                    if (!idPemeriksaan || idPemeriksaan === '-') {
-                                        var modal = new bootstrap.Modal(document.getElementById('modalIdPemeriksaanNotFound'));
-                                        modal.show();
-                                        return;
-                                    }
-                                    var url = '/exportword/pemeriksaansoap/' + encodeURIComponent(idPemeriksaan);
-                                    window.open(url, '_blank');
-                                };
-                            }
-                        });
-                        </script>
-                    </div>
-                    <div class="col-12 col-md-5 d-flex flex-column align-items-center align-items-md-end justify-content-center">
-                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end mb-1" style="gap: 10px;">
-                            <span class="info-badge badge-info" style="min-width: 80px;"><i class="bi bi-person"></i> <?= esc($pemeriksaan['jenis_kelamin'] ?? '-') ?></span>
-                            <span class="info-badge badge-warning" style="min-width: 100px;"><i class="bi bi-calendar-heart"></i> <?= esc($pemeriksaan['usia'] ?? '-') ?> Tahun</span>
+                        
+                        <!-- Info Pasien -->
+                        <div class="d-flex flex-wrap gap-2">
+                            <span style="background: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 0.4rem; font-size: 0.8rem; font-weight: 600;">
+                                <i class="bi bi-person me-1"></i>
+                                <?= esc($pemeriksaan['jenis_kelamin'] ?? '-') ?>
+                            </span>
+                            <span style="background: #fff3e0; color: #f57c00; padding: 4px 10px; border-radius: 0.4rem; font-size: 0.8rem; font-weight: 600;">
+                                <i class="bi bi-calendar-heart me-1"></i>
+                                <?= esc($pemeriksaan['usia'] ?? '-') ?> Tahun
+                            </span>
                             <?php if (!empty($pemeriksaan['tanggal_lahir'])): ?>
-                                <span class="info-badge badge-info" style="min-width: 110px;"><i class="bi bi-cake2"></i> <?= esc($pemeriksaan['tanggal_lahir']) ?></span>
+                            <span style="background: #f3e5f5; color: #7b1fa2; padding: 4px 10px; border-radius: 0.4rem; font-size: 0.8rem; font-weight: 600;">
+                                <i class="bi bi-cake2 me-1"></i>
+                                <?= esc($pemeriksaan['tanggal_lahir']) ?>
+                            </span>
                             <?php endif; ?>
                         </div>
-                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end" style="gap: 10px;">
-                            <span class="info-badge badge-success" style="min-width: 120px;"><i class="bi bi-clock"></i> <?= esc($pemeriksaan['waktu_pemeriksaan'] ?? '-') ?></span>
-                            <span class="info-badge badge-warning" style="min-width: 120px;"><i class="bi bi-hospital"></i> <?= esc($pemeriksaan['poli'] ?? '-') ?></span>
-                            <span class="info-badge badge-info" style="min-width: 120px;"><i class="bi bi-person-badge"></i> <?= esc($pemeriksaan['dokter'] ?? '-') ?></span>
+                    </div>
+                    
+                    <!-- Info Pemeriksaan -->
+                    <div class="col-lg-5 col-md-5 col-12">
+                        <div style="background: #ffffff; border-radius: 0.75rem; padding: 16px; border: 1px solid #e9ecef;">
+                            <h6 style="color: #4a5568; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 12px;">
+                                Info Pemeriksaan
+                            </h6>
+                            <div class="d-flex flex-column gap-2">
+                                <div style="font-size: 0.85rem;">
+                                    <i class="bi bi-clock me-2" style="color: #28a745;"></i>
+                                    <span style="color: #4a5568;"><?= esc($pemeriksaan['waktu_pemeriksaan'] ?? '-') ?></span>
+                                </div>
+                                <div style="font-size: 0.85rem;">
+                                    <i class="bi bi-hospital me-2" style="color: #ffc107;"></i>
+                                    <span style="color: #4a5568;"><?= esc($pemeriksaan['poli'] ?? '-') ?></span>
+                                </div>
+                                <div style="font-size: 0.85rem;">
+                                    <i class="bi bi-person-badge me-2" style="color: #007bff;"></i>
+                                    <span style="color: #4a5568;"><?= esc($pemeriksaan['dokter'] ?? '-') ?></span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <!-- Export Button -->
+                    <div class="col-lg-1 col-md-1 col-12 text-center">
+                        <button class="btn btn-outline-primary btn-sm" id="btnExportWordSOAP" type="button" style="border-radius: 0.5rem; padding: 8px 12px;">
+                            <i class="bi bi-file-earmark-word me-1"></i>
+                            <span class="d-none d-md-inline">Export</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- S -->
             <div class="mb-4">
-                <div class="section-header section-subjective"><i class="bi bi-chat-left-text-fill me-2"></i> S – Subjective</div>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="mb-2"><span style="font-weight:400;">Keluhan Utama:</span></div>
-                        <div><?= nl2br(esc($pemeriksaan['keluhan_utama'] ?? '-')) ?></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-2"><span style="font-weight:400;">Riwayat Penyakit:</span></div>
-                        <div><?= nl2br(esc($pemeriksaan['riwayat_penyakit'] ?? '-')) ?></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-2"><span style="font-weight:400;">Riwayat Alergi:</span></div>
-                        <div><?= nl2br(esc($pemeriksaan['riwayat_alergi'] ?? '-')) ?></div>
+                <div class="section-header section-subjective">
+                    <i class="bi bi-chat-left-text-fill me-3"></i>
+                    <span>S – Subjective (Data Subjektif)</span>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e9ecef; border-radius: 0.75rem; padding: 20px;">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 8px;">
+                                <i class="bi bi-exclamation-circle me-2" style="color: #007bff;"></i>
+                                Keluhan Utama
+                            </h6>
+                            <div style="color: #6c757d; line-height: 1.6;">
+                                <?= nl2br(esc($pemeriksaan['keluhan_utama'] ?? '-')) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 8px;">
+                                <i class="bi bi-journal-medical me-2" style="color: #28a745;"></i>
+                                Riwayat Penyakit
+                            </h6>
+                            <div style="color: #6c757d; line-height: 1.6;">
+                                <?= nl2br(esc($pemeriksaan['riwayat_penyakit'] ?? '-')) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 8px;">
+                                <i class="bi bi-shield-exclamation me-2" style="color: #dc3545;"></i>
+                                Riwayat Alergi
+                            </h6>
+                            <div style="color: #6c757d; line-height: 1.6;">
+                                <?= nl2br(esc($pemeriksaan['riwayat_alergi'] ?? '-')) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- O -->
             <div class="mb-4">
-                <div class="section-header section-objective"><i class="bi bi-activity me-2"></i> O – Objective</div>
-                <div class="row g-3">
-                    <div class="col-md-3"><span style="font-weight:400;">Tekanan Darah:</span><br><?= esc($pemeriksaan['tekanan_darah'] ?? '-') ?></div>
-                    <div class="col-md-3"><span style="font-weight:400;">Denyut Nadi:</span><br><?= esc($pemeriksaan['denyut_nadi'] ?? '-') ?></div>
-                    <div class="col-md-3"><span style="font-weight:400;">Suhu Tubuh:</span><br><?= esc($pemeriksaan['suhu_tubuh'] ?? '-') ?></div>
-                    <div class="col-md-3"><span style="font-weight:400;">Respirasi:</span><br><?= esc($pemeriksaan['respirasi'] ?? '-') ?></div>
+                <div class="section-header section-objective">
+                    <i class="bi bi-activity me-3"></i>
+                    <span>O – Objective (Data Objektif)</span>
                 </div>
-                <div class="mt-3"><span style="font-weight:400;">Pemeriksaan Fisik:</span><br><?= nl2br(esc($pemeriksaan['pemeriksaan_fisik'] ?? '-')) ?></div>
+                <div style="background: #ffffff; border: 1px solid #e9ecef; border-radius: 0.75rem; padding: 20px;">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-3">
+                            <div style="background: #f8f9fa; border-radius: 0.5rem; padding: 12px; text-center;">
+                                <i class="bi bi-heart-pulse" style="color: #dc3545; font-size: 1.2rem; margin-bottom: 8px;"></i>
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 4px;">Tekanan Darah</div>
+                                <div style="font-weight: 600; color: #495057;"><?= esc($pemeriksaan['tekanan_darah'] ?? '-') ?></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="background: #f8f9fa; border-radius: 0.5rem; padding: 12px; text-center;">
+                                <i class="bi bi-heart" style="color: #e74c3c; font-size: 1.2rem; margin-bottom: 8px;"></i>
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 4px;">Denyut Nadi</div>
+                                <div style="font-weight: 600; color: #495057;"><?= esc($pemeriksaan['denyut_nadi'] ?? '-') ?></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="background: #f8f9fa; border-radius: 0.5rem; padding: 12px; text-center;">
+                                <i class="bi bi-thermometer-half" style="color: #f39c12; font-size: 1.2rem; margin-bottom: 8px;"></i>
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 4px;">Suhu Tubuh</div>
+                                <div style="font-weight: 600; color: #495057;"><?= esc($pemeriksaan['suhu_tubuh'] ?? '-') ?></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="background: #f8f9fa; border-radius: 0.5rem; padding: 12px; text-center;">
+                                <i class="bi bi-lungs" style="color: #3498db; font-size: 1.2rem; margin-bottom: 8px;"></i>
+                                <div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 4px;">Respirasi</div>
+                                <div style="font-weight: 600; color: #495057;"><?= esc($pemeriksaan['respirasi'] ?? '-') ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 style="color: #495057; font-weight: 600; margin-bottom: 12px;">
+                            <i class="bi bi-search me-2" style="color: #28a745;"></i>
+                            Pemeriksaan Fisik
+                        </h6>
+                        <div style="background: #f8f9fa; border-radius: 0.5rem; padding: 16px; color: #6c757d; line-height: 1.6;">
+                            <?= nl2br(esc($pemeriksaan['pemeriksaan_fisik'] ?? '-')) ?>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- A -->
             <div class="mb-4">
-                <div class="section-header section-assessment"><i class="bi bi-clipboard2-pulse me-2"></i> A – Assessment</div>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="mb-2"><span style="font-weight:400;">Diagnosis:</span></div>
-                        <div><?= nl2br(esc($pemeriksaan['diagnosis'] ?? '-')) ?></div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-2"><span style="font-weight:400;">Prognosis:</span></div>
-                        <div><?= nl2br(esc($pemeriksaan['prognosis'] ?? '-')) ?></div>
+                <div class="section-header section-assessment">
+                    <i class="bi bi-clipboard2-pulse me-3"></i>
+                    <span>A – Assessment (Asesmen)</span>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e9ecef; border-radius: 0.75rem; padding: 20px;">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 12px;">
+                                <i class="bi bi-clipboard2-check me-2" style="color: #ffc107;"></i>
+                                Diagnosis
+                            </h6>
+                            <div style="background: #fff8e1; border-left: 4px solid #ffc107; border-radius: 0.5rem; padding: 16px; color: #6c757d; line-height: 1.6;">
+                                <?= nl2br(esc($pemeriksaan['diagnosis'] ?? '-')) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 12px;">
+                                <i class="bi bi-graph-up-arrow me-2" style="color: #28a745;"></i>
+                                Prognosis
+                            </h6>
+                            <div style="background: #e8f5e8; border-left: 4px solid #28a745; border-radius: 0.5rem; padding: 16px; color: #6c757d; line-height: 1.6;">
+                                <?= nl2br(esc($pemeriksaan['prognosis'] ?? '-')) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- P -->
             <div class="mb-4">
-                <div class="section-header section-plan"><i class="bi bi-calendar2-check me-2"></i> P – Plan</div>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="mb-2"><span style="font-weight:400;">Daftar Obat :</span></div>
-                        <?php if (!empty($pemeriksaan['obat_list']) && is_array($pemeriksaan['obat_list'])): ?>
-                            <ul class="mb-2">
-                                <?php foreach ($pemeriksaan['obat_list'] as $obat): ?>
-                                    <li><?= esc($obat) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php else: ?>
-                            <div>-</div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-2"><span style="font-weight:400;">Catatan Obat dan Edukasi Pasien:</span></div>
-                        <div><?= nl2br(esc($pemeriksaan['edukasi'] ?? '-')) ?></div>
+                <div class="section-header section-plan">
+                    <i class="bi bi-calendar2-check me-3"></i>
+                    <span>P – Plan (Rencana Tindakan)</span>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e9ecef; border-radius: 0.75rem; padding: 20px;">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 12px;">
+                                <i class="bi bi-capsule me-2" style="color: #17a2b8;"></i>
+                                Daftar Obat
+                            </h6>
+                            <div style="background: #e3f2fd; border-left: 4px solid #17a2b8; border-radius: 0.5rem; padding: 16px;">
+                                <?php if (!empty($pemeriksaan['obat_list']) && is_array($pemeriksaan['obat_list'])): ?>
+                                    <ul style="margin: 0; padding-left: 20px; color: #6c757d; line-height: 1.8;">
+                                        <?php foreach ($pemeriksaan['obat_list'] as $obat): ?>
+                                            <li style="margin-bottom: 4px;"><?= esc($obat) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else: ?>
+                                    <div style="color: #6c757d; font-style: italic;">Tidak ada obat yang diresepkan</div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 12px;">
+                                <i class="bi bi-lightbulb me-2" style="color: #fd7e14;"></i>
+                                Catatan Obat dan Edukasi Pasien
+                            </h6>
+                            <div style="background: #fff3cd; border-left: 4px solid #fd7e14; border-radius: 0.5rem; padding: 16px; color: #6c757d; line-height: 1.6;">
+                                <?= nl2br(esc($pemeriksaan['edukasi'] ?? '-')) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal Error ID Pemeriksaan -->
+<div class="modal fade" id="modalIdPemeriksaanNotFound" tabindex="-1" aria-labelledby="modalIdPemeriksaanNotFoundLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalIdPemeriksaanNotFoundLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Data Tidak Ditemukan
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ID Pemeriksaan tidak ditemukan!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('btnExportWordSOAP');
+    if (btn) {
+        btn.onclick = function() {
+            var idPemeriksaan = "<?= isset($pemeriksaan['id']) ? esc($pemeriksaan['id']) : '' ?>";
+            if (!idPemeriksaan || idPemeriksaan === '-') {
+                var modal = new bootstrap.Modal(document.getElementById('modalIdPemeriksaanNotFound'));
+                modal.show();
+                return;
+            }
+            var url = '/exportword/pemeriksaansoap/' + encodeURIComponent(idPemeriksaan);
+            window.open(url, '_blank');
+        };
+    }
+});
+</script>
 <style>
 .modern-card {
     background: #fff;

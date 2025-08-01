@@ -150,12 +150,209 @@ class Farmasi extends BaseController
 
     //permintaan obat
     public function permintaanObat()
-    {        
+    {     
+        $resepModel = new \App\Models\ResepModel();
+        
+        // Ambil semua permintaan obat dengan detail terkait
+        $list_permintaan = $resepModel->getResepWithDetails();
+        
+        // Jika data kosong, gunakan data dummy untuk testing
+        if (empty($list_permintaan)) {
+            $list_permintaan = [
+                [
+                    'id' => 1,
+                    'tanggal_resep' => date('Y-m-d H:i:s'),
+                    'no_rm' => 'RM001',
+                    'nama_pasien' => 'Ahmad Santoso',
+                    'nama_dokter' => 'Dr. Budi Hartanto',
+                    'diagnosis' => 'Hipertensi',
+                    'nama_obat' => 'Amlodipine 5mg',
+                    'jumlah' => 30,
+                    'satuan' => 'tablet',
+                    'instruksi' => '1x1 sehari setelah makan',
+                    'status' => 'pending'
+                ],
+                [
+                    'id' => 2,
+                    'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+                    'no_rm' => 'RM002',
+                    'nama_pasien' => 'Siti Nurhaliza',
+                    'nama_dokter' => 'Dr. Sarah Wijaya',
+                    'diagnosis' => 'Diabetes Mellitus',
+                    'nama_obat' => 'Metformin 500mg',
+                    'jumlah' => 60,
+                    'satuan' => 'tablet',
+                    'instruksi' => '2x1 sebelum makan',
+                    'status' => 'processing'
+                ],
+                [
+                    'id' => 3,
+                    'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-2 hours')),
+                    'no_rm' => 'RM003',
+                    'nama_pasien' => 'Andi Prasetyo',
+                    'nama_dokter' => 'Dr. Eko Susanto',
+                    'diagnosis' => 'Gastritis',
+                    'nama_obat' => 'Omeprazole 20mg',
+                    'jumlah' => 14,
+                    'satuan' => 'kapsul',
+                    'instruksi' => '1x1 pagi sebelum makan',
+                    'status' => 'completed'
+                ]
+            ];
+        }
+        
+        // Ubah nama kolom tanggal_resep menjadi tanggal_permintaan untuk konsistensi dengan view
+        foreach ($list_permintaan as &$permintaan) {
+            if (isset($permintaan['tanggal_resep'])) {
+                $permintaan['tanggal_permintaan'] = $permintaan['tanggal_resep'];
+            }
+        }
+        
         $data = [
             'title' => 'Permintaan Obat - SIMRS',
             'pageTitle' => 'Permintaan Obat',
+            'list_permintaan' => $list_permintaan
         ];
         return view('farmasi/permintaan_obat', $data);
     }
+
+    public function prosesPermintaan($id)
+    {
+        $resepModel = new \App\Models\ResepModel();
+        
+        // Update status permintaan menjadi 'processing'
+        $updated = $resepModel->updateStatus($id, 'processing', [
+            'diproses_oleh' => $this->session->get('user_id')
+        ]);
+        
+        if ($updated) {
+            $this->session->setFlashdata('success', 'Permintaan obat berhasil diproses');
+        } else {
+            $this->session->setFlashdata('error', 'Gagal memproses permintaan obat');
+        }
+        
+        return redirect()->to('/farmasi/permintaan-obat');
+    }
+
+    /**
+     * Complete medicine request and update patient queue status
+     * When all medicine requests for today are completed, patient status changes to 'Menunggu Kasir'
+     */
+    public function selesaiPermintaan($id)
+    {
+        $resepModel = new \App\Models\ResepModel();
+        $db = \Config\Database::connect();
+        
+        try {
+            $db->transStart();
+            
+            // Ambil data resep untuk mendapatkan no_rm pasien
+            $resep = $resepModel->getResepWithDetails(['r.id' => $id]);
+            if (empty($resep)) {
+                throw new \Exception('Data permintaan obat tidak ditemukan');
+            }
+            
+            $no_rm = $resep[0]['no_rm'];
+            log_message('info', 'Completing medicine request ID: ' . $id . ' for patient: ' . $no_rm);
+            
+            // Update status permintaan menjadi 'completed'
+            $updated = $resepModel->updateStatus($id, 'completed', [
+                'diselesaikan_oleh' => $this->session->get('user_id')
+            ]);
+            
+            if (!$updated) {
+                throw new \Exception('Gagal mengupdate status permintaan obat');
+            }
+            
+            // Cek apakah masih ada permintaan obat lain yang belum selesai untuk pasien ini
+            $pendingResep = $resepModel->getResepWithDetails([
+                'p.no_rekam_medis' => $no_rm,
+                'r.status !=' => 'completed',
+                'DATE(r.tanggal_resep)' => date('Y-m-d')
+            ]);
+            
+            log_message('info', 'Remaining pending medicine requests for ' . $no_rm . ': ' . count($pendingResep));
+            
+            // Jika semua permintaan obat sudah selesai, update status antrian ke 'Menunggu Kasir'
+            if (empty($pendingResep)) {
+                // Update status antrian pasien menjadi 'Menunggu Kasir'
+                // Cari antrian pasien hari ini yang statusnya masih 'Menunggu Farmasi'
+                $antrianUpdated = $db->table('antrian')
+                    ->where('no_rm', $no_rm)
+                    ->where('DATE(created_at)', date('Y-m-d'))
+                    ->where('status', 'Menunggu Farmasi')
+                    ->update(['status' => 'Menunggu Kasir']);
+                
+                // Juga update di antrian_poli jika ada
+                $db->table('antrian_poli')
+                    ->where('no_rm', $no_rm)
+                    ->where('DATE(created_at)', date('Y-m-d'))
+                    ->where('status', 'Menunggu Farmasi')
+                    ->update(['status' => 'Menunggu Kasir']);
+                
+                log_message('info', 'Updated patient queue status to Menunggu Kasir for ' . $no_rm);
+                $successMessage = 'Permintaan obat telah selesai diproses. Status pasien diubah ke Menunggu Kasir.';
+            } else {
+                $successMessage = 'Permintaan obat telah selesai diproses. Masih ada ' . count($pendingResep) . ' permintaan obat lain yang belum selesai.';
+            }
+            
+            $db->transComplete();
+            
+            if ($db->transStatus() === false) {
+                throw new \Exception('Gagal menyimpan perubahan ke database');
+            }
+            
+            $this->session->setFlashdata('success', $successMessage);
+            
+        } catch (\Exception $e) {
+            $db->transRollback();
+            log_message('error', 'Failed to complete medicine request: ' . $e->getMessage());
+            $this->session->setFlashdata('error', 'Gagal menyelesaikan permintaan obat: ' . $e->getMessage());
+        }
+        
+        return redirect()->to('/farmasi/permintaan-obat');
+    }
+
+    public function batalPermintaan($id)
+    {
+        $resepModel = new \App\Models\ResepModel();
+        
+        // Kembalikan status ke 'pending'
+        $updated = $resepModel->updateStatus($id, 'pending', [
+            'tanggal_diproses' => null,
+            'diproses_oleh' => null
+        ]);
+        
+        if ($updated) {
+            $this->session->setFlashdata('warning', 'Proses permintaan obat dibatalkan');
+        } else {
+            $this->session->setFlashdata('error', 'Gagal membatalkan permintaan obat');
+        }
+        
+        return redirect()->to('/farmasi/permintaan-obat');
+    }
+
+    public function detailPermintaan($id)
+    {
+        $resepModel = new \App\Models\ResepModel();
+        
+        // Ambil detail permintaan obat
+        $permintaan = $resepModel->getResepWithDetails(['r.id' => $id]);
+        
+        if (empty($permintaan)) {
+            $this->session->setFlashdata('error', 'Permintaan obat tidak ditemukan');
+            return redirect()->to('/farmasi/permintaan-obat');
+        }
+        
+        $data = [
+            'title' => 'Detail Permintaan Obat - SIMRS',
+            'pageTitle' => 'Detail Permintaan Obat',
+            'permintaan' => $permintaan[0] // Ambil data pertama karena hasil adalah array
+        ];
+        
+        return view('farmasi/detail_permintaan_obat', $data);
+    }
+
+
 
 }

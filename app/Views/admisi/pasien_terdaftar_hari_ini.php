@@ -110,8 +110,8 @@
                                 <th>Nama Lengkap Pasien</th>
                                 <th>Nurs Station</th>
                                 <th>SOAP</th>
-                                <th>Kasir</th>
                                 <th>Farmasi</th>
+                                <th>Kasir</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -148,9 +148,20 @@
                                         </td>
                                         <td>
                                             <?php
-                                            $kasirSelesai = in_array($p['status'], [
-                                                'Menunggu Farmasi', 'Selesai'
-                                            ]);
+                                            $farmasiSelesai = ($p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai');
+                                            $farmasiProses = ($p['status'] === 'Menunggu Farmasi');
+                                            ?>
+                                            <?php if ($farmasiSelesai): ?>
+                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                            <?php elseif ($farmasiProses): ?>
+                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            $kasirSelesai = ($p['status'] === 'Selesai');
                                             $kasirProses = ($p['status'] === 'Menunggu Kasir');
                                             ?>
                                             <?php if ($kasirSelesai): ?>
@@ -163,24 +174,15 @@
                                         </td>
                                         <td>
                                             <?php
-                                            $farmasiSelesai = ($p['status'] === 'Selesai');
-                                            $farmasiProses = ($p['status'] === 'Menunggu Farmasi');
+                                            $status = isset($p['status']) ? $p['status'] : '';
+                                            if ($status === 'Selesai') {
+                                                echo '<span class="badge bg-success text-white">'.esc($status).'</span>';
+                                            } elseif ($status) {
+                                                echo '<span class="badge bg-info text-white">'.esc($status).'</span>';
+                                            } else {
+                                                echo '<span class="badge bg-light text-secondary">-</span>';
+                                            }
                                             ?>
-                                            <?php if ($farmasiSelesai): ?>
-                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
-                                            <?php elseif ($farmasiProses): ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
-                                            <?php else: ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <?php if (isset($p['status']) && $p['status']): ?>
-                                                <span class="badge bg-info text-white"><?= esc($p['status']) ?></span>
-                                            <?php else: ?>
-                                                <span class="badge bg-light text-secondary">-</span>
-                                            <?php endif; ?>
-                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -223,22 +225,7 @@
     </div>
 </div>
 
-<!-- Modal Detail Pasien -->
-<div class="modal fade" id="modalDetailPasien" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Pasien</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalDetailBody">
-                <!-- Content will be loaded here -->
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <?= $this->endSection() ?>
 
@@ -264,23 +251,5 @@ $(document).ready(function() {
     });
 });
 
-function lihatDetail(id) {
-    // Load patient details
-    $.ajax({
-        url: '<?= base_url('admisi/detailpasien') ?>/' + id,
-        type: 'GET',
-        success: function(response) {
-            $('#modalDetailBody').html(response);
-            $('#modalDetailPasien').modal('show');
-        },
-        error: function() {
-            alert('Gagal memuat detail pasien');
-        }
-    });
-}
-function editPasien(id) {
-    // Redirect to edit patient
-    window.location.href = '<?= base_url('admisi/editpasien') ?>/' + id;
-}
 </script>
 <?= $this->endSection() ?>

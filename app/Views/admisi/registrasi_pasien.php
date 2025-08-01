@@ -87,9 +87,30 @@
 .step.completed + .step-line {
     background-color: #28a745;
 }
-
 .form-group {
     margin-bottom: 1rem;
+}
+/* Custom button style */
+.btn-primary {
+    background: #28a745 !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(43, 50, 128, 0.2) !important;
+}
+
+.btn-primary:active {
+    transform: translateY(0) !important;
+}
+
+label {
+    margin-bottom: 0.5rem !important;
+    font-weight: 500 !important;
 }
 
 @media (max-width: 768px) {
@@ -269,7 +290,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="foto-identitas">Upload Dokumen Identitas <span class="text-danger">*</span></label>
+                                  <label for="foto-identitas">Upload Dokumen Identitas(KTP/SIM) <span class="text-danger">*</span></label>
                                   <input type="file" class="form-control" id="foto-identitas" name="foto-identitas" required>
                                 </div>
                             </div>
@@ -297,8 +318,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const val = nomorIdentitasInput.value.trim();
         feedback.textContent = '';
         feedback.className = 'form-text';
-        if (val.length < 8) {
-            feedback.textContent = 'Minimal 8 karakter.';
+        if (val.length < 16) {
+            feedback.textContent = ' 16 karakter.';
             feedback.classList.add('text-danger');
             nomorIdentitasInput.setCustomValidity('Nomor identitas terlalu pendek');
             return;

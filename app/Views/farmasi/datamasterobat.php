@@ -120,7 +120,7 @@
                                     </td>
                                     <td class="text-center">
                                         <a href="/farmasi/edit-obat/<?= esc($obat['id_obat'] ?? 0) ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                                        <a href="/farmasi/delete-obat/<?= esc($obat['id_obat'] ?? 0) ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                                        <button type="button" class="btn btn-sm btn-danger btn-hapus-obat" data-id="<?= esc($obat['id_obat'] ?? 0) ?>" data-nama="<?= esc($obat['nama_obat'] ?? '') ?>"><i class="bi bi-trash"></i></button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -132,6 +132,26 @@
             </div>
         </div>
     </div>
+</div>
+<!-- Modal Konfirmasi Hapus Obat -->
+<div class="modal fade" id="modalHapusObat" tabindex="-1" aria-labelledby="modalHapusObatLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHapusObatLabel">Konfirmasi Hapus Obat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Yakin ingin menghapus obat <strong id="namaObatHapus"></strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <a href="#" id="btnKonfirmasiHapusObat" class="btn btn-danger">Hapus</a>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
 // Filter pencarian obat
@@ -146,6 +166,29 @@ document.addEventListener('DOMContentLoaded', function() {
             if (row.querySelectorAll('td').length < 2) return; // skip empty row
             const text = row.textContent.toLowerCase();
             row.style.display = text.includes(val) ? '' : 'none';
+        });
+    });
+});
+// Modal konfirmasi hapus obat
+document.addEventListener('DOMContentLoaded', function() {
+    const hapusButtons = document.querySelectorAll('.btn-hapus-obat');
+    const modal = document.getElementById('modalHapusObat');
+    const namaObatSpan = document.getElementById('namaObatHapus');
+    const btnKonfirmasi = document.getElementById('btnKonfirmasiHapusObat');
+    let hapusModal;
+    if (window.bootstrap) {
+        hapusModal = new bootstrap.Modal(modal);
+    } else if (window.$ && window.$.fn.modal) {
+        // fallback untuk Bootstrap 4
+        hapusModal = { show: () => $(modal).modal('show'), hide: () => $(modal).modal('hide') };
+    }
+    hapusButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const nama = this.getAttribute('data-nama');
+            namaObatSpan.textContent = nama;
+            btnKonfirmasi.setAttribute('href', '/farmasi/delete-obat/' + id);
+            if (hapusModal) hapusModal.show();
         });
     });
 });

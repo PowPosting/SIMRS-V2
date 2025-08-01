@@ -1,0 +1,122 @@
+<?php
+
+namespace App\Database\Seeds;
+
+use CodeIgniter\Database\Seeder;
+
+class ResepSeeder extends Seeder
+{
+    public function run()
+    {
+        $data = [
+            [
+                'id_pasien' => 1,
+                'id_dokter' => 1,
+                'id_rekam_medis' => null,
+                'id_obat' => null,
+                'nama_obat' => 'Amlodipine 5mg',
+                'jumlah' => 30,
+                'satuan' => 'tablet',
+                'instruksi' => '1x1 sehari setelah makan',
+                'dosis' => '5mg',
+                'cara_pakai' => '1 tablet sekali sehari',
+                'tanggal_resep' => date('Y-m-d H:i:s'),
+                'tanggal_diproses' => null,
+                'tanggal_selesai' => null,
+                'status' => 'pending',
+                'diproses_oleh' => null,
+                'diselesaikan_oleh' => null,
+                'keterangan' => null,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'id_pasien' => 1,
+                'id_dokter' => 1,
+                'id_rekam_medis' => null,
+                'id_obat' => null,
+                'nama_obat' => 'Metformin 500mg',
+                'jumlah' => 60,
+                'satuan' => 'tablet',
+                'instruksi' => '2x1 sebelum makan',
+                'dosis' => '500mg',
+                'cara_pakai' => '1 tablet 2 kali sehari',
+                'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+                'tanggal_diproses' => date('Y-m-d H:i:s', strtotime('-30 minutes')),
+                'tanggal_selesai' => null,
+                'status' => 'processing',
+                'diproses_oleh' => 1,
+                'diselesaikan_oleh' => null,
+                'keterangan' => null,
+                'created_at' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-30 minutes')),
+            ],
+            [
+                'id_pasien' => 1,
+                'id_dokter' => 1,
+                'id_rekam_medis' => null,
+                'id_obat' => null,
+                'nama_obat' => 'Omeprazole 20mg',
+                'jumlah' => 14,
+                'satuan' => 'kapsul',
+                'instruksi' => '1x1 pagi sebelum makan',
+                'dosis' => '20mg',
+                'cara_pakai' => '1 kapsul sekali sehari pagi',
+                'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-2 hours')),
+                'tanggal_diproses' => date('Y-m-d H:i:s', strtotime('-1 hour 30 minutes')),
+                'tanggal_selesai' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+                'status' => 'completed',
+                'diproses_oleh' => 1,
+                'diselesaikan_oleh' => 1,
+                'keterangan' => null,
+                'created_at' => date('Y-m-d H:i:s', strtotime('-2 hours')),
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+            ],
+            [
+                'id_pasien' => 1,
+                'id_dokter' => 1,
+                'id_rekam_medis' => null,
+                'id_obat' => null,
+                'nama_obat' => 'Paracetamol 500mg',
+                'jumlah' => 20,
+                'satuan' => 'tablet',
+                'instruksi' => '3x1 saat demam',
+                'dosis' => '500mg',
+                'cara_pakai' => '1 tablet 3 kali sehari saat diperlukan',
+                'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-3 hours')),
+                'tanggal_diproses' => null,
+                'tanggal_selesai' => null,
+                'status' => 'pending',
+                'diproses_oleh' => null,
+                'diselesaikan_oleh' => null,
+                'keterangan' => null,
+                'created_at' => date('Y-m-d H:i:s', strtotime('-3 hours')),
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 hours')),
+            ],
+            [
+                'id_pasien' => 1,
+                'id_dokter' => 1,
+                'id_rekam_medis' => null,
+                'id_obat' => null,
+                'nama_obat' => 'Amoxicillin 500mg',
+                'jumlah' => 21,
+                'satuan' => 'kapsul',
+                'instruksi' => '3x1 sesudah makan selama 7 hari',
+                'dosis' => '500mg',
+                'cara_pakai' => '1 kapsul 3 kali sehari',
+                'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-4 hours')),
+                'tanggal_diproses' => date('Y-m-d H:i:s', strtotime('-3 hours 30 minutes')),
+                'tanggal_selesai' => null,
+                'status' => 'processing',
+                'diproses_oleh' => 1,
+                'diselesaikan_oleh' => null,
+                'keterangan' => null,
+                'created_at' => date('Y-m-d H:i:s', strtotime('-4 hours')),
+                'updated_at' => date('Y-m-d H:i:s', strtotime('-3 hours 30 minutes')),
+            ]
+        ];
+
+        // Insert data
+        $this->db->table('resep')->insertBatch($data);
+    }
+}

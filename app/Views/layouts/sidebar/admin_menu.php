@@ -69,7 +69,7 @@
 
 
 <!-- Sub Header - Divisi Dokter -->
-<li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> Poliklinik</li>
+<li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> Dokter</li>
 
 <!-- Dashboard Dokter dengan Dropdown -->
 <li class="nav-item has-submenu">
@@ -104,9 +104,6 @@
     </ul>
 </li>
 
-
-
-
 <!-- Sub Header - Divisi Farmasi -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Farmasi</li>
 
@@ -128,9 +125,9 @@
         
         <!-- Resep Obat -->
         <li class="submenu-item">
-            <a href="<?= base_url('farmasi/resep-obat') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Resep Obat">
+            <a href="<?= base_url('farmasi/permintaan-obat') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Permintaan Obat">
                 <i class="fas fa-prescription submenu-icon"></i>
-                <span class="submenu-text">Resep Obat</span>
+                <span class="submenu-text">Permintaan Obat</span>
             </a>
         </li>
         
