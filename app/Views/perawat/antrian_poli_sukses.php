@@ -35,20 +35,6 @@
                         </div>
                     </div>
 
-                    <!-- Instructions -->
-                    <div class="alert alert-info border-left-primary mb-4">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-info-circle fa-2x text-primary mr-3"></i>
-                            <div class="text-left">
-                                <h6 class="font-weight-bold mb-1">Petunjuk:</h6>
-                                <p class="mb-0">
-                                    Silakan tunggu di ruang poliklinik sesuai nomor antrian Anda.<br>
-                                    <strong>Petugas akan memanggil sesuai urutan.</strong>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Action Buttons -->
                     <div class="row justify-content-center">
                         <div class="col-md-6 mb-3">

@@ -64,16 +64,47 @@
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
-            <h4 class="mb-0"><i class="bi bi-prescription2 me-2"></i>Permintaan Obat dari Dokter</h4>
-            <div class="d-flex align-items-center gap-2">
-                <select id="filterStatus" class="form-select form-select-sm" style="width:180px;">
-                    <option value="">Semua Status</option>
-                    <option value="pending">Belum Diproses</option>
-                    <option value="processing">Sedang Diproses</option>
-                    <option value="completed">Selesai</option>
-                </select>
-                <input type="text" id="searchPermintaan" class="form-control form-control-sm" style="width:220px;" placeholder="Cari pasien/dokter...">
+        <div class="card-header bg-gradient-primary text-white p-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12 mb-3 mb-md-0">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-prescription2 me-2"></i>Permintaan Obat dari Dokter</h4>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="row g-3">
+                        <div class="col-md-4 col-12">
+                            <div class="filter-group">
+                                <label class="filter-label">Filter Tanggal</label>
+                                <select id="filterTanggal" class="form-select filter-select">
+                                    <option value="">Semua Tanggal</option>
+                                    <option value="today" selected>Hari Ini</option>
+                                    <option value="yesterday">Kemarin</option>
+                                    <option value="week">7 Hari Terakhir</option>
+                                    <option value="month">30 Hari Terakhir</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="filter-group">
+                                <label class="filter-label">Filter Status</label>
+                                <select id="filterStatus" class="form-select filter-select">
+                                    <option value="">Semua Status</option>
+                                    <option value="pending">Belum Diproses</option>
+                                    <option value="processing">Sedang Diproses</option>
+                                    <option value="completed">Selesai</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="filter-group">
+                                <label class="filter-label">Pencarian</label>
+                                <div class="search-wrapper">
+                                    <i class="bi bi-search search-icon"></i>
+                                    <input type="text" id="searchPermintaan" class="form-control search-input" placeholder="Cari pasien/dokter...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-body p-0">
@@ -96,13 +127,45 @@
                     <tbody>
                         <?php if (!empty($list_permintaan) && is_array($list_permintaan)): ?>
                             <?php $no=1; foreach ($list_permintaan as $permintaan): ?>
-                                <tr data-status="<?= esc($permintaan['status'] ?? '') ?>">
+                                <?php 
+                                    $tanggalPermintaan = $permintaan['tanggal_permintaan'] ?? $permintaan['tanggal_resep'] ?? '';
+                                    $tanggalFormatted = date('Y-m-d', strtotime($tanggalPermintaan));
+                                ?>
+                                <tr data-status="<?= esc($permintaan['status'] ?? '') ?>" data-tanggal="<?= $tanggalFormatted ?>">
                                     <td class="text-center"><?= $no++ ?></td>
-                                    <td><?= date('d/m/Y H:i', strtotime($permintaan['tanggal_permintaan'] ?? $permintaan['tanggal_resep'] ?? '')) ?></td>
+                                    <td>
+                                        <div class="fw-bold text-primary"><?= date('d/m/Y', strtotime($tanggalPermintaan)) ?></div>
+                                        <small class="text-muted"><?= date('H:i', strtotime($tanggalPermintaan)) ?></small>
+                                    </td>
                                     <td><strong><?= esc($permintaan['no_rm'] ?? 'RM000001') ?></strong></td>
                                     <td><?= esc($permintaan['nama_pasien'] ?? 'Mukhamad Diva Mahardika Awaludin') ?></td>
                                     <td><?= esc($permintaan['nama_dokter'] ?? 'Dr. Administrator') ?></td>
-                                    <td><strong><?= esc($permintaan['nama_obat'] ?? '') ?></strong></td>
+                                    <td><strong><?= esc($permintaan['nama_obat'] ?? '') ?></strong>
+                                        <?php if (!empty($permintaan['id_obat'])): ?>
+                                            <?php
+                                            // Ambil stok obat dari database jika ada id_obat
+                                            $db = \Config\Database::connect();
+                                            $obat = $db->table('obat')->where('id_obat', $permintaan['id_obat'])->get()->getRowArray();
+                                            if ($obat):
+                                                $stok = $obat['stok'];
+                                                $jumlahDiminta = $permintaan['jumlah'] ?? 0;
+                                                $badgeClass = 'success';
+                                                
+                                                if ($stok <= 0) {
+                                                    $badgeClass = 'danger';
+                                                } elseif ($stok < $jumlahDiminta) {
+                                                    $badgeClass = 'warning';
+                                                } elseif ($stok <= ($obat['stok_minimal'] ?? 0)) {
+                                                    $badgeClass = 'warning';
+                                                }
+                                            ?>
+                                                <br><small class="badge bg-<?= $badgeClass ?> mt-1">Stok: <?= $stok ?></small>
+                                                <?php if ($stok < $jumlahDiminta): ?>
+                                                    <br><small class="text-danger"><i class="bi bi-exclamation-triangle"></i> Stok tidak mencukupi!</small>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </td>
                                     <td class="text-center"><?= esc($permintaan['jumlah'] ?? 0) ?> <?= esc($permintaan['satuan'] ?? '') ?></td>
                                     <td><?= esc($permintaan['instruksi'] ?? '-') ?></td>
                                     <td class="text-center">
@@ -126,8 +189,27 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
                                             <?php if ($status === 'pending'): ?>
-                                                <button type="button" class="btn btn-sm btn-info btn-proses" data-id="<?= esc($permintaan['id'] ?? 0) ?>" title="Proses Permintaan" style="min-width: 70px;">
-                                                    Proses
+                                                <?php
+                                                // Cek stok untuk tombol proses
+                                                $canProcess = true;
+                                                $tooltipMessage = "Proses Permintaan";
+                                                
+                                                if (!empty($permintaan['id_obat'])) {
+                                                    $db = \Config\Database::connect();
+                                                    $obat = $db->table('obat')->where('id_obat', $permintaan['id_obat'])->get()->getRowArray();
+                                                    if ($obat && $obat['stok'] < ($permintaan['jumlah'] ?? 0)) {
+                                                        $canProcess = false;
+                                                        $tooltipMessage = "Stok tidak mencukupi - Stok: " . $obat['stok'] . ", Diminta: " . ($permintaan['jumlah'] ?? 0);
+                                                    }
+                                                }
+                                                ?>
+                                                <button type="button" 
+                                                        class="btn btn-sm <?= $canProcess ? 'btn-info btn-proses' : 'btn-secondary' ?>" 
+                                                        data-id="<?= esc($permintaan['id'] ?? 0) ?>" 
+                                                        title="<?= $tooltipMessage ?>" 
+                                                        style="min-width: 70px;"
+                                                        <?= $canProcess ? '' : 'disabled' ?>>
+                                                    <?= $canProcess ? 'Proses' : 'Stok <' ?>
                                                 </button>
                                             <?php elseif ($status === 'processing'): ?>
                                                 <button type="button" class="btn btn-sm btn-success btn-selesai" data-id="<?= esc($permintaan['id'] ?? 0) ?>" title="Selesaikan" style="min-width: 70px;">
@@ -139,6 +221,9 @@
                                             <?php else: ?>
                                                 <button type="button" class="btn btn-sm btn-outline-primary btn-detail" data-id="<?= esc($permintaan['id'] ?? 0) ?>" title="Lihat Detail" style="min-width: 70px;">
                                                     Detail
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-warning btn-batal" data-id="<?= esc($permintaan['id'] ?? 0) ?>" title="Batalkan & Kembalikan Stok" style="min-width: 70px;">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> Batal
                                                 </button>
                                             <?php endif; ?>
                                         </div>
@@ -222,26 +307,98 @@ document.addEventListener('DOMContentLoaded', function() {
     // Filter pencarian
     const searchInput = document.getElementById('searchPermintaan');
     const filterStatus = document.getElementById('filterStatus');
+    const filterTanggal = document.getElementById('filterTanggal');
     const table = document.getElementById('tabelPermintaan');
+
+    // Helper function untuk mendapatkan tanggal
+    function getDateRange(filter) {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        switch (filter) {
+            case 'today':
+                return {
+                    start: today.toISOString().split('T')[0],
+                    end: today.toISOString().split('T')[0]
+                };
+            case 'yesterday':
+                return {
+                    start: yesterday.toISOString().split('T')[0],
+                    end: yesterday.toISOString().split('T')[0]
+                };
+            case 'week':
+                const weekAgo = new Date(today);
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                return {
+                    start: weekAgo.toISOString().split('T')[0],
+                    end: today.toISOString().split('T')[0]
+                };
+            case 'month':
+                const monthAgo = new Date(today);
+                monthAgo.setDate(monthAgo.getDate() - 30);
+                return {
+                    start: monthAgo.toISOString().split('T')[0],
+                    end: today.toISOString().split('T')[0]
+                };
+            default:
+                return null;
+        }
+    }
 
     function filterTable() {
         const searchVal = searchInput.value.trim().toLowerCase();
         const statusVal = filterStatus.value;
+        const tanggalVal = filterTanggal.value;
         const rows = table.querySelectorAll('tbody tr[data-status]');
+        
+        const dateRange = getDateRange(tanggalVal);
         
         rows.forEach(row => {
             const text = row.textContent.toLowerCase();
             const status = row.getAttribute('data-status');
+            const tanggalRow = row.getAttribute('data-tanggal');
             
             const matchSearch = text.includes(searchVal);
             const matchStatus = !statusVal || status === statusVal;
             
-            row.style.display = matchSearch && matchStatus ? '' : 'none';
+            let matchTanggal = true;
+            if (dateRange && tanggalRow) {
+                matchTanggal = tanggalRow >= dateRange.start && tanggalRow <= dateRange.end;
+            }
+            
+            row.style.display = matchSearch && matchStatus && matchTanggal ? '' : 'none';
         });
+        
+        // Update counter
+        updateCounter();
     }
 
+    function updateCounter() {
+        const allRows = table.querySelectorAll('tbody tr[data-status]');
+        const visibleRows = table.querySelectorAll('tbody tr[data-status]:not([style*="display: none"])');
+        const totalVisible = visibleRows.length;
+        const totalAll = allRows.length;
+        
+        // Update header title with counter
+        const headerTitle = document.querySelector('.card-header h4');
+        if (headerTitle) {
+            const baseTitle = 'Permintaan Obat dari Dokter';
+            if (totalVisible !== totalAll) {
+                headerTitle.innerHTML = `<i class="bi bi-prescription2 me-2"></i>${baseTitle} <small class="text-warning">(${totalVisible} dari ${totalAll})</small>`;
+            } else {
+                headerTitle.innerHTML = `<i class="bi bi-prescription2 me-2"></i>${baseTitle}`;
+            }
+        }
+    }
+
+    // Event listeners
     if (searchInput) searchInput.addEventListener('input', filterTable);
     if (filterStatus) filterStatus.addEventListener('change', filterTable);
+    if (filterTanggal) filterTanggal.addEventListener('change', filterTable);
+
+    // Jalankan filter awal (untuk "Hari Ini" yang sudah terpilih)
+    filterTable();
 
     // Modal handlers
     const modalProses = document.getElementById('modalKonfirmasiProses');
@@ -276,11 +433,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Button batal (langsung redirect tanpa modal)
+    // Button batal (untuk processing dan completed)
     document.querySelectorAll('.btn-batal').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = this.getAttribute('data-id');
-            if (confirm('Yakin ingin membatalkan proses permintaan ini?')) {
+            const isCompleted = this.closest('tr').querySelector('[data-status]').getAttribute('data-status') === 'completed';
+            
+            let confirmMessage = 'Yakin ingin membatalkan proses permintaan ini?';
+            if (isCompleted) {
+                confirmMessage = 'Yakin ingin membatalkan permintaan yang sudah selesai? Stok obat akan dikembalikan.';
+            }
+            
+            if (confirm(confirmMessage)) {
                 window.location.href = '/farmasi/batal-permintaan/' + id;
             }
         });
@@ -298,28 +462,215 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
+/* Header styling improvements */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+}
+
+.card-header {
+    border-bottom: none;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+/* Filter styling improvements */
+.filter-group {
+    margin-bottom: 0;
+}
+
+.filter-label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-select {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #495057;
+    font-size: 14px;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.filter-select:focus {
+    background-color: #fff;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+    outline: none;
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.search-input {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #495057;
+    font-size: 14px;
+    padding: 8px 12px 8px 40px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.search-input:focus {
+    background-color: #fff;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: rgba(108, 117, 125, 0.7);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(108, 117, 125, 0.7);
+    font-size: 14px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Table styling */
 .table th, .table td {
     vertical-align: middle;
     font-size: 14px;
     padding: 12px 8px;
 }
+
 .table thead th {
     font-size: 14px;
     font-weight: 600;
     text-align: center;
     vertical-align: middle;
     background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
 }
+
 .badge {
     font-size: 12px;
     padding: 6px 12px;
+    border-radius: 6px;
 }
+
 .btn-sm {
     font-size: 13px;
     padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
 }
+
 .card {
+    border-radius: 12px;
+    border: none;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .card-header {
+        padding: 20px !important;
+    }
+    
+    .card-header .col-12:first-child {
+        text-align: center;
+        margin-bottom: 20px !important;
+    }
+    
+    .card-header h4 {
+        font-size: 1.3rem;
+    }
+    
+    .filter-group {
+        margin-bottom: 15px;
+    }
+    
+    .filter-group:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 769px) {
+    .card-header .row {
+        align-items: flex-end;
+    }
+}
+
+/* Stock status styling */
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Hover effects */
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    transition: background-color 0.15s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    transition: transform 0.15s ease-in-out;
+}
+
+.filter-select:hover, .search-input:hover {
+    background-color: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Card statistics improvements */
+.card.border-0 {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 12px;
+}
+
+.card.border-0:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Additional enhancements */
+.card-body {
+    border-radius: 0 0 12px 12px;
+}
+
+.table-responsive {
     border-radius: 8px;
+    overflow: hidden;
+}
+
+.fw-bold.text-primary {
+    color: #007bff !important;
+    font-weight: 600 !important;
+}
+
+/* Animation for counter updates */
+.card-header h4 small {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 </style>
 <?= $this->endSection() ?>

@@ -76,7 +76,7 @@ class ResepModel extends Model
     public function getResepWithDetails($where = null)
     {
         $builder = $this->db->table($this->table . ' r');
-        $builder->select('r.*, p.no_rekam_medis as no_rm, p.nama_lengkap as nama_pasien, u.nama_lengkap as nama_dokter, o.satuan as satuan_obat, rk.diagnosis');
+        $builder->select('r.*, p.no_rekam_medis as no_rm, p.nama_lengkap as nama_pasien, u.nama_lengkap as nama_dokter, o.satuan as satuan_obat, o.harga_jual, rk.diagnosis');
         $builder->join('pasien p', 'r.id_pasien = p.id', 'left');
         $builder->join('users u', 'r.id_dokter = u.id', 'left');
         $builder->join('obat o', 'r.id_obat = o.id_obat', 'left');
@@ -176,5 +176,45 @@ class ResepModel extends Model
             'processing' => $this->where('status', 'processing')->countAllResults(false),
             'completed' => $this->where('status', 'completed')->countAllResults(false)
         ];
+    }
+
+    /**
+     * Ambil semua riwayat permintaan obat (urut terbaru)
+     */
+    public function getRiwayatPermintaan()
+    {
+        return $this->orderBy('tanggal_resep', 'DESC')->findAll();
+    }
+    /**
+     * Ambil daftar tagihan pasien yang resepnya sudah completed (belum ada filter pembayaran)
+     */
+    public function getTagihanPasienBelumBayar()
+    {
+        $builder = $this->db->table($this->table . ' r');
+        $builder->select('r.id_pasien, p.no_rekam_medis as no_rm, p.nama_lengkap as nama_pasien, DATE(r.tanggal_resep) as tanggal, SUM(o.harga_jual * r.jumlah) as total_obat');
+        $builder->join('pasien p', 'r.id_pasien = p.id', 'left');
+        $builder->join('obat o', 'r.id_obat = o.id_obat', 'left');
+        $builder->where('r.status', 'completed');
+        // Tambah kondisi untuk pastikan belum dibayar
+        $builder->where('r.is_paid', 0); // Asumsi ada field is_paid di tabel resep
+        $builder->groupBy(['r.id_pasien', 'tanggal']);
+        $builder->orderBy('tanggal', 'DESC');
+        
+        $results = $builder->get()->getResultArray();
+        
+        // Tambahkan biaya standar ke setiap tagihan
+        foreach ($results as &$tagihan) {
+            $biaya_administrasi = 50000;  // Rp 50,000
+            $biaya_nurs_station = 100000; // Rp 100,000
+            $biaya_dokter = 250000;       // Rp 250,000
+            $total_obat = $tagihan['total_obat'] ?? 0;
+            
+            $tagihan['biaya_administrasi'] = $biaya_administrasi;
+            $tagihan['biaya_nurs_station'] = $biaya_nurs_station;
+            $tagihan['biaya_dokter'] = $biaya_dokter;
+            $tagihan['total_tagihan'] = $total_obat + $biaya_administrasi + $biaya_nurs_station + $biaya_dokter;
+        }
+        
+        return $results;
     }
 }

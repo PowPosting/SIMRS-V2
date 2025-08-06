@@ -130,6 +130,14 @@
                 <span class="submenu-text">Permintaan Obat</span>
             </a>
         </li>
+
+        <!--riwayat permintaan obat-->
+        <li class="submenu-item">
+            <a href="<?= base_url('farmasi/riwayat-permintaan') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Riwayat Permintaan Obat">
+                <i class="fas fa-history submenu-icon"></i>
+                <span class="submenu-text">Riwayat Permintaan</span>
+            </a>
+        </li>
         
         <!-- Laporan Farmasi -->
         <li class="submenu-item">
@@ -154,7 +162,7 @@
     <ul class="submenu">
         <!-- Kasir -->
         <li class="submenu-item">
-            <a href="<?= base_url('cashier') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Kasir">
+            <a href="<?= base_url('kasir/') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Kasir">
                 <i class="fas fa-cash-register submenu-icon"></i>
                 <span class="submenu-text">Kasir</span>
             </a>

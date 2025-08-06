@@ -3,11 +3,94 @@
 <?= $this->section('content') ?>
 <div class="container mt-4">
     <h2>Daftar Dokter & Jadwal Praktik</h2>
-    <div class="mb-3">
-        <a href="<?= base_url('admin/tambahjadwaldokter') ?>" class="btn btn-primary btn-sm">
-            Tambah Jadwal Dokter
-        </a>
+    
+    <!-- Tabel Daftar Dokter -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-user-md mr-2"></i>Daftar Dokter</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Dokter</th>
+                            <th>Spesialisasi</th>
+
+                            <th>Email</th>
+                            <th>Telepon</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($dokterList)): ?>
+                            <?php $no = 1; foreach ($dokterList as $dokter): ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mr-2" style="width: 35px; height: 35px;">
+                                                <?= strtoupper(substr($dokter['nama_lengkap'] ?? '', 0, 2)) ?>
+                                            </div>
+                                            <div>
+                                                <strong><?= esc($dokter['nama_lengkap'] ?? '') ?></strong>
+                                                <br><small class="text-muted">dr. <?= esc($dokter['nama_lengkap'] ?? '') ?></small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">
+                                            <?= esc($dokter['spesialisasi'] ?? 'Umum') ?>
+                                        </span>
+                                    </td>
+                                    <td><?= esc($dokter['email'] ?? '-') ?></td>
+                                    <td><?= esc($dokter['telepon'] ?? '-') ?></td>
+                                    <td>
+                                        <?php 
+                                        $status = $dokter['status'] ?? 'aktif';
+                                        $badgeClass = $status === 'aktif' ? 'badge-success' : 'badge-secondary';
+                                        ?>
+                                        <span class="badge <?= $badgeClass ?>">
+                                            <?= ucfirst($status) ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info btn-sm" title="Detail Dokter">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" title="Edit Dokter">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Hapus Dokter" onclick="return confirm('Yakin ingin menghapus dokter ini?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">Belum ada data dokter</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
+    <!-- Jadwal Praktik Dokter -->
+    <div class="card">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-calendar-alt mr-2"></i>Jadwal Praktik Dokter</h5>
+            <a href="<?= base_url('admin/tambahjadwaldokter') ?>" class="btn btn-light btn-sm">
+                <i class="fas fa-plus mr-1"></i>Tambah Jadwal
+            </a>
+        </div>
+        <div class="card-body p-0">
     <div class="table-responsive">
     <table class="table table-bordered text-center" style="font-size:14px; width:100%; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
         <thead style="background:linear-gradient(90deg,#4f8fc3 0%,#b2e0f7 100%); color:#2c3e50;">
@@ -81,9 +164,61 @@
                 </td>
             <?php endforeach; ?>
             </tr>
-        </tbody>
-    </table>
+        </div>
     </div>
 </div>
+
+<style>
+.jadwal-card:hover {
+    background: #f0f8ff !important;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.avatar-sm {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.card-header {
+    border-bottom: none;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+}
+
+.btn-group .btn {
+    border-radius: 4px !important;
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+@media (max-width: 768px) {
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+        margin-right: 0;
+    }
+}
+</style>
 
 <?= $this->endSection() ?>

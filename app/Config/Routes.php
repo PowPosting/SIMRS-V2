@@ -139,12 +139,22 @@ $routes->group('farmasi', function($routes) {
     $routes->post('update-obat/(:num)', 'Farmasi::updateObat/$1');
     $routes->get('delete-obat/(:num)', 'Farmasi::deleteObat/$1');
     $routes->get('permintaan-obat', 'Farmasi::permintaanObat');
-    
+
+    //riwayat permintaan
+    $routes->get('riwayat-permintaan', 'Farmasi::riwayatPermintaan');
+    $routes->get('detail-permintaan-obat/(:num)', 'Farmasi::detailTagihan/$1');
+    $routes->get('print-resep/(:num)', 'Farmasi::printResep/$1');
+    $routes->get('print-invoice/(:num)', 'Farmasi::printInvoice/$1');
+
     // Routes untuk workflow permintaan obat
     $routes->get('proses-permintaan/(:num)', 'Farmasi::prosesPermintaan/$1');
     $routes->get('selesai-permintaan/(:num)', 'Farmasi::selesaiPermintaan/$1');
     $routes->get('batal-permintaan/(:num)', 'Farmasi::batalPermintaan/$1');
     $routes->get('detail-permintaan/(:num)', 'Farmasi::detailPermintaan/$1');
+
+
+    //laporan
+    $routes->get('laporan', 'Farmasi::laporan');
 
 });
 
@@ -152,6 +162,9 @@ $routes->group('farmasi', function($routes) {
 $routes->group('kasir', function($routes) {
     $routes->get('/', 'Kasir::index');
     $routes->get('kasir', 'Kasir::index');
+    $routes->get('detail-tagihan/(:num)/(:any)', 'Kasir::detailTagihan/$1/$2');
+    $routes->post('proses-pembayaran', 'Kasir::prosesPembayaran');
+    $routes->get('riwayat-pembayaran', 'Kasir::riwayatPembayaran');
 });
 
 // Dokter Routes
@@ -167,13 +180,7 @@ $routes->group('dokter', function($routes) {
     $routes->get('detailpemeriksaanpasien/(:num)', 'Dokter::detailPemeriksaanPasien/$1');
 });
 
-// Manajemen Routes
-$routes->group('manajemen', function($routes) {
-    $routes->get('/', 'Manajemen::index');
-    $routes->get('dashboard', 'Manajemen::index');
-    $routes->get('reports', 'Manajemen::reports');
-    $routes->get('statistics', 'Manajemen::statistics');
-});
+
 
 // ExportWord routes
 $routes->get('exportword/pasien/(:segment)', 'ExportWord::pasien/$1');
