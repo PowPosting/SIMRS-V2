@@ -385,14 +385,12 @@ class Farmasi extends BaseController
                 }
                 
                 // Biaya standar
-                $biaya_administrasi = 50000;
-                $biaya_nurs_station = 100000;
-                $biaya_dokter = 250000;
-                $total_biaya = $total_biaya_obat + $biaya_administrasi + $biaya_nurs_station + $biaya_dokter;
+                $biaya_administrasi = 35000;
+                $biaya_dokter = 100000;
+                $total_biaya = $total_biaya_obat + $biaya_administrasi + $biaya_dokter;
                 
                 // Tambahkan biaya standar ke detail tagihan
                 $detail_tagihan[] = ['nama_item' => 'Biaya Administrasi', 'harga' => $biaya_administrasi];
-                $detail_tagihan[] = ['nama_item' => 'Biaya Nurs Station', 'harga' => $biaya_nurs_station];
                 $detail_tagihan[] = ['nama_item' => 'Biaya Dokter', 'harga' => $biaya_dokter];
                 
                 // Cek apakah sudah ada tagihan untuk pasien ini hari ini
@@ -558,18 +556,58 @@ class Farmasi extends BaseController
     {
         $resepModel = new \App\Models\ResepModel();
         
-        // Ambil detail permintaan obat
-        $permintaan = $resepModel->getResepWithDetails(['r.id' => $id]);
+        // Ambil detail permintaan obat dengan data pasien lengkap
+        $builder = $resepModel->builder();
+        $builder->select('resep.*, pasien.nama_lengkap as nama_pasien, pasien.no_rekam_medis as no_rm, pasien.jenis_kelamin, pasien.tanggal_lahir, users.nama_lengkap as nama_dokter, obat.nama_obat as nama_obat_db, obat.harga_jual, obat.satuan as satuan_db');
+        $builder->join('pasien', 'pasien.id = resep.id_pasien', 'left');
+        $builder->join('users', 'users.id = resep.id_dokter', 'left');
+        $builder->join('obat', 'obat.id_obat = resep.id_obat', 'left');
+        $builder->where('resep.id', $id);
+        $resep = $builder->get()->getRowArray();
         
-        if (empty($permintaan)) {
+        if (empty($resep)) {
             $this->session->setFlashdata('error', 'Permintaan obat tidak ditemukan');
             return redirect()->to('/farmasi/permintaan-obat');
+        }
+        
+        // Ambil semua resep untuk pasien yang sama di tanggal yang sama
+        $semua_resep = $resepModel->builder()
+            ->select('resep.*, obat.nama_obat as nama_obat_db, obat.harga_jual, obat.satuan as satuan_db')
+            ->join('obat', 'obat.id_obat = resep.id_obat', 'left')
+            ->where('resep.id_pasien', $resep['id_pasien'])
+            ->where('DATE(resep.tanggal_resep)', date('Y-m-d', strtotime($resep['tanggal_resep'])))
+            ->orderBy('resep.tanggal_resep', 'asc')
+            ->get()->getResultArray();
+        
+        // Hitung total biaya
+        $total_biaya = 0;
+        foreach ($semua_resep as &$item) {
+            // Pilih nama obat (prioritas obat dari DB, fallback ke manual)
+            $item['nama_obat_final'] = !empty($item['nama_obat_db']) ? $item['nama_obat_db'] : $item['nama_obat'];
+            $item['satuan_final'] = !empty($item['satuan_db']) ? $item['satuan_db'] : ($item['satuan'] ?? 'pcs');
+            
+            // Hitung subtotal
+            $harga = $item['harga_jual'] ?? 0;
+            $jumlah = $item['jumlah'] ?? 1;
+            $item['subtotal'] = $harga * $jumlah;
+            $total_biaya += $item['subtotal'];
+        }
+        
+        // Hitung umur pasien
+        $umur = '-';
+        if (!empty($resep['tanggal_lahir'])) {
+            $lahir = new \DateTime($resep['tanggal_lahir']);
+            $sekarang = new \DateTime();
+            $umur = $sekarang->diff($lahir)->y . ' tahun';
         }
         
         $data = [
             'title' => 'Detail Permintaan Obat - SIMRS',
             'pageTitle' => 'Detail Permintaan Obat',
-            'permintaan' => $permintaan[0] // Ambil data pertama karena hasil adalah array
+            'resep' => $resep,
+            'semua_resep' => $semua_resep,
+            'total_biaya' => $total_biaya,
+            'umur' => $umur
         ];
         
         return view('farmasi/detail_permintaan_obat', $data);

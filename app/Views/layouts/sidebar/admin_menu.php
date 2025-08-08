@@ -168,11 +168,11 @@
             </a>
         </li>
         
-        <!-- Pembayaran -->
+        <!-- Riwayat Pembayaran -->
         <li class="submenu-item">
-            <a href="<?= base_url('payments') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Pembayaran">
+            <a href="<?= base_url('kasir/riwayat-pembayaran') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Riwayat Pembayaran">
                 <i class="fas fa-credit-card submenu-icon"></i>
-                <span class="submenu-text">Pembayaran</span>
+                <span class="submenu-text">Riwayat Pembayaran</span>
             </a>
         </li>
         
@@ -193,45 +193,6 @@
         </li>
     </ul>
 </li>
-
-
-<!-- Sub Header - Divisi Manajemen -->
-<li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Manajemen</li>
-
-<!-- Dashboard Manajemen dengan Dropdown -->
-<li class="nav-item has-submenu">
-    <a href="#" class="nav-link submenu-toggle" data-toggle="tooltip" data-placement="right" title="Dashboard Manajemen">
-        <i class="fas fa-chart-line nav-icon"></i>
-        <span class="nav-text">Dashboard Manajemen</span>
-        <i class="fas fa-chevron-down submenu-arrow"></i>
-    </a>
-    <ul class="submenu">
-        <!-- Laporan -->
-        <li class="submenu-item">
-            <a href="<?= base_url('reports') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Laporan">
-                <i class="fas fa-chart-bar submenu-icon"></i>
-                <span class="submenu-text">Laporan</span>
-            </a>
-        </li>
-        
-        <!-- Statistik -->
-        <li class="submenu-item">
-            <a href="<?= base_url('statistics') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Statistik">
-                <i class="fas fa-chart-pie submenu-icon"></i>
-                <span class="submenu-text">Statistik</span>
-            </a>
-        </li>
-        
-        <!-- Laporan Keuangan -->
-        <li class="submenu-item">
-            <a href="<?= base_url('management-financial-reports') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Laporan Keuangan">
-                <i class="fas fa-money-bill-wave submenu-icon"></i>
-                <span class="submenu-text">Laporan Keuangan</span>
-            </a>
-        </li>
-    </ul>
-</li>
-
 <!-- Sub Header - Administrasi Sistem -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> Admin Master Data Sistem</li>
 

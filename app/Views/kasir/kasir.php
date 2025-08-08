@@ -146,9 +146,7 @@
             </div>
         </div>
     </div>
-
-                    </div>
-
+</div>
     <!-- Quick Actions -->
     <div class="row g-3 mt-2">
         <div class="col-md-4">
@@ -395,7 +393,7 @@ function prosesPembayaran() {
     
     // AJAX call to process payment dengan timeout yang lebih pendek
     $.ajax({
-        url: '<?= base_url('kasir/prosesPembayaran') ?>',
+        url: '<?= base_url('kasir/proses-pembayaran') ?>',
         type: 'POST',
         data: formData,
         timeout: 10000, // 10 detik timeout

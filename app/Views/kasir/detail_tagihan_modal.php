@@ -71,15 +71,11 @@
     <div class="bg-light rounded p-3">
         <div class="d-flex justify-content-between py-1">
             <span>Administrasi</span>
-            <span>Rp <?= number_format($biaya_layanan['administrasi'] ?? 50000, 0, ',', '.') ?></span>
-        </div>
-        <div class="d-flex justify-content-between py-1">
-            <span>Nurs Station</span>
-            <span>Rp <?= number_format($biaya_layanan['nurs_station'] ?? 100000, 0, ',', '.') ?></span>
+            <span>Rp <?= number_format($biaya_layanan['administrasi'] ?? 35000, 0, ',', '.') ?></span>
         </div>
         <div class="d-flex justify-content-between py-1">
             <span>Konsultasi Dokter</span>
-            <span>Rp <?= number_format($biaya_layanan['dokter'] ?? 250000, 0, ',', '.') ?></span>
+            <span>Rp <?= number_format($biaya_layanan['dokter'] ?? 100000, 0, ',', '.') ?></span>
         </div>
     </div>
 </div>

@@ -1310,3 +1310,553 @@ DEBUG - 2025-08-06 06:37:46 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2025-08-06 06:51:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-08-06 06:53:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-08-06 06:53:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:04:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:05:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:05:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:05:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:06:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:07:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:07:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:09:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-08-06 07:09:59 --> mysqli_sql_exception: Unknown column 'users.nama' in 'field list' in D:\KP\SIMRSv2\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\KP\SIMRSv2\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `tagihan...', 0)
+#1 D:\KP\SIMRSv2\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `tagihan...')
+#2 D:\KP\SIMRSv2\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `tagihan...')
+#3 D:\KP\SIMRSv2\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `tagihan...', Array, false)
+#4 D:\KP\SIMRSv2\app\Controllers\Kasir.php(235): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\KP\SIMRSv2\system\CodeIgniter.php(933): App\Controllers\Kasir->riwayatPembayaran()
+#6 D:\KP\SIMRSv2\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Kasir))
+#7 D:\KP\SIMRSv2\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\KP\SIMRSv2\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 D:\KP\SIMRSv2\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 D:\KP\SIMRSv2\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 D:\KP\SIMRSv2\system\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\p...')
+#12 {main}
+CRITICAL - 2025-08-06 07:09:59 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'users.nama' in 'field list'
+[Method: GET, Route: kasir/riwayat-pembayaran]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = :tagihan.status:
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100', [...], false)
+ 2 APPPATH\Controllers\Kasir.php(235): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Kasir->riwayatPembayaran()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Kasir))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+CRITICAL - 2025-08-06 07:09:59 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'users.nama' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = \'paid\'
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = \'paid\'
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = :tagihan.status:
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100', [...], false)
+ 4 APPPATH\Controllers\Kasir.php(235): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Kasir->riwayatPembayaran()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Kasir))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+CRITICAL - 2025-08-06 07:09:59 --> [Caused by] mysqli_sql_exception: Unknown column 'users.nama' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = \'paid\'
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = \'paid\'
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = \'paid\'
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `tagihan`.*, `pasien`.`nama_lengkap` as `nama_pasien`, `users`.`nama` as `nama_kasir`
+FROM `tagihan`
+LEFT JOIN `pasien` ON CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)
+LEFT JOIN `users` ON `users`.`id` = `tagihan`.`kasir_id`
+WHERE `tagihan`.`status` = :tagihan.status:
+ORDER BY `tagihan`.`tanggal_bayar` DESC
+ LIMIT 100', [...], false)
+ 5 APPPATH\Controllers\Kasir.php(235): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Kasir->riwayatPembayaran()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Kasir))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+DEBUG - 2025-08-06 07:12:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:13:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:14:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:15:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:16:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:18:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:18:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:21:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:22:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 07:25:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:48:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:48:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:50:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:50:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:50:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:51:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:52:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:54:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:54:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:54:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:55:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-08-06 08:55:04 --> ErrorException: Undefined variable $umur
+[Method: GET, Route: farmasi/detail-permintaan/28]
+in APPPATH\Views\farmasi\detail_permintaan_obat.php on line 38.
+ 1 APPPATH\Views\farmasi\detail_permintaan_obat.php(38): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $umur', 'D:\\KP\\SIMRSv2\\app\\Views\\farmasi\\detail_permintaan_obat.php', 38)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\KP\\SIMRSv2\\app\\Views\\farmasi\\detail_permintaan_obat.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('farmasi/detail_permintaan_obat', [], true)
+ 5 APPPATH\Controllers\Farmasi.php(575): view('farmasi/detail_permintaan_obat', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Farmasi->detailPermintaan('28')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Farmasi))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+DEBUG - 2025-08-06 08:55:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-08-06 08:55:10 --> ErrorException: Undefined variable $umur
+[Method: GET, Route: farmasi/detail-permintaan/28]
+in APPPATH\Views\farmasi\detail_permintaan_obat.php on line 38.
+ 1 APPPATH\Views\farmasi\detail_permintaan_obat.php(38): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $umur', 'D:\\KP\\SIMRSv2\\app\\Views\\farmasi\\detail_permintaan_obat.php', 38)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\KP\\SIMRSv2\\app\\Views\\farmasi\\detail_permintaan_obat.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('farmasi/detail_permintaan_obat', [], true)
+ 5 APPPATH\Controllers\Farmasi.php(575): view('farmasi/detail_permintaan_obat', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Farmasi->detailPermintaan('28')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Farmasi))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+DEBUG - 2025-08-06 08:55:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-08-06 08:55:46 --> ErrorException: Undefined variable $umur
+[Method: GET, Route: farmasi/detail-permintaan/29]
+in APPPATH\Views\farmasi\detail_permintaan_obat.php on line 38.
+ 1 APPPATH\Views\farmasi\detail_permintaan_obat.php(38): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $umur', 'D:\\KP\\SIMRSv2\\app\\Views\\farmasi\\detail_permintaan_obat.php', 38)
+ 2 SYSTEMPATH\View\View.php(224): include('D:\\KP\\SIMRSv2\\app\\Views\\farmasi\\detail_permintaan_obat.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('farmasi/detail_permintaan_obat', [], true)
+ 5 APPPATH\Controllers\Farmasi.php(575): view('farmasi/detail_permintaan_obat', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Farmasi->detailPermintaan('29')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Farmasi))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+DEBUG - 2025-08-06 08:55:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 08:56:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:03:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:03:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:03:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:05:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:05:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:05:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:06:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:06:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:06:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:22 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-08-06 09:07:22 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-08-06 09:07:22 --> [Perawat::getAntrianPendaftaran] Data count: 1
+DEBUG - 2025-08-06 09:07:22 --> [Perawat::getAntrianPendaftaran] Data: [{"id":"90","no_antrian":"A004","no_rm":"RM000001","nama_pasien":"Mukhamad Diva Mahardika Awaludin","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-08-06T09:07:00Z"}]
+DEBUG - 2025-08-06 09:07:22 --> Response: {"data":[{"id":"90","no_antrian":"A004","no_rm":"RM000001","nama_pasien":"Mukhamad Diva Mahardika Awaludin","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-08-06T09:07:00Z"}],"recordsTotal":1,"recordsFiltered":1,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-08-06 09:07:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:23 --> [Perawat::tandaVitalPasien] Data ke view: Array
+(
+    [id] => 90
+    [no_antrian] => A004
+    [no_rm] => RM000001
+    [id_poli] => 1
+    [status] => Menunggu Pemeriksaan
+    [created_at] => 2025-08-06 09:07:00
+    [updated_at] => 2025-08-06 09:07:00
+    [nama_pasien] => Mukhamad Diva Mahardika Awaludin
+    [poli_tujuan] => Poli Umum
+)
+
+DEBUG - 2025-08-06 09:07:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:38 --> [Perawat::simpanPemeriksaan] Data masuk: {"id_antrian":"90","tekanan_darah":"120\/80","detak_jantung":"72","suhu_tubuh":"36","pernafasan":"16","berat_badan":"65","tinggi_badan":"170","keluhan":"sa"}
+DEBUG - 2025-08-06 09:07:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:07:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:08:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:08:14 --> SOAP SUBMIT: method=POST POST={"csrf_test_name":"7ea22c3203064dfd77c8c014a5aaa390","no_rm":"RM000001","id_antrian":"37","keluhan_utama":"das","riwayat_penyakit":"sad","riwayat_alergi":"sad","tekanan_darah":"das","denyut_nadi":"asd","suhu_tubuh":"assd","respirasi":"sad","pemeriksaan_fisik":"sad","diagnosis":"asd","prognosis":"asd","obat_manual":[""],"obat_db":["30"],"jumlah_obat":["20"],"instruksi_obat":["3x1\/hari"],"edukasi":""}
+DEBUG - 2025-08-06 09:08:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:08:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:08:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:08:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:09:20 --> Completing medicine request ID: 31 for patient: RM000001
+INFO - 2025-08-06 09:09:20 --> Updated stock for medicine ID: 30 from 40 to 20
+INFO - 2025-08-06 09:09:20 --> Remaining pending medicine requests for RM000001: 0
+INFO - 2025-08-06 09:09:20 --> Created billing for patient RM000001 with total: 760000
+INFO - 2025-08-06 09:09:20 --> Updated patient queue status to Menunggu Kasir for RM000001
+DEBUG - 2025-08-06 09:09:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:09:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:11 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-08-06 09:10:11 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-08-06 09:10:11 --> [Perawat::getAntrianPendaftaran] Data count: 1
+DEBUG - 2025-08-06 09:10:11 --> [Perawat::getAntrianPendaftaran] Data: [{"id":"91","no_antrian":"A005","no_rm":"RM2025080005","nama_pasien":"Mintes","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-08-06T09:10:05Z"}]
+DEBUG - 2025-08-06 09:10:11 --> Response: {"data":[{"id":"91","no_antrian":"A005","no_rm":"RM2025080005","nama_pasien":"Mintes","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-08-06T09:10:05Z"}],"recordsTotal":1,"recordsFiltered":1,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-08-06 09:10:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:13 --> [Perawat::tandaVitalPasien] Data ke view: Array
+(
+    [id] => 91
+    [no_antrian] => A005
+    [no_rm] => RM2025080005
+    [id_poli] => 1
+    [status] => Menunggu Pemeriksaan
+    [created_at] => 2025-08-06 09:10:05
+    [updated_at] => 2025-08-06 09:10:05
+    [nama_pasien] => Mintes
+    [poli_tujuan] => Poli Umum
+)
+
+DEBUG - 2025-08-06 09:10:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:27 --> [Perawat::simpanPemeriksaan] Data masuk: {"id_antrian":"91","tekanan_darah":"120\/80","detak_jantung":"72","suhu_tubuh":"36","pernafasan":"16","berat_badan":"65","tinggi_badan":"170","keluhan":"asd"}
+DEBUG - 2025-08-06 09:10:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:50 --> SOAP SUBMIT: method=POST POST={"csrf_test_name":"7ea22c3203064dfd77c8c014a5aaa390","no_rm":"RM2025080005","id_antrian":"38","keluhan_utama":"DSA","riwayat_penyakit":"ASD","riwayat_alergi":"DAS","tekanan_darah":"SAD","denyut_nadi":"ASD","suhu_tubuh":"SAD","respirasi":"das","pemeriksaan_fisik":"asd","diagnosis":"asd","prognosis":"das","obat_manual":[""],"obat_db":["19"],"jumlah_obat":["14"],"instruksi_obat":["3x1\/hari"],"edukasi":""}
+DEBUG - 2025-08-06 09:10:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:10:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:11:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:11:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:11:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:11:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:11:07 --> Completing medicine request ID: 32 for patient: RM2025080005
+INFO - 2025-08-06 09:11:07 --> Updated stock for medicine ID: 19 from 75 to 61
+INFO - 2025-08-06 09:11:07 --> Remaining pending medicine requests for RM2025080005: 0
+INFO - 2025-08-06 09:11:07 --> Created billing for patient RM2025080005 with total: 568000
+INFO - 2025-08-06 09:11:07 --> Updated patient queue status to Menunggu Kasir for RM2025080005
+DEBUG - 2025-08-06 09:11:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:11:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:14:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-08-06 09:16:19 --> ErrorException: Cannot use try without catch or finally
+[Method: GET, Route: kasir/]
+in APPPATH\Controllers\Kasir.php on line 60.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-08-06 09:17:05 --> ParseError: syntax error, unexpected token "public", expecting end of file
+[Method: GET, Route: kasir]
+in APPPATH\Controllers\Kasir.php on line 213.
+ 1 VENDORPATH\composer\ClassLoader.php(427): Composer\Autoload\{closure}('D:\\KP\\SIMRSv2\\vendor\\composer/../../app/Controllers/Kasir.php')
+ 2 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Kasir')
+ 3 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\Kasir', true)
+ 4 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('D:\\KP\\SIMRSv2\\public\\index.php')
+DEBUG - 2025-08-06 09:17:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:17:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:18:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:18:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:19:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:20:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:20:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:22:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:24:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:24:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:24:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:24:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:24:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:24:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:25:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:25:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:26:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:27:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:29:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:29:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:29:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:29:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:29:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:29:41 --> detailTagihan called with idPasien: RM2025080005, tanggal: 2025-08-06
+INFO - 2025-08-06 09:29:41 --> Models initialized successfully
+INFO - 2025-08-06 09:29:41 --> Tagihan query executed. Result: {"id_tagihan":"6","no_rm":"RM2025080005","no_resep":"32","total_biaya":"568000.00","detail_tagihan":"[{\"nama_obat\":\"Paracetamol Sirup 60ml\",\"jumlah\":\"14\",\"satuan\":\"Botol\",\"harga_satuan\":\"12000.00\",\"subtotal\":168000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":50000},{\"nama_item\":\"Biaya Nurs Station\",\"harga\":100000},{\"nama_item\":\"Biaya Dokter\",\"harga\":250000}]","status":"pending","tanggal_tagihan":"2025-08-06 09:11:07","tanggal_bayar":null,"metode_pembayaran":null,"kasir_id":null,"keterangan":null,"created_at":"2025-08-06 09:11:07","updated_at":"2025-08-06 09:11:07","nama_pasien":"Mintes"}
+INFO - 2025-08-06 09:29:41 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-08-06 09:29:41 --> Detail tagihan parsed: [{"nama_obat":"Paracetamol Sirup 60ml","jumlah":"14","satuan":"Botol","harga_satuan":"12000.00","subtotal":168000},{"nama_item":"Biaya Administrasi","harga":50000},{"nama_item":"Biaya Nurs Station","harga":100000},{"nama_item":"Biaya Dokter","harga":250000}]
+INFO - 2025-08-06 09:29:41 --> Processed obat item: Paracetamol Sirup 60ml with price: 12000.00
+INFO - 2025-08-06 09:29:41 --> Resep list processed. Total obat: 168000
+INFO - 2025-08-06 09:29:41 --> Additional models initialized
+INFO - 2025-08-06 09:29:41 --> Pasien info query executed: {"id":"100","no_rekam_medis":"RM2025080005","title":"Tn","nama_lengkap":"Mintes","jenis_kelamin":"L","tempat_lahir":"Subang","tanggal_lahir":"2002-12-10","status_perkawinan":"belum_menikah","nomor_identitas":"364723725372676327","email":"mintes@gmail.com","nomor_hp":"085782222873","status_aktif":"aktif","tanggal_daftar":"2025-08-05 01:26:55","tanggal_hapus":null,"created_at":"2025-08-05 01:26:55","updated_at":"2025-08-05 01:26:55","foto_identitas":"identitas_68915d75590a3.jpg","nama_dokter":"Administrator"}
+INFO - 2025-08-06 09:29:41 --> Age calculated: 22 tahun
+INFO - 2025-08-06 09:29:41 --> Data array prepared successfully
+INFO - 2025-08-06 09:29:41 --> Processing detailed view, returning modal view
+DEBUG - 2025-08-06 09:30:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:30:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:30:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:33:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:34:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:34:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:34:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:37:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:37:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:37:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:37:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:37:38 --> Completing medicine request ID: 31 for patient: RM000001
+INFO - 2025-08-06 09:37:38 --> Updated stock for medicine ID: 30 from 20 to 0
+INFO - 2025-08-06 09:37:38 --> Remaining pending medicine requests for RM000001: 0
+INFO - 2025-08-06 09:37:38 --> Updated patient queue status to Menunggu Kasir for RM000001
+DEBUG - 2025-08-06 09:37:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:37:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:37:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:38:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:38:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:38:08 --> detailTagihan called with idPasien: RM000001, tanggal: 2025-08-06
+INFO - 2025-08-06 09:38:08 --> Models initialized successfully
+INFO - 2025-08-06 09:38:08 --> Tagihan query executed. Result: {"id_tagihan":"5","no_rm":"RM000001","no_resep":"31","total_biaya":"760000.00","detail_tagihan":"[{\"nama_obat\":\"Paracetamol Drop 15ml\",\"jumlah\":\"20\",\"satuan\":\"Botol\",\"harga_satuan\":\"18000.00\",\"subtotal\":360000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":50000},{\"nama_item\":\"Biaya Nurs Station\",\"harga\":100000},{\"nama_item\":\"Biaya Dokter\",\"harga\":250000}]","status":"pending","tanggal_tagihan":"2025-08-06 09:09:20","tanggal_bayar":null,"metode_pembayaran":null,"jumlah_bayar":"0.00","kembalian":"0.00","kasir_id":null,"keterangan":null,"created_at":"2025-08-06 09:09:20","updated_at":"2025-08-06 09:09:20","nama_pasien":"Mukhamad Diva Mahardika Awaludin"}
+INFO - 2025-08-06 09:38:08 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-08-06 09:38:08 --> Detail tagihan parsed: [{"nama_obat":"Paracetamol Drop 15ml","jumlah":"20","satuan":"Botol","harga_satuan":"18000.00","subtotal":360000},{"nama_item":"Biaya Administrasi","harga":50000},{"nama_item":"Biaya Nurs Station","harga":100000},{"nama_item":"Biaya Dokter","harga":250000}]
+INFO - 2025-08-06 09:38:08 --> Processed obat item: Paracetamol Drop 15ml with price: 18000.00
+INFO - 2025-08-06 09:38:08 --> Resep list processed. Total obat: 360000
+INFO - 2025-08-06 09:38:08 --> Additional models initialized
+INFO - 2025-08-06 09:38:08 --> Pasien info query executed: {"id":"1","no_rekam_medis":"RM000001","title":"Tn","nama_lengkap":"Mukhamad Diva Mahardika Awaludin","jenis_kelamin":"L","tempat_lahir":"Subang","tanggal_lahir":"2002-12-10","status_perkawinan":"menikah","nomor_identitas":"302123214123","email":"diva@gmail.com","nomor_hp":"08172132131","status_aktif":"aktif","tanggal_daftar":"2025-07-23 02:21:40","tanggal_hapus":null,"created_at":"2025-07-23 02:21:40","updated_at":null,"foto_identitas":"","nama_dokter":"Administrator"}
+INFO - 2025-08-06 09:38:08 --> Age calculated: 22 tahun
+INFO - 2025-08-06 09:38:08 --> Data array prepared successfully
+INFO - 2025-08-06 09:38:08 --> Processing detailed view, returning modal view
+DEBUG - 2025-08-06 09:38:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:38:23 --> detailTagihan called with idPasien: RM000001, tanggal: 2025-08-06
+INFO - 2025-08-06 09:38:23 --> Models initialized successfully
+INFO - 2025-08-06 09:38:24 --> Tagihan query executed. Result: {"id_tagihan":"5","no_rm":"RM000001","no_resep":"31","total_biaya":"760000.00","detail_tagihan":"[{\"nama_obat\":\"Paracetamol Drop 15ml\",\"jumlah\":\"20\",\"satuan\":\"Botol\",\"harga_satuan\":\"18000.00\",\"subtotal\":360000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":50000},{\"nama_item\":\"Biaya Nurs Station\",\"harga\":100000},{\"nama_item\":\"Biaya Dokter\",\"harga\":250000}]","status":"pending","tanggal_tagihan":"2025-08-06 09:09:20","tanggal_bayar":null,"metode_pembayaran":null,"jumlah_bayar":"0.00","kembalian":"0.00","kasir_id":null,"keterangan":null,"created_at":"2025-08-06 09:09:20","updated_at":"2025-08-06 09:09:20","nama_pasien":"Mukhamad Diva Mahardika Awaludin"}
+INFO - 2025-08-06 09:38:24 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-08-06 09:38:24 --> Detail tagihan parsed: [{"nama_obat":"Paracetamol Drop 15ml","jumlah":"20","satuan":"Botol","harga_satuan":"18000.00","subtotal":360000},{"nama_item":"Biaya Administrasi","harga":50000},{"nama_item":"Biaya Nurs Station","harga":100000},{"nama_item":"Biaya Dokter","harga":250000}]
+INFO - 2025-08-06 09:38:24 --> Processed obat item: Paracetamol Drop 15ml with price: 18000.00
+INFO - 2025-08-06 09:38:24 --> Resep list processed. Total obat: 360000
+INFO - 2025-08-06 09:38:24 --> Additional models initialized
+INFO - 2025-08-06 09:38:24 --> Pasien info query executed: {"id":"1","no_rekam_medis":"RM000001","title":"Tn","nama_lengkap":"Mukhamad Diva Mahardika Awaludin","jenis_kelamin":"L","tempat_lahir":"Subang","tanggal_lahir":"2002-12-10","status_perkawinan":"menikah","nomor_identitas":"302123214123","email":"diva@gmail.com","nomor_hp":"08172132131","status_aktif":"aktif","tanggal_daftar":"2025-07-23 02:21:40","tanggal_hapus":null,"created_at":"2025-07-23 02:21:40","updated_at":null,"foto_identitas":"","nama_dokter":"Administrator"}
+INFO - 2025-08-06 09:38:24 --> Age calculated: 22 tahun
+INFO - 2025-08-06 09:38:24 --> Data array prepared successfully
+INFO - 2025-08-06 09:38:24 --> Processing detailed view, returning modal view
+DEBUG - 2025-08-06 09:38:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:38:39 --> Proses Pembayaran Data: idPasien=RM000001, tanggal=2025-08-06, jumlahBayar=800000, metodeBayar=cash, totalTagihan=760000
+DEBUG - 2025-08-06 09:38:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:38:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:39:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:39:15 --> detailTagihan called with idPasien: RM000001, tanggal: 2025-08-06
+INFO - 2025-08-06 09:39:15 --> Models initialized successfully
+INFO - 2025-08-06 09:39:15 --> Tagihan query executed. Result: null
+ERROR - 2025-08-06 09:39:15 --> Tagihan not found for idPasien: RM000001, tanggal: 2025-08-06
+DEBUG - 2025-08-06 09:46:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:46:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:46:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:29 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-08-06 09:47:29 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-08-06 09:47:29 --> [Perawat::getAntrianPendaftaran] Data count: 1
+DEBUG - 2025-08-06 09:47:29 --> [Perawat::getAntrianPendaftaran] Data: [{"id":"92","no_antrian":"A006","no_rm":"RM000002","nama_pasien":"Rea","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-08-06T09:47:06Z"}]
+DEBUG - 2025-08-06 09:47:29 --> Response: {"data":[{"id":"92","no_antrian":"A006","no_rm":"RM000002","nama_pasien":"Rea","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-08-06T09:47:06Z"}],"recordsTotal":1,"recordsFiltered":1,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-08-06 09:47:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:30 --> [Perawat::tandaVitalPasien] Data ke view: Array
+(
+    [id] => 92
+    [no_antrian] => A006
+    [no_rm] => RM000002
+    [id_poli] => 1
+    [status] => Menunggu Pemeriksaan
+    [created_at] => 2025-08-06 09:47:06
+    [updated_at] => 2025-08-06 09:47:06
+    [nama_pasien] => Rea
+    [poli_tujuan] => Poli Umum
+)
+
+DEBUG - 2025-08-06 09:47:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:47:45 --> [Perawat::simpanPemeriksaan] Data masuk: {"id_antrian":"92","tekanan_darah":"120\/80","detak_jantung":"72","suhu_tubuh":"36","pernafasan":"16","berat_badan":"65","tinggi_badan":"170","keluhan":"dsak"}
+DEBUG - 2025-08-06 09:47:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:25 --> SOAP SUBMIT: method=POST POST={"csrf_test_name":"7ea22c3203064dfd77c8c014a5aaa390","no_rm":"RM000002","id_antrian":"39","keluhan_utama":"das","riwayat_penyakit":"das","riwayat_alergi":"das","tekanan_darah":"dsa","denyut_nadi":"asda","suhu_tubuh":"asd","respirasi":"sad","pemeriksaan_fisik":"sad","diagnosis":"sad","prognosis":"asd","obat_manual":["asd"],"obat_db":["16"],"jumlah_obat":["12"],"instruksi_obat":["3x1\/hari"],"edukasi":""}
+DEBUG - 2025-08-06 09:48:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:48:38 --> Completing medicine request ID: 33 for patient: RM000002
+INFO - 2025-08-06 09:48:38 --> Remaining pending medicine requests for RM000002: 1
+DEBUG - 2025-08-06 09:48:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:48:48 --> Completing medicine request ID: 34 for patient: RM000002
+INFO - 2025-08-06 09:48:48 --> Updated stock for medicine ID: 16 from 77 to 65
+INFO - 2025-08-06 09:48:48 --> Remaining pending medicine requests for RM000002: 0
+INFO - 2025-08-06 09:48:48 --> Created billing for patient RM000002 with total: 279000
+INFO - 2025-08-06 09:48:48 --> Updated patient queue status to Menunggu Kasir for RM000002
+DEBUG - 2025-08-06 09:48:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:48:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:49:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:49:03 --> detailTagihan called with idPasien: RM000002, tanggal: 2025-08-06
+INFO - 2025-08-06 09:49:03 --> Models initialized successfully
+INFO - 2025-08-06 09:49:03 --> Tagihan query executed. Result: {"id_tagihan":"7","no_rm":"RM000002","no_resep":"34","total_biaya":"279000.00","detail_tagihan":"[{\"nama_obat\":\"asd\",\"jumlah\":\"12\",\"satuan\":\"pcs\",\"harga_satuan\":0,\"subtotal\":0},{\"nama_obat\":\"Panadol 500mg\",\"jumlah\":\"12\",\"satuan\":\"Tablet\",\"harga_satuan\":\"12000.00\",\"subtotal\":144000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":35000},{\"nama_item\":\"Biaya Dokter\",\"harga\":100000}]","status":"pending","tanggal_tagihan":"2025-08-06 09:48:48","tanggal_bayar":null,"metode_pembayaran":null,"jumlah_bayar":"0.00","kembalian":"0.00","kasir_id":null,"keterangan":null,"created_at":"2025-08-06 09:48:48","updated_at":"2025-08-06 09:48:48","nama_pasien":"Rea"}
+INFO - 2025-08-06 09:49:03 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-08-06 09:49:03 --> Detail tagihan parsed: [{"nama_obat":"asd","jumlah":"12","satuan":"pcs","harga_satuan":0,"subtotal":0},{"nama_obat":"Panadol 500mg","jumlah":"12","satuan":"Tablet","harga_satuan":"12000.00","subtotal":144000},{"nama_item":"Biaya Administrasi","harga":35000},{"nama_item":"Biaya Dokter","harga":100000}]
+INFO - 2025-08-06 09:49:03 --> Processed obat item: asd with price: 0
+INFO - 2025-08-06 09:49:03 --> Processed obat item: Panadol 500mg with price: 12000.00
+INFO - 2025-08-06 09:49:03 --> Resep list processed. Total obat: 144000
+INFO - 2025-08-06 09:49:03 --> Additional models initialized
+INFO - 2025-08-06 09:49:03 --> Pasien info query executed: {"id":"2","no_rekam_medis":"RM000002","title":"Ny","nama_lengkap":"Rea","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","status_perkawinan":"menikah","nomor_identitas":"3047128731321","email":"rea@gmail.com","nomor_hp":"086312321635","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:33:29","tanggal_hapus":null,"created_at":"2025-07-23 03:33:29","updated_at":null,"foto_identitas":"","nama_dokter":"Administrator"}
+INFO - 2025-08-06 09:49:03 --> Age calculated: 24 tahun
+INFO - 2025-08-06 09:49:03 --> Data array prepared successfully
+INFO - 2025-08-06 09:49:03 --> Processing detailed view, returning modal view
+DEBUG - 2025-08-06 09:49:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:49:33 --> Proses Pembayaran Data: idPasien=RM000002, tanggal=2025-08-06, jumlahBayar=280000, metodeBayar=cash, totalTagihan=279000
+INFO - 2025-08-06 09:49:33 --> Update Data: {"status":"paid","tanggal_bayar":"2025-08-06 09:49:33","metode_pembayaran":"cash","jumlah_bayar":280000,"kembalian":1000,"kasir_id":"1","keterangan":"Pembayaran berhasil - Cash"}
+DEBUG - 2025-08-06 09:49:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:49:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:50:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:53:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:53:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:54:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:55:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:56:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:56:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:56:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:57:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:57:01 --> detailTagihan called with idPasien: RM000002, tanggal: 2025-08-06
+INFO - 2025-08-06 09:57:01 --> Models initialized successfully
+INFO - 2025-08-06 09:57:01 --> Tagihan query executed. Result: null
+ERROR - 2025-08-06 09:57:01 --> Tagihan not found for idPasien: RM000002, tanggal: 2025-08-06
+DEBUG - 2025-08-06 09:57:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:57:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:57:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:57:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:57:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:58:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:58:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:59:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:59:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-06 09:59:19 --> detailTagihan called with idPasien: RM000002, tanggal: 2025-08-06
+INFO - 2025-08-06 09:59:19 --> Models initialized successfully
+INFO - 2025-08-06 09:59:19 --> Tagihan query executed. Result: null
+ERROR - 2025-08-06 09:59:19 --> Tagihan not found for idPasien: RM000002, tanggal: 2025-08-06
+DEBUG - 2025-08-06 09:59:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:59:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-06 09:59:38 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-08-06 09:59:38 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-08-06 09:59:38 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-08-06 09:59:38 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-08-06 09:59:38 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-08-06 09:59:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

@@ -162,9 +162,11 @@ $routes->group('farmasi', function($routes) {
 $routes->group('kasir', function($routes) {
     $routes->get('/', 'Kasir::index');
     $routes->get('kasir', 'Kasir::index');
-    $routes->get('detail-tagihan/(:num)/(:any)', 'Kasir::detailTagihan/$1/$2');
+    $routes->get('detail-tagihan/(:any)/(:any)', 'Kasir::detailTagihan/$1/$2');
     $routes->post('proses-pembayaran', 'Kasir::prosesPembayaran');
     $routes->get('riwayat-pembayaran', 'Kasir::riwayatPembayaran');
+    $routes->get('export-excel', 'Kasir::exportExcel');
+    $routes->get('export-pdf', 'Kasir::exportPdf');
 });
 
 // Dokter Routes
