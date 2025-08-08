@@ -1,1 +1,1 @@
-    nama database : simrs_hamori
+nama database : simrs_hamori
