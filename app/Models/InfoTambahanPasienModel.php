@@ -12,7 +12,7 @@ class InfoTambahanPasienModel extends Model
     protected $returnType = 'array';
     protected $allowedFields = [
         'pasien_id', 'agama', 'pendidikan_terakhir',
-        'pekerjaan', 'kewarganegaraan', 'suku', 
+        'pekerjaan', 'kewarganegaraan', 'suku'
     ];
 
     protected $useTimestamps = true;

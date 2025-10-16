@@ -832,5 +832,280 @@ class Admisi extends BaseController
         return $this->response->setJSON(['exists' => $exists]);
     }
 
+    // Edit Data Pasien
+    public function editPasien($id)
+    {
+        // Load models
+        $infoTambahanModel = new \App\Models\InfoTambahanPasienModel();
+        $infoMedisModel = new \App\Models\InfoMedisPasienModel();
+        $kontakDaruratModel = new \App\Models\KontakDaruratModel();
+
+        // Get pasien data
+        $pasien = $this->pasienModel->find($id);
+        if (!$pasien) {
+            return redirect()->to('admisi/datapasien')->with('error', 'Data pasien tidak ditemukan');
+        }
+
+        // Get related data
+        $alamat = $this->alamatPasienModel->where('pasien_id', $id)->first();
+        $info_tambahan = $infoTambahanModel->where('pasien_id', $id)->first();
+        $info_medis = $infoMedisModel->where('pasien_id', $id)->first();
+        $kontak_darurat = $kontakDaruratModel->where('pasien_id', $id)->first();
+
+        $data = [
+            'title' => 'Edit Data Pasien - SIMRS',
+            'pasien' => $pasien,
+            'alamat' => $alamat ?? [],
+            'info_tambahan' => $info_tambahan ?? [],
+            'info_medis' => $info_medis ?? [],
+            'kontak_darurat' => $kontak_darurat ?? []
+        ];
+
+        return view('admisi/edit_pasien', $data);
+    }
+
+    /**
+     * Update Data Pasien
+     * 
+     * Method untuk mengupdate data pasien beserta informasi terkait seperti alamat,
+     * informasi tambahan, informasi medis, dan kontak darurat.
+     * Menggunakan database transaction untuk menjaga integritas data.
+     * 
+     * @param int $id ID pasien yang akan diupdate
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     * 
+     * Tabel Database yang Terpengaruh:
+     * - pasien: Data utama pasien (nama, identitas, kontak)
+     * - alamat_pasien: Alamat lengkap pasien
+     * - info_tambahan_pasien: Informasi demografis (agama, pendidikan, pekerjaan, dll)
+     * - info_medis_pasien: Informasi medis (golongan darah)
+     * - kontak_darurat: Informasi kontak darurat
+     */
+    public function updatePasien($id)
+    {
+        // Inisialisasi model yang diperlukan
+        $infoTambahanModel = new \App\Models\InfoTambahanPasienModel();
+        $infoMedisModel = new \App\Models\InfoMedisPasienModel();
+        $kontakDaruratModel = new \App\Models\KontakDaruratModel();
+
+        // Validasi input data
+        if (!$this->validasiDataPasien()) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Mulai database transaction
+        $this->db->transStart();
+
+        try {
+            // Update data utama pasien
+            $this->updateDataUtamaPasien($id);
+            
+            // Update alamat pasien
+            $this->updateAlamatPasien($id);
+            
+            // Update informasi tambahan pasien
+            $this->updateInfoTambahanPasien($id, $infoTambahanModel);
+            
+            // Update informasi medis pasien
+            $this->updateInfoMedisPasien($id, $infoMedisModel);
+            
+            // Update kontak darurat pasien
+            $this->updateKontakDaruratPasien($id, $kontakDaruratModel);
+
+            // Selesaikan transaction
+            $this->db->transComplete();
+
+            // Cek status transaction
+            if ($this->db->transStatus() === false) {
+                log_message('error', 'Transaction gagal untuk pasien ID: ' . $id);
+                return redirect()->back()->withInput()->with('error', 'Gagal mengupdate data pasien');
+            }
+
+            log_message('info', 'Data pasien berhasil diupdate. ID: ' . $id);
+            return redirect()->to('admisi/datapasien')->with('success', 'Data pasien berhasil diupdate');
+
+        } catch (\Exception $e) {
+            $this->db->transRollback();
+            log_message('error', 'Exception saat update pasien: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Validasi Data Input Pasien
+     * 
+     * Memvalidasi seluruh input yang diperlukan untuk update data pasien
+     * 
+     * @return bool True jika validasi berhasil, false jika gagal
+     */
+    private function validasiDataPasien()
+    {
+        $rules = [
+            'title' => 'required',
+            'nama_lengkap' => 'required|min_length[3]',
+            'jenis_kelamin' => 'required|in_list[L,P]',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required',
+            'nomor_identitas' => 'required',
+            'nomor_hp' => 'required',
+            'alamat_lengkap' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            log_message('error', 'Validasi pasien gagal: ' . json_encode($this->validator->getErrors()));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update Data Utama Pasien
+     * 
+     * Mengupdate data inti pasien di tabel 'pasien'
+     * Termasuk: title, nama, jenis kelamin, tempat/tanggal lahir, identitas, kontak
+     * 
+     * @param int $id ID pasien
+     * @return void
+     */
+    private function updateDataUtamaPasien($id)
+    {
+        $pasienData = [
+            'title' => $this->request->getPost('title'),
+            'nama_lengkap' => $this->request->getPost('nama_lengkap'),
+            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'tempat_lahir' => $this->request->getPost('tempat_lahir'),
+            'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
+            'nomor_identitas' => $this->request->getPost('nomor_identitas'),
+            'status_perkawinan' => $this->request->getPost('status_perkawinan'),
+            'nomor_hp' => $this->request->getPost('nomor_hp'),
+            'email' => $this->request->getPost('email')
+        ];
+
+        $this->pasienModel->update($id, $pasienData);
+    }
+
+    /**
+     * Update Alamat Pasien
+     * 
+     * Mengupdate atau membuat record baru alamat pasien di tabel 'alamat_pasien'
+     * Termasuk: alamat lengkap, kelurahan, kecamatan, kabupaten/kota, provinsi, kode pos
+     * 
+     * @param int $id ID pasien
+     * @return void
+     */
+    private function updateAlamatPasien($id)
+    {
+        $alamatData = [
+            'alamat_lengkap' => $this->request->getPost('alamat_lengkap'),
+            'kelurahan' => $this->request->getPost('kelurahan'),
+            'kecamatan' => $this->request->getPost('kecamatan'),
+            'kabupaten_kota' => $this->request->getPost('kabupaten_kota'),
+            'provinsi' => $this->request->getPost('provinsi'),
+            'kode_pos' => $this->request->getPost('kode_pos')
+        ];
+
+        $existingAlamat = $this->alamatPasienModel->where('pasien_id', $id)->first();
+        
+        if ($existingAlamat) {
+            // Update data alamat yang sudah ada
+            $this->alamatPasienModel->update($existingAlamat['id'], $alamatData);
+        } else {
+            // Insert data alamat baru
+            $alamatData['pasien_id'] = $id;
+            $this->alamatPasienModel->insert($alamatData);
+        }
+    }
+
+    /**
+     * Update Informasi Tambahan Pasien
+     * 
+     * Mengupdate atau membuat record informasi demografis di tabel 'info_tambahan_pasien'
+     * Termasuk: agama, pendidikan terakhir, pekerjaan, kewarganegaraan, suku
+     * 
+     * @param int $id ID pasien
+     * @param \App\Models\InfoTambahanPasienModel $model Instance dari InfoTambahanPasienModel
+     * @return void
+     */
+    private function updateInfoTambahanPasien($id, $model)
+    {
+        $infoData = [
+            'agama' => $this->request->getPost('agama'),
+            'pendidikan_terakhir' => $this->request->getPost('pendidikan_terakhir'),
+            'pekerjaan' => $this->request->getPost('pekerjaan'),
+            'kewarganegaraan' => $this->request->getPost('kewarganegaraan'),
+            'suku' => $this->request->getPost('suku')
+        ];
+
+        $existingInfo = $model->where('pasien_id', $id)->first();
+        
+        if ($existingInfo) {
+            // Update data info tambahan yang sudah ada
+            $model->update($existingInfo['id'], $infoData);
+        } else {
+            // Insert data info tambahan baru
+            $infoData['pasien_id'] = $id;
+            $model->insert($infoData);
+        }
+    }
+
+    /**
+     * Update Informasi Medis Pasien
+     * 
+     * Mengupdate atau membuat record informasi medis di tabel 'info_medis_pasien'
+     * Saat ini menangani: golongan darah
+     * 
+     * @param int $id ID pasien
+     * @param \App\Models\InfoMedisPasienModel $model Instance dari InfoMedisPasienModel
+     * @return void
+     */
+    private function updateInfoMedisPasien($id, $model)
+    {
+        $infoMedisData = [
+            'golongan_darah' => $this->request->getPost('golongan_darah')
+        ];
+
+        $existingInfoMedis = $model->where('pasien_id', $id)->first();
+        
+        if ($existingInfoMedis) {
+            // Update data info medis yang sudah ada
+            $model->update($existingInfoMedis['id'], $infoMedisData);
+        } else {
+            // Insert data info medis baru
+            $infoMedisData['pasien_id'] = $id;
+            $model->insert($infoMedisData);
+        }
+    }
+
+    /**
+     * Update Kontak Darurat Pasien
+     * 
+     * Mengupdate atau membuat record kontak darurat di tabel 'kontak_darurat'
+     * Termasuk: nama kontak, hubungan, nomor HP, alamat
+     * 
+     * @param int $id ID pasien
+     * @param \App\Models\KontakDaruratModel $model Instance dari KontakDaruratModel
+     * @return void
+     */
+    private function updateKontakDaruratPasien($id, $model)
+    {
+        $kontakData = [
+            'nama_kontak' => $this->request->getPost('nama_kontak'),
+            'hubungan' => $this->request->getPost('hubungan'),
+            'nomor_hp' => $this->request->getPost('nomor_hp_darurat'),
+            'alamat' => $this->request->getPost('alamat_darurat')
+        ];
+
+        $existingKontak = $model->where('pasien_id', $id)->first();
+        
+        if ($existingKontak) {
+            // Update data kontak darurat yang sudah ada
+            $model->update($existingKontak['id'], $kontakData);
+        } else {
+            // Insert data kontak darurat baru
+            $kontakData['pasien_id'] = $id;
+            $model->insert($kontakData);
+        }
+    }
 }
 
