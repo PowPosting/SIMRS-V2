@@ -118,6 +118,11 @@ class Admisi extends BaseController
     // Step 1: Form pendaftaran awal
     public function registrasiPasien()
     {
+        // Bersihkan semua session dari pendaftaran sebelumnya
+        $this->session->remove(['pasien_step1', 'pasien_step2', 'pasien_step3', 'pasien_step4', 'registration_data']);
+        
+        log_message('info', '[registrasiPasien] Session dibersihkan untuk pendaftaran baru');
+        
         return view('admisi/registrasi_pasien');
     }
 
@@ -520,22 +525,37 @@ class Admisi extends BaseController
 
             log_message('debug', 'Nomor antrian generated: ' . $noAntrian);
 
+            // Gunakan timezone Asia/Jakarta untuk konsistensi
+            $dateTime = new \DateTime('now', new \DateTimeZone('Asia/Jakarta'));
+            
             // Masukkan ke antrian
             $antrianData = [
                 'no_antrian' => $noAntrian,
                 'no_rm' => $pasienData['no_rm'],
                 'id_poli' => $pasienData['id_poli'],
-                'status' => 'Menunggu Pemeriksaan'
+                'status' => 'Menunggu Pemeriksaan',
+                'created_at' => $dateTime->format('Y-m-d H:i:s')
             ];
+
+            // Log data antrian yang akan disimpan
+            log_message('info', '[saveStep5] Data antrian: ' . json_encode($antrianData));
 
             // Inisialisasi model antrian
             $antrianModel = new \App\Models\AntrianModel();
 
-            if (!$antrianModel->insert($antrianData)) {
+            $insertResult = $antrianModel->insert($antrianData);
+            
+            if (!$insertResult) {
                 $errorMessage = 'Gagal menyimpan data antrian: ' . json_encode($antrianModel->errors());
                 log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
+            
+            log_message('info', '[saveStep5] Berhasil insert antrian dengan ID: ' . $insertResult);
+            
+            // Verifikasi data yang tersimpan
+            $savedData = $antrianModel->find($insertResult);
+            log_message('info', '[saveStep5] Data tersimpan di DB: ' . json_encode($savedData));
             
             // Commit transaction if all is well
             if ($this->db->transStatus() === false) {
@@ -605,28 +625,93 @@ class Admisi extends BaseController
     {
         $prefix = chr(64 + $idPoli); // A untuk poli 1, B untuk poli 2, dst
         $date = date('Y-m-d');
-        $lastAntrian = $this->antrianModel->getLastAntrian($idPoli, $date);
-        if ($lastAntrian) {
-            $counter = (int)substr($lastAntrian, 1, 3); // Ambil 3 digit setelah prefix
-        } else {
-            $counter = 0;
-        }
-        return $prefix . str_pad($counter + 1, 3, '0', STR_PAD_LEFT);
+        
+        log_message('info', '[generateNoAntrian] Generating for poli: ' . $idPoli . ', prefix: ' . $prefix . ', date: ' . $date);
+        
+        // Loop untuk memastikan nomor antrian unik
+        $maxAttempts = 100;
+        $attempt = 0;
+        
+        do {
+            $lastAntrian = $this->antrianModel->getLastAntrian($idPoli, $date);
+            
+            log_message('info', '[generateNoAntrian] Last antrian found: ' . ($lastAntrian ?? 'NULL'));
+            
+            if ($lastAntrian) {
+                $counter = (int)substr($lastAntrian, 1, 3); // Ambil 3 digit setelah prefix
+            } else {
+                $counter = 0;
+            }
+            
+            $newNoAntrian = $prefix . str_pad($counter + 1, 3, '0', STR_PAD_LEFT);
+            
+            // Cek apakah nomor sudah ada di database hari ini
+            $exists = $this->antrianModel
+                ->where('no_antrian', $newNoAntrian)
+                ->where('DATE(created_at)', $date)
+                ->first();
+            
+            if (!$exists) {
+                log_message('info', '[generateNoAntrian] Generated unique no_antrian: ' . $newNoAntrian);
+                return $newNoAntrian;
+            }
+            
+            log_message('warning', '[generateNoAntrian] Nomor antrian ' . $newNoAntrian . ' sudah ada, mencoba nomor berikutnya');
+            $attempt++;
+            
+        } while ($attempt < $maxAttempts);
+        
+        // Jika gagal setelah banyak percobaan, gunakan timestamp
+        $fallbackNo = $prefix . substr(time(), -3);
+        log_message('error', '[generateNoAntrian] Gagal generate nomor unik setelah ' . $maxAttempts . ' percobaan. Menggunakan fallback: ' . $fallbackNo);
+        return $fallbackNo;
     }
     public function pasienHariIni()
     {
         $today = date('Y-m-d');
-        // Ambil semua pasien yang ada di antrian hari ini (registrasi baru & daftar ulang)
-        $subquery = $this->db->table('antrian')
-            ->select('no_rm, MAX(id) as max_id')
-            ->where('DATE(created_at)', $today)
-            ->groupBy('no_rm');
-
-        $builder = $this->db->table('antrian')
-            ->select('antrian.*, pasien.title, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis')
-            ->join('pasien', 'pasien.no_rekam_medis = antrian.no_rm', 'left')
-            ->join('(' . $subquery->getCompiledSelect() . ') as latest_antrian', 'latest_antrian.max_id = antrian.id', 'inner');
-        $pasien_hari_ini = $builder->get()->getResultArray();
+        
+        // Log untuk debugging
+        log_message('info', '[pasienHariIni] Today: ' . $today);
+        
+        // Cek timezone database
+        $timezoneQuery = $this->db->query("SELECT NOW() as now, CURDATE() as curdate, @@session.time_zone as tz");
+        $timezoneInfo = $timezoneQuery->getRow();
+        log_message('info', '[pasienHariIni] DB NOW: ' . $timezoneInfo->now . ', CURDATE: ' . $timezoneInfo->curdate . ', TZ: ' . $timezoneInfo->tz);
+        
+        // Gunakan raw SQL untuk ambil antrian terbaru per pasien hari ini (dari tabel antrian saja)
+        $sql = "SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC";
+        
+        log_message('info', '[pasienHariIni] Query: ' . $sql);
+        
+        $query = $this->db->query($sql);
+        $pasien_hari_ini = $query->getResultArray();
+        
+        log_message('info', '[pasienHariIni] Total rows: ' . count($pasien_hari_ini));
+        
+        // Debug: Log status setiap pasien
+        foreach ($pasien_hari_ini as $p) {
+            log_message('info', '[pasienHariIni] Pasien: ' . $p['no_rekam_medis'] . ' - Status: ' . ($p['status'] ?? 'NULL'));
+        }
 
         // Summary cards
         $total_pasien_hari_ini = count($pasien_hari_ini);
@@ -786,19 +871,36 @@ class Admisi extends BaseController
         }
         // Generate nomor antrian untuk poli terpilih
         $no_antrian = $this->generateNoAntrian($id_poli);
+        
+        // Gunakan timezone Asia/Jakarta untuk konsistensi
+        $dateTime = new \DateTime('now', new \DateTimeZone('Asia/Jakarta'));
+        
         $antrianData = [
             'no_antrian' => $no_antrian,
             'no_rm' => $no_rm,
             'id_poli' => $id_poli,
             'status' => 'Menunggu Pemeriksaan',
-            'created_at' => date('Y-m-d H:i:s')
+            'created_at' => $dateTime->format('Y-m-d H:i:s')
         ];
-        if (!$this->antrianModel->insert($antrianData)) {
+        
+        // Log data yang akan disimpan
+        log_message('info', '[daftarUlangPasien] Data antrian: ' . json_encode($antrianData));
+        
+        $insertResult = $this->antrianModel->insert($antrianData);
+        
+        if (!$insertResult) {
+            log_message('error', '[daftarUlangPasien] Gagal insert antrian. Errors: ' . json_encode($this->antrianModel->errors()));
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Gagal menyimpan data antrian.'
             ]);
         }
+        
+        log_message('info', '[daftarUlangPasien] Berhasil insert antrian dengan ID: ' . $insertResult);
+        
+        // Verifikasi data yang tersimpan
+        $savedData = $this->antrianModel->find($insertResult);
+        log_message('info', '[daftarUlangPasien] Data tersimpan di DB: ' . json_encode($savedData));
         return $this->response->setJSON([
             'success' => true,
             'no_antrian' => $no_antrian
@@ -1106,6 +1208,43 @@ class Admisi extends BaseController
             $kontakData['pasien_id'] = $id;
             $model->insert($kontakData);
         }
+    }
+
+    /**
+     * Print Nomor Antrian
+     */
+    public function printAntrian($no_antrian)
+    {
+        $db = \Config\Database::connect();
+        
+        // Ambil data lengkap dari antrian (yang paling baru hari ini)
+        $today = date('Y-m-d');
+        $antrian = $db->table('antrian a')
+            ->select('a.*, p.nama_lengkap, p.tanggal_lahir, p.jenis_kelamin, p.no_rekam_medis')
+            ->join('pasien p', 'p.no_rekam_medis = a.no_rm', 'left')
+            ->where('a.no_antrian', $no_antrian)
+            ->where('DATE(a.created_at)', $today)
+            ->orderBy('a.id', 'DESC')  // Ambil data terbaru jika ada duplikasi
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+
+        // Debug logging
+        log_message('info', '[printAntrian] No Antrian: ' . $no_antrian . ', Date: ' . $today);
+        log_message('info', '[printAntrian] Query Result: ' . json_encode($antrian));
+        log_message('info', '[printAntrian] Last Query: ' . $db->getLastQuery());
+
+        if (!$antrian) {
+            echo '<script>alert("Data antrian tidak ditemukan!"); window.close();</script>';
+            return;
+        }
+        
+        $data = [
+            'no_antrian' => $no_antrian,
+            'antrian' => $antrian
+        ];
+        
+        return view('admisi/antrian_admisi', $data);
     }
 }
 

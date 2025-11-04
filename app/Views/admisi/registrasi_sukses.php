@@ -273,11 +273,9 @@
                     </div>
                 </div>
 
-                
-
                 <!-- Action Buttons -->
                 <div class="action-buttons">
-                    <a href="<?= base_url('exportword/antrian/' . $no_antrian) ?>" 
+                    <a href="<?= base_url('admisi/print-antrian/' . $no_antrian) ?>" 
                        class="btn-modern btn-print" target="_blank">
                         <i class="fas fa-print"></i>
                         <span>Cetak Antrian</span>

@@ -53,6 +53,11 @@ class Perawat extends ResourceController
     public function getAntrianPendaftaran()
     {
         try {
+            // Log CURDATE untuk debugging
+            $curdateQuery = $this->db->query("SELECT CURDATE() as today");
+            $today = $curdateQuery->getRow()->today;
+            log_message('info', '[getAntrianPendaftaran] CURDATE: ' . $today);
+            
             // Gunakan raw query untuk menghindari masalah collation
             $sql = "SELECT 
                     a.id,
@@ -61,7 +66,8 @@ class Perawat extends ResourceController
                     p.nama_lengkap as nama_pasien,
                     pol.nama as poli_tujuan,
                     a.status,
-                    a.created_at
+                    a.created_at,
+                    DATE(a.created_at) as created_date
                 FROM antrian a
                 LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
                 LEFT JOIN poliklinik pol ON pol.id = a.id_poli
@@ -69,13 +75,22 @@ class Perawat extends ResourceController
                   AND DATE(a.created_at) = CURDATE()
                 ORDER BY a.created_at ASC";
             
+            log_message('info', '[getAntrianPendaftaran] Query: ' . $sql);
+            
             $query = $this->db->query($sql);
             $data = $query->getResultArray();
-            // Convert created_at to ISO 8601 (Z) for timeago.js
+            
+            log_message('info', '[getAntrianPendaftaran] Total rows: ' . count($data));
+            log_message('info', '[getAntrianPendaftaran] Data: ' . json_encode($data));
+            
+            // Convert created_at to ISO 8601 for timeago.js
+            // Data di database sudah dalam timezone Asia/Jakarta
             foreach ($data as &$row) {
                 if (isset($row['created_at']) && $row['created_at']) {
-                    $dt = new \DateTime($row['created_at'], new \DateTimeZone('UTC'));
-                    $row['created_at'] = $dt->format('Y-m-d\TH:i:s\Z');
+                    // Parse sebagai Asia/Jakarta (sesuai dengan data di database)
+                    $dt = new \DateTime($row['created_at'], new \DateTimeZone('Asia/Jakarta'));
+                    // Format untuk timeago.js dengan timezone offset
+                    $row['created_at'] = $dt->format('c'); // ISO 8601 dengan timezone: 2025-11-02T10:30:00+07:00
                 }
             }
             
@@ -142,6 +157,21 @@ class Perawat extends ResourceController
                 'keluhan' => $this->request->getPost('keluhan'),
             ];
             log_message('debug', '[Perawat::simpanPemeriksaan] Data masuk: ' . json_encode($data));
+            
+            // CEK DUPLIKASI: Cek apakah antrian ini sudah pernah diperiksa
+            $existingPemeriksaan = $this->pemeriksaanModel->where('id_antrian', $data['id_antrian'])->first();
+            if ($existingPemeriksaan) {
+                log_message('warning', '[Perawat::simpanPemeriksaan] Duplikasi terdeteksi untuk id_antrian: ' . $data['id_antrian']);
+                if ($this->request->isAJAX()) {
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Pasien ini sudah pernah diperiksa. Tidak dapat melakukan pemeriksaan ulang.'
+                    ]);
+                } else {
+                    return redirect()->back()->with('error', 'Pasien ini sudah pernah diperiksa.');
+                }
+            }
+            
             $this->db->transStart();
             $this->pemeriksaanModel->insert($data);
             $this->db->table('antrian')
@@ -157,17 +187,52 @@ class Perawat extends ResourceController
                 // Ambil kode poli dari tabel poliklinik
                 $poliRow = $this->db->table('poliklinik')->where('id', $idPoli)->get()->getRowArray();
                 $kodePoli = isset($poliRow['kode']) ? $poliRow['kode'] : 'X';
-                $lastAntrianPoli = $this->db->table('antrian_poli')
-                    ->where('id_poli', $idPoli)
-                    ->where('DATE(created_at)', $date)
-                    ->orderBy('created_at', 'DESC')
-                    ->get()->getRowArray();
-                $counter = 1;
-                if ($lastAntrianPoli && isset($lastAntrianPoli['no_antrian'])) {
-                    $lastNo = (int)preg_replace('/[^0-9]/', '', $lastAntrianPoli['no_antrian']);
-                    $counter = $lastNo + 1;
+                
+                // Generate nomor antrian unik dengan loop pengecekan
+                $maxAttempts = 100;
+                $attempt = 0;
+                
+                do {
+                    // Generate nomor antrian dengan mengambil counter tertinggi hari ini
+                    $lastAntrianPoli = $this->db->table('antrian_poli')
+                        ->select('no_antrian')
+                        ->where('id_poli', $idPoli)
+                        ->where('DATE(created_at)', $date)
+                        ->like('no_antrian', $kodePoli, 'after') // Filter hanya nomor dengan prefix yang sama
+                        ->orderBy('id', 'DESC')
+                        ->get(1)
+                        ->getRowArray();
+                    
+                    $counter = 1;
+                    if ($lastAntrianPoli && isset($lastAntrianPoli['no_antrian'])) {
+                        // Ekstrak angka dari nomor antrian
+                        $lastNo = (int)preg_replace('/[^0-9]/', '', $lastAntrianPoli['no_antrian']);
+                        $counter = $lastNo + 1;
+                    }
+                    
+                    $noAntrianPoli = $kodePoli . str_pad($counter, 3, '0', STR_PAD_LEFT);
+                    
+                    // Cek apakah nomor sudah ada di database hari ini
+                    $exists = $this->db->table('antrian_poli')
+                        ->where('no_antrian', $noAntrianPoli)
+                        ->where('DATE(created_at)', $date)
+                        ->countAllResults();
+                    
+                    if ($exists == 0) {
+                        log_message('info', '[Perawat::simpanPemeriksaan] Generated unique no_antrian: ' . $noAntrianPoli . ' for poli ' . $kodePoli);
+                        break;
+                    }
+                    
+                    log_message('warning', '[Perawat::simpanPemeriksaan] Nomor antrian ' . $noAntrianPoli . ' sudah ada, mencoba nomor berikutnya');
+                    $attempt++;
+                    
+                } while ($attempt < $maxAttempts);
+                
+                if ($attempt >= $maxAttempts) {
+                    // Fallback menggunakan timestamp jika gagal
+                    $noAntrianPoli = $kodePoli . substr(time(), -3);
+                    log_message('error', '[Perawat::simpanPemeriksaan] Gagal generate nomor unik setelah ' . $maxAttempts . ' percobaan. Menggunakan fallback: ' . $noAntrianPoli);
                 }
-                $noAntrianPoli = $kodePoli . str_pad($counter, 4, '0', STR_PAD_LEFT);
 
                 // Insert ke antrian_poli
                 $this->db->table('antrian_poli')->insert([
@@ -278,17 +343,16 @@ class Perawat extends ResourceController
         if (!$row) {
             return '<div class="alert alert-danger">Data tidak ditemukan</div>';
         }
-        // Format tanggal ke WIB dan format Indonesia
+        // Format tanggal ke format Indonesia (tanpa jam)
         $createdAt = $row['created_at'];
         $dt = new \DateTime($createdAt, new \DateTimeZone('UTC'));
         $dt->setTimezone(new \DateTimeZone('Asia/Jakarta'));
-        // Format: 25 Juli 2025 09:35 WIB
+        // Format: 4 November 2025
         $bulan = [1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
         $tgl = (int)$dt->format('d');
         $bln = $bulan[(int)$dt->format('m')];
         $thn = $dt->format('Y');
-        $jam = $dt->format('H:i');
-        $tanggalWIB = $tgl . ' ' . $bln . ' ' . $thn . ' ' . $jam ;
+        $tanggalWIB = $tgl . ' ' . $bln . ' ' . $thn;
 
         $html = '<div class="container-fluid">';
         $html .= '<div class="row mb-2">';
@@ -312,5 +376,44 @@ class Perawat extends ResourceController
     {
         $noAntrian = $this->request->getGet('no_antrian');
         return view('perawat/antrian_poli_sukses', ['no_antrian' => $noAntrian]);
+    }
+
+    public function cetakAntrianPoli($no_antrian = null)
+    {
+        if (!$no_antrian) {
+            echo '<script>alert("Nomor antrian tidak ditemukan!"); window.close();</script>';
+            return;
+        }
+
+        // Ambil data lengkap dari antrian_poli (yang paling baru hari ini)
+        $today = date('Y-m-d');
+        $antrianPoli = $this->db->table('antrian_poli ap')
+            ->select('ap.*, p.nama_lengkap, p.tanggal_lahir, p.jenis_kelamin, p.no_rekam_medis,
+                      pol.nama as nama_poli, pol.kode as kode_poli')
+            ->join('pasien p', 'p.no_rekam_medis = ap.no_rm', 'left')
+            ->join('poliklinik pol', 'pol.id = ap.id_poli', 'left')
+            ->where('ap.no_antrian', $no_antrian)
+            ->where('DATE(ap.created_at)', $today)
+            ->orderBy('ap.id', 'DESC')  // Ambil data terbaru jika ada duplikasi
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+
+        // Debug logging
+        log_message('info', '[cetakAntrianPoli] No Antrian: ' . $no_antrian . ', Date: ' . $today);
+        log_message('info', '[cetakAntrianPoli] Query Result: ' . json_encode($antrianPoli));
+        log_message('info', '[cetakAntrianPoli] Last Query: ' . $this->db->getLastQuery());
+
+        if (!$antrianPoli) {
+            echo '<script>alert("Data antrian tidak ditemukan!"); window.close();</script>';
+            return;
+        }
+
+        $data = [
+            'no_antrian' => $no_antrian,
+            'antrian' => $antrianPoli
+        ];
+
+        return view('perawat/antrian_perawat', $data);
     }
 }

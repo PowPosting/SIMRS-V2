@@ -175,24 +175,19 @@
                 <span class="submenu-text">Riwayat Pembayaran</span>
             </a>
         </li>
-        
-        <!-- Tagihan -->
-        <li class="submenu-item">
-            <a href="<?= base_url('billing') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Tagihan">
-                <i class="fas fa-file-invoice submenu-icon"></i>
-                <span class="submenu-text">Tagihan</span>
-            </a>
-        </li>
-        
-        <!-- Laporan Keuangan -->
-        <li class="submenu-item">
-            <a href="<?= base_url('financial-reports') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Laporan Keuangan">
-                <i class="fas fa-chart-pie submenu-icon"></i>
-                <span class="submenu-text">Laporan Keuangan</span>
-            </a>
-        </li>
     </ul>
 </li>
+<!-- Sub Header - Data Medis -->
+<li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Data Medis</li>
+
+<!-- Rekam Medis -->
+<li class="nav-item">
+    <a href="<?= base_url('rekam-medis') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Rekam Medis Pasien">
+        <i class="fas fa-folder-open nav-icon"></i>
+        <span class="nav-text">Rekam Medis</span>
+    </a>
+</li>
+
 <!-- Sub Header - Administrasi Sistem -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;"> Admin Master Data Sistem</li>
 
@@ -204,10 +199,3 @@
     </a>
 </li>
 
-<!-- Database Management -->
-<li class="nav-item">
-    <a href="<?= base_url('admin/database') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Database">
-        <i class="fas fa-database nav-icon"></i>
-        <span class="nav-text">Database</span>
-    </a>
-</li>

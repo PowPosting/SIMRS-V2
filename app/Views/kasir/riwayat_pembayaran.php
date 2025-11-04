@@ -179,6 +179,9 @@
                 <!-- Detail content akan dimuat di sini -->
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnPrintStruk" onclick="printStrukFromModal()">
+                    <i class="bi bi-printer me-1"></i>Cetak Struk
+                </button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
                     <i class="bi bi-x-circle me-1"></i>Tutup
                 </button>
@@ -189,54 +192,81 @@
 
 <script>
 function filterRiwayat() {
-    const cariPasien = document.getElementById('cariPasien').value;
+    const cariPasien = document.getElementById('cariPasien').value.toLowerCase().trim();
     const tanggalDari = document.getElementById('tanggalDari').value;
     const tanggalSampai = document.getElementById('tanggalSampai').value;
     
-    // Implementasi filter - bisa menggunakan AJAX untuk load data yang difilter
     console.log('Filter:', { cariPasien, tanggalDari, tanggalSampai });
     
-    // Untuk sementara, filter client-side
+    // Filter client-side
     const rows = document.querySelectorAll('#riwayatTable tbody tr');
     let visibleCount = 0;
+    let totalPendapatan = 0;
     
     rows.forEach(row => {
         if (row.cells.length === 1) return; // Skip empty state row
         
-        const waktuBayar = row.cells[0].textContent.trim();
+        // Ambil data dari sel
+        const waktuCell = row.cells[0].querySelector('.fw-bold');
         const noRM = row.cells[1].textContent.trim();
         const namaPasien = row.cells[2].textContent.trim().toLowerCase();
+        const totalTagihan = row.cells[3].textContent.trim();
+        
+        // Parse tanggal dari format dd/mm/yyyy
+        let rowDateStr = '';
+        if (waktuCell) {
+            rowDateStr = waktuCell.textContent.trim(); // Format: dd/mm/yyyy
+        }
         
         let show = true;
         
         // Filter by patient name/RM
-        if (cariPasien && !namaPasien.includes(cariPasien.toLowerCase()) && !noRM.includes(cariPasien)) {
-            show = false;
+        if (cariPasien) {
+            if (!namaPasien.includes(cariPasien) && !noRM.toLowerCase().includes(cariPasien)) {
+                show = false;
+            }
         }
         
         // Filter by date range
-        if (tanggalDari || tanggalSampai) {
-            const rowDate = waktuBayar.split('\n')[0]; // Get date part
-            const [day, month, year] = rowDate.split('/');
-            const rowDateObj = new Date(year, month - 1, day);
+        if (rowDateStr && (tanggalDari || tanggalSampai)) {
+            // Parse dd/mm/yyyy ke Date object
+            const [day, month, year] = rowDateStr.split('/');
+            const rowDate = new Date(year, parseInt(month) - 1, day);
+            rowDate.setHours(0, 0, 0, 0); // Reset time untuk perbandingan tanggal saja
             
             if (tanggalDari) {
                 const fromDate = new Date(tanggalDari);
-                if (rowDateObj < fromDate) show = false;
+                fromDate.setHours(0, 0, 0, 0);
+                if (rowDate < fromDate) {
+                    show = false;
+                }
             }
             
             if (tanggalSampai) {
                 const toDate = new Date(tanggalSampai);
-                if (rowDateObj > toDate) show = false;
+                toDate.setHours(23, 59, 59, 999);
+                if (rowDate > toDate) {
+                    show = false;
+                }
             }
         }
         
         row.style.display = show ? '' : 'none';
-        if (show) visibleCount++;
+        
+        if (show) {
+            visibleCount++;
+            // Hitung total pendapatan dari row yang visible
+            const nilai = totalTagihan.replace(/[^\d]/g, ''); // Hapus Rp, titik, koma
+            if (nilai) {
+                totalPendapatan += parseInt(nilai);
+            }
+        }
     });
     
-    // Update counter
+    // Update counter dan total pendapatan
     document.getElementById('totalRiwayat').textContent = `Total: ${visibleCount} transaksi`;
+    document.getElementById('totalTransaksi').textContent = visibleCount;
+    document.getElementById('totalPendapatan').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(totalPendapatan);
 }
 
 function resetFilter() {
@@ -276,7 +306,13 @@ function exportData() {
     });
 }
 
+// Global variable untuk menyimpan data transaksi yang sedang dilihat
+let currentTransactionData = {};
+
 function lihatDetail(noRm, tanggal) {
+    // Simpan data transaksi untuk keperluan print
+    currentTransactionData = { noRm: noRm, tanggal: tanggal };
+    
     // Show detail in a simple modal
     $('#detailContent').html('<div class="text-center"><i class="bi bi-hourglass-split"></i> Memuat data...</div>');
     $('#modalDetail').modal('show');
@@ -338,7 +374,52 @@ function lihatDetail(noRm, tanggal) {
     });
 }
 
+function printStrukFromModal() {
+    if (currentTransactionData.noRm && currentTransactionData.tanggal) {
+        // Buka halaman print dalam tab/window baru
+        window.open('<?= base_url('kasir/print-tagihan/') ?>' + currentTransactionData.noRm + '/' + currentTransactionData.tanggal, '_blank');
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Data transaksi tidak ditemukan'
+        });
+    }
+}
 
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Real-time search on input
+    const cariPasienInput = document.getElementById('cariPasien');
+    if (cariPasienInput) {
+        cariPasienInput.addEventListener('input', function() {
+            filterRiwayat();
+        });
+        
+        // Enter key untuk trigger filter
+        cariPasienInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterRiwayat();
+            }
+        });
+    }
+    
+    // Auto filter saat tanggal berubah
+    const tanggalDari = document.getElementById('tanggalDari');
+    const tanggalSampai = document.getElementById('tanggalSampai');
+    
+    if (tanggalDari) {
+        tanggalDari.addEventListener('change', function() {
+            filterRiwayat();
+        });
+    }
+    
+    if (tanggalSampai) {
+        tanggalSampai.addEventListener('change', function() {
+            filterRiwayat();
+        });
+    }
+});
 </script>
 
 <style>

@@ -290,37 +290,7 @@ select.form-control {
                                 </span>
                                 <span style="background: #fff3e0; color: #f57c00; padding: 6px 12px; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600;">
                                     <i class="bi bi-calendar-heart me-1"></i>
-                                    <?php
-                                    $umur = 0;
-                                    $debug_info = '';
-                                    
-                                    // Debug: cek data yang ada
-                                    if (isset($pasien['usia'])) {
-                                        $debug_info .= "Usia field: '" . $pasien['usia'] . "' ";
-                                    }
-                                    if (isset($pasien['tgl_lahir'])) {
-                                        $debug_info .= "Tgl lahir: '" . $pasien['tgl_lahir'] . "' ";
-                                    }
-                                    
-                                    if (isset($pasien['usia']) && !empty($pasien['usia']) && $pasien['usia'] > 0) {
-                                        $umur = (int)$pasien['usia'];
-                                    } elseif (isset($pasien['tgl_lahir']) && !empty($pasien['tgl_lahir'])) {
-                                        try {
-                                            $lahir = new DateTime($pasien['tgl_lahir']);
-                                            $today = new DateTime();
-                                            $umur = $today->diff($lahir)->y;
-                                        } catch (Exception $e) {
-                                            $umur = 0;
-                                            $debug_info .= "Error: " . $e->getMessage();
-                                        }
-                                    }
-                                    
-                                    echo $umur . ' Tahun';
-                                    // Tampilkan debug info sementara
-                                    if ($umur == 0 && !empty($debug_info)) {
-                                        echo '<small style="display:block;font-size:0.7rem;color:#999;margin-top:2px;">' . $debug_info . '</small>';
-                                    }
-                                    ?>
+                                    <?= isset($pasien['usia']) ? $pasien['usia'] : 0 ?> Tahun
                                 </span>
                             </div>
                             
@@ -403,7 +373,7 @@ select.form-control {
                                 <label class="form-label" for="tekanan_darah">
                                     <i class="bi bi-heart-pulse me-2"></i>Tekanan Darah
                                 </label>
-                                <input type="text" class="form-control" id="tekanan_darah" name="tekanan_darah" placeholder="120/80 mmHg">
+                                <input type="text" class="form-control" id="tekanan_darah" name="tekanan_darah" placeholder="120/80" pattern="[0-9]+/[0-9]+" title="Format: sistole/diastole (contoh: 120/80)">
                                 <small class="text-muted">Format: sistole/diastole</small>
                             </div>
                         </div>
@@ -412,7 +382,7 @@ select.form-control {
                                 <label class="form-label" for="denyut_nadi">
                                     <i class="bi bi-heart me-2"></i>Denyut Nadi
                                 </label>
-                                <input type="text" class="form-control" id="denyut_nadi" name="denyut_nadi" placeholder="80 x/menit">
+                                <input type="number" class="form-control" id="denyut_nadi" name="denyut_nadi" placeholder="80" min="0" max="300" step="1">
                                 <small class="text-muted">Normal: 60-100 x/menit</small>
                             </div>
                         </div>
@@ -421,7 +391,7 @@ select.form-control {
                                 <label class="form-label" for="suhu_tubuh">
                                     <i class="bi bi-thermometer-half me-2"></i>Suhu Tubuh
                                 </label>
-                                <input type="text" class="form-control" id="suhu_tubuh" name="suhu_tubuh" placeholder="36.5°C">
+                                <input type="number" class="form-control" id="suhu_tubuh" name="suhu_tubuh" placeholder="36.5" min="30" max="45" step="0.1">
                                 <small class="text-muted">Normal: 36.1-37.2°C</small>
                             </div>
                         </div>
@@ -430,7 +400,7 @@ select.form-control {
                                 <label class="form-label" for="respirasi">
                                     <i class="bi bi-lungs me-2"></i>Respirasi
                                 </label>
-                                <input type="text" class="form-control" id="respirasi" name="respirasi" placeholder="20 x/menit">
+                                <input type="number" class="form-control" id="respirasi" name="respirasi" placeholder="20" min="0" max="100" step="1">
                                 <small class="text-muted">Normal: 16-24 x/menit</small>
                             </div>
                         </div>

@@ -17,7 +17,6 @@
                             <th>No</th>
                             <th>Nama Dokter</th>
                             <th>Spesialisasi</th>
-
                             <th>Email</th>
                             <th>Telepon</th>
                             <th>Status</th>
@@ -57,17 +56,9 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-info btn-sm" title="Detail Dokter">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-warning btn-sm" title="Edit Dokter">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-danger btn-sm" title="Hapus Dokter" onclick="return confirm('Yakin ingin menghapus dokter ini?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
+                                        <button type="button" class="btn btn-danger btn-sm" title="Hapus Dokter" onclick="return confirm('Yakin ingin menghapus dokter ini?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

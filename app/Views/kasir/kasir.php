@@ -37,7 +37,7 @@
                     <div class="filter-group">
                         <label class="filter-label-dark">Cari Pasien</label>
                         <div class="search-wrapper-dark">
-                            <i class="bi bi-search search-icon-dark"></i>
+    
                             <input type="text" class="form-control search-input-dark" id="cariPasien" placeholder="Nama atau No. RM">
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="fw-bold text-primary"><?= date('d/m/Y', strtotime($tagihan['tanggal'])) ?></div>
-                                        <small class="text-muted"><?= date('H:i', strtotime($tagihan['tanggal'])) ?></small>
+                                
                                     </td>
                                     <td class="text-center">
                                         <div class="fw-bold text-success fs-6">Rp <?= number_format($tagihan['total_tagihan'], 0, ',', '.') ?></div>
@@ -269,9 +269,6 @@
                         <select class="form-control form-control-lg" id="metodeBayar" required>
                             <option value="">Pilih Metode Pembayaran</option>
                             <option value="cash">💵 Cash/Tunai</option>
-                            <option value="transfer">💳 Transfer Bank</option>
-                            <option value="debit">💳 Kartu Debit</option>
-                            <option value="qris">📱 QRIS</option>
                         </select>
                     </div>
 
@@ -303,15 +300,103 @@
 </div>
 
 <script>
+// Update total tagihan saat halaman dimuat
+document.addEventListener('DOMContentLoaded', function() {
+    updateTotalTagihan();
+});
+
 function cariTagihan() {
-    // Implementasi pencarian tagihan
-    console.log('Mencari tagihan...');
+    const searchText = document.getElementById('cariPasien').value.toLowerCase();
+    const tanggal = document.getElementById('tanggal').value;
+    const status = document.getElementById('statusPembayaran').value;
+    
+    const rows = document.querySelectorAll('#tagihanTable tbody tr');
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        // Skip empty state row
+        if (row.querySelector('.empty-state')) {
+            row.style.display = 'none';
+            return;
+        }
+        
+        const noRM = row.cells[0].textContent.toLowerCase();
+        const namaPasien = row.cells[1].textContent.toLowerCase();
+        const tanggalRow = row.cells[2].querySelector('.fw-bold').textContent;
+        const statusBadge = row.cells[4].querySelector('.badge').textContent.toLowerCase();
+        
+        // Filter berdasarkan pencarian
+        const matchSearch = searchText === '' || noRM.includes(searchText) || namaPasien.includes(searchText);
+        
+        // Filter berdasarkan tanggal
+        let matchTanggal = true;
+        if (tanggal) {
+            const [day, month, year] = tanggalRow.split('/');
+            const rowDate = `${year}-${month}-${day}`;
+            matchTanggal = rowDate === tanggal;
+        }
+        
+        // Filter berdasarkan status
+        let matchStatus = true;
+        if (status === 'belum_bayar') {
+            matchStatus = statusBadge.includes('belum bayar');
+        } else if (status === 'sudah_bayar') {
+            matchStatus = statusBadge.includes('sudah bayar') || statusBadge.includes('lunas');
+        }
+        
+        // Tampilkan atau sembunyikan baris
+        if (matchSearch && matchTanggal && matchStatus) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    // Update total count
+    updateTotalTagihan();
+    
+    // Tampilkan pesan jika tidak ada hasil
+    if (visibleCount === 0) {
+        const tbody = document.querySelector('#tagihanTable tbody');
+        const emptyRow = tbody.querySelector('.empty-state')?.closest('tr');
+        if (emptyRow) {
+            emptyRow.style.display = '';
+            emptyRow.querySelector('h6').textContent = 'Tidak Ada Hasil';
+            emptyRow.querySelector('p').textContent = 'Tidak ada tagihan yang sesuai dengan filter pencarian';
+        }
+    }
 }
 
 function resetFilter() {
     document.getElementById('cariPasien').value = '';
     document.getElementById('tanggal').value = '<?= date('Y-m-d') ?>';
     document.getElementById('statusPembayaran').value = '';
+    
+    // Tampilkan semua baris
+    const rows = document.querySelectorAll('#tagihanTable tbody tr');
+    rows.forEach(row => {
+        if (!row.querySelector('.empty-state')) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    updateTotalTagihan();
+}
+
+function updateTotalTagihan() {
+    const rows = document.querySelectorAll('#tagihanTable tbody tr');
+    let count = 0;
+    
+    rows.forEach(row => {
+        if (row.style.display !== 'none' && !row.querySelector('.empty-state')) {
+            count++;
+        }
+    });
+    
+    document.getElementById('totalTagihan').textContent = `Total: ${count} tagihan`;
 }
 
 function lihatDetail(idPasien, tanggal) {
@@ -500,6 +585,27 @@ document.getElementById('metodeBayar').addEventListener('change', function() {
     
     // Enable button jika jumlah bayar cukup dan metode pembayaran dipilih
     btnProses.disabled = !(this.value && jumlahBayar >= totalTagihan);
+});
+
+// Real-time search saat mengetik
+document.getElementById('cariPasien').addEventListener('input', function() {
+    cariTagihan();
+});
+
+// Filter saat tanggal atau status berubah
+document.getElementById('tanggal').addEventListener('change', function() {
+    cariTagihan();
+});
+
+document.getElementById('statusPembayaran').addEventListener('change', function() {
+    cariTagihan();
+});
+
+// Enter key untuk search
+document.getElementById('cariPasien').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        cariTagihan();
+    }
 });
 </script>
 

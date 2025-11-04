@@ -34,6 +34,7 @@ $routes->group('admisi', function($routes) {
     $routes->post('registrasi-pasien/save-step5', 'Admisi::saveStep5');
     $routes->post('registrasi-pasien/cek-nomor-identitas', 'Admisi::cekNomorIdentitas');
     $routes->get('registrasi-sukses', 'Admisi::registrasiSukses');
+    $routes->get('print-antrian/(:any)', 'Admisi::printAntrian/$1');
 });
 
 // Shared Routes 
@@ -127,6 +128,7 @@ $routes->group('perawat', function($routes) {
     $routes->get('detail-pemeriksaan/(:num)', 'Perawat::detailPemeriksaan/$1');
     $routes->get('tandavitalpasien/(:num)', 'Perawat::tandavitalpasien/$1');
     $routes->get('antrian-poli-sukses', 'Perawat::antrianPoliSukses');
+    $routes->get('cetak-antrian-poli/(:any)', 'Perawat::cetakAntrianPoli/$1');
 });
 
 // Farmasi Routes
@@ -145,6 +147,7 @@ $routes->group('farmasi', function($routes) {
     $routes->get('detail-permintaan-obat/(:num)', 'Farmasi::detailTagihan/$1');
     $routes->get('print-resep/(:num)', 'Farmasi::printResep/$1');
     $routes->get('print-invoice/(:num)', 'Farmasi::printInvoice/$1');
+    $routes->get('print-struk-resep/(:num)', 'Farmasi::printStrukResep/$1');
 
     // Routes untuk workflow permintaan obat
     $routes->get('proses-permintaan/(:num)', 'Farmasi::prosesPermintaan/$1');
@@ -154,7 +157,8 @@ $routes->group('farmasi', function($routes) {
 
 
     //laporan
-    $routes->get('laporan', 'Farmasi::laporan');
+    $routes->get('laporan', 'Farmasi::laporanFarmasi');
+    $routes->get('getLaporanPemakaian', 'Farmasi::getLaporanPemakaian');
 
 });
 
@@ -165,6 +169,7 @@ $routes->group('kasir', function($routes) {
     $routes->get('detail-tagihan/(:any)/(:any)', 'Kasir::detailTagihan/$1/$2');
     $routes->post('proses-pembayaran', 'Kasir::prosesPembayaran');
     $routes->get('riwayat-pembayaran', 'Kasir::riwayatPembayaran');
+    $routes->get('print-tagihan/(:any)/(:any)', 'Kasir::printTagihan/$1/$2');
     $routes->get('export-excel', 'Kasir::exportExcel');
     $routes->get('export-pdf', 'Kasir::exportPdf');
 });
@@ -182,6 +187,15 @@ $routes->group('dokter', function($routes) {
     $routes->get('detailpemeriksaanpasien/(:num)', 'Dokter::detailPemeriksaanPasien/$1');
 });
 
+// Rekam Medis Routes (Multi-role: admin, dokter, perawat, admisi)
+$routes->group('rekam-medis', function($routes) {
+    $routes->get('/', 'RekamMedis::index');
+    $routes->get('get-pasien-list', 'RekamMedis::getPasienList');
+    $routes->get('detail/(:any)', 'RekamMedis::detail/$1');
+    $routes->get('get-detail-kunjungan/(:num)', 'RekamMedis::getDetailKunjungan/$1');
+    $routes->get('print/(:any)', 'RekamMedis::print/$1');
+});
+
 
 
 // ExportWord routes
@@ -193,3 +207,6 @@ $routes->get('exportword/pemeriksaansoap/(:num)', 'ExportWord::pemeriksaansoap/$
 
 $routes->get('admisi/get-poli-list', 'Admisi::getPoliList');
 $routes->post('admisi/daftar-ulang-pasien', 'Admisi::daftarUlangPasien');
+
+// Debug routes (remove in production)
+$routes->get('debug/check-antrian', 'Debug::checkAntrian');

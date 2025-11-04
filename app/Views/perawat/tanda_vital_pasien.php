@@ -229,8 +229,17 @@
 <?= $this->section('scripts') ?>
 <script>
 $(document).ready(function() {
+    // Prevent double submit
+    let isSubmitting = false;
+    
     // Form validation
     $('#formTandaVital').on('submit', function(e) {
+        // Cek jika sedang proses submit
+        if (isSubmitting) {
+            e.preventDefault();
+            return false;
+        }
+        
         let isValid = true;
         
         // Validate required fields
@@ -254,7 +263,13 @@ $(document).ready(function() {
         if (!isValid) {
             e.preventDefault();
             alert('Mohon periksa kembali data yang diinput!');
+            return false;
         }
+        
+        // Set flag dan disable button
+        isSubmitting = true;
+        const $submitBtn = $(this).find('button[type="submit"]');
+        $submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
     });
     
     // Real-time validation

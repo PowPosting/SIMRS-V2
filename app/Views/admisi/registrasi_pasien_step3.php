@@ -281,17 +281,6 @@ label {
                                     <input type="text" class="form-control" id="no_telepon_rumah" name="no_telepon_rumah" placeholder="Contoh: 021-1234567">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="status_pasien">Status Pasien</label>
-                                    <select class="form-control" id="status_pasien" name="status_pasien">
-                                        <option value="">Pilih Status Pasien</option>
-                                        <option value="Siaga 1">Siaga 1</option>
-                                        <option value="Siaga 2">Siaga 2</option>
-                                        <option value="Normal">Normal</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="row">

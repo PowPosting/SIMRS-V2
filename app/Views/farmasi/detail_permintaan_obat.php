@@ -168,7 +168,7 @@
                         <i class="fas fa-arrow-left me-1"></i>
                         Kembali ke Riwayat
                     </a>
-                    <a href="<?= base_url('farmasi/print-invoice/' . $resep['id']) ?>" class="btn btn-success" target="_blank">
+                    <a href="<?= base_url('farmasi/print-struk-resep/' . $resep['id']) ?>" class="btn btn-success" target="_blank">
                         <i class="fas fa-print me-1"></i>
                         Cetak Struk
                     </a>

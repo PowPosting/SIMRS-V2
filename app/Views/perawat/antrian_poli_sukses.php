@@ -26,7 +26,7 @@
                         </h5>
                         <div class="queue-number-display mb-4">
                             <div class="h1 font-weight-bold text-primary mb-2" style="font-size: 3rem; text-shadow: 1px 1px 3px rgba(0,123,255,0.2);">
-                                <?= esc($_GET['no_antrian'] ?? '-') ?>
+                                <?= esc($no_antrian ?? '-') ?>
                             </div>
                             <div class="badge badge-primary badge-pill px-3 py-1">
                                 <i class="fas fa-clock mr-1"></i>
@@ -38,9 +38,9 @@
                     <!-- Action Buttons -->
                     <div class="row justify-content-center">
                         <div class="col-md-6 mb-3">
-                            <a href="<?= base_url('exportword/antrian-poli/' . esc($_GET['no_antrian'] ?? '-')) ?>" 
+                            <a href="<?= base_url('perawat/cetak-antrian-poli/' . esc($no_antrian ?? '-')) ?>" 
                                class="btn btn-success btn-lg btn-block shadow-sm" target="_blank">
-                                <i class="fas fa-file-word mr-2"></i>
+                                <i class="fas fa-print mr-2"></i>
                                 Cetak Antrian
                             </a>
                         </div>

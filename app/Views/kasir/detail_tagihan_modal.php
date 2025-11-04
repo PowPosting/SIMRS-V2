@@ -60,6 +60,17 @@
         </div>
     </div>
 </div>
+<?php else: ?>
+<!-- Jika tidak ada resep obat -->
+<div class="mb-4">
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+        <i class="fas fa-info-circle me-3 fa-2x"></i>
+        <div>
+            <strong>Tidak Ada Resep Obat</strong><br>
+            <small>Pasien tidak mendapatkan resep obat dari dokter. Hanya biaya konsultasi dan administrasi.</small>
+        </div>
+    </div>
+</div>
 <?php endif; ?>
 
 <!-- Biaya Layanan -->
@@ -71,11 +82,11 @@
     <div class="bg-light rounded p-3">
         <div class="d-flex justify-content-between py-1">
             <span>Administrasi</span>
-            <span>Rp <?= number_format($biaya_layanan['administrasi'] ?? 35000, 0, ',', '.') ?></span>
+            <span>Rp <?= number_format($biaya_layanan['administrasi'] ?? 10000, 0, ',', '.') ?></span>
         </div>
         <div class="d-flex justify-content-between py-1">
             <span>Konsultasi Dokter</span>
-            <span>Rp <?= number_format($biaya_layanan['dokter'] ?? 100000, 0, ',', '.') ?></span>
+            <span>Rp <?= number_format($biaya_layanan['konsultasi'] ?? 50000, 0, ',', '.') ?></span>
         </div>
     </div>
 </div>
@@ -88,8 +99,8 @@
     </div>
     
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button type="button" class="btn btn-outline-secondary" onclick="window.print()">
-            <i class="fas fa-print me-1"></i>Cetak
+        <button type="button" class="btn btn-outline-secondary" onclick="cetakStruk()">
+            <i class="fas fa-print me-1"></i>Cetak Struk
         </button>
         <button type="button" class="btn btn-success" onclick="bayarSekarang()">
             <i class="fas fa-credit-card me-1"></i>Bayar Sekarang
@@ -106,6 +117,7 @@
 function bayarSekarang() {
     // Tutup modal dan buka modal pembayaran
     $('#detailModal').modal('hide');
+    $('#modalDetailTagihan').modal('hide');
     
     const idPasien = '<?= esc($pasien['no_rm'] ?? '') ?>';
     const tanggal = '<?= date('Y-m-d', strtotime($pasien['tanggal_resep'] ?? date('Y-m-d'))) ?>';
@@ -115,6 +127,14 @@ function bayarSekarang() {
     if (typeof bayarTagihan === 'function') {
         bayarTagihan(idPasien, tanggal, totalTagihan);
     }
+}
+
+function cetakStruk() {
+    const idPasien = '<?= esc($pasien['no_rm'] ?? '') ?>';
+    const tanggal = '<?= date('Y-m-d', strtotime($pasien['tanggal_resep'] ?? date('Y-m-d'))) ?>';
+    
+    // Buka halaman print dalam tab/window baru
+    window.open('<?= base_url('kasir/print-tagihan/') ?>' + idPasien + '/' + tanggal, '_blank');
 }
 </script>
 

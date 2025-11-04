@@ -420,22 +420,24 @@ class Farmasi extends BaseController
                     log_message('info', 'Created billing for patient ' . $no_rm . ' with total: ' . $total_biaya);
                 }
                 
-                // Update status antrian pasien menjadi 'Menunggu Kasir'
-                // Cari antrian pasien hari ini yang statusnya masih 'Menunggu Farmasi'
-                $antrianUpdated = $db->table('antrian')
+                // Update status antrian pasien menjadi 'Menunggu Kasir' (menggunakan id_antrian_perawat)
+                // Ambil antrian_poli terbaru untuk no_rm hari ini
+                $antrianPoli = $db->table('antrian_poli')
                     ->where('no_rm', $no_rm)
                     ->where('DATE(created_at)', date('Y-m-d'))
-                    ->where('status', 'Menunggu Farmasi')
-                    ->update(['status' => 'Menunggu Kasir']);
+                    ->orderBy('id', 'DESC')
+                    ->get(1)
+                    ->getFirstRow('array');
                 
-                // Juga update di antrian_poli jika ada
-                $db->table('antrian_poli')
-                    ->where('no_rm', $no_rm)
-                    ->where('DATE(created_at)', date('Y-m-d'))
-                    ->where('status', 'Menunggu Farmasi')
-                    ->update(['status' => 'Menunggu Kasir']);
-                
-                log_message('info', 'Updated patient queue status to Menunggu Kasir for ' . $no_rm);
+                if ($antrianPoli && isset($antrianPoli['id_antrian_perawat'])) {
+                    $antrianUpdated = $db->table('antrian')
+                        ->where('id', $antrianPoli['id_antrian_perawat'])
+                        ->update(['status' => 'Menunggu Kasir']);
+                    
+                    log_message('info', 'Updated antrian id=' . $antrianPoli['id_antrian_perawat'] . ' status to Menunggu Kasir for no_rm: ' . $no_rm . ', rows affected: ' . $antrianUpdated);
+                } else {
+                    log_message('warning', 'No antrian_poli or id_antrian_perawat found for no_rm: ' . $no_rm . ' today');
+                }
                 $successMessage = 'Permintaan obat telah selesai diproses. Tagihan telah dibuat. Status pasien diubah ke Menunggu Kasir.';
             } else {
                 $successMessage = 'Permintaan obat telah selesai diproses. Masih ada ' . count($pendingResep) . ' permintaan obat lain yang belum selesai.';
@@ -886,5 +888,153 @@ class Farmasi extends BaseController
         return view('farmasi/print_resep', $data);
     }
 
+    /**
+     * Print/Cetak Struk Resep berdasarkan ID Resep
+     */
+    public function printStrukResep($id)
+    {
+        $resepModel = new \App\Models\ResepModel();
+        
+        // Ambil detail resep dengan data pasien lengkap
+        $builder = $resepModel->builder();
+        $builder->select('resep.*, pasien.nama_lengkap as nama_pasien, pasien.no_rekam_medis as no_rm, pasien.jenis_kelamin, pasien.tanggal_lahir, users.nama_lengkap as nama_dokter, obat.nama_obat as nama_obat_db, obat.harga_jual, obat.satuan as satuan_db');
+        $builder->join('pasien', 'pasien.id = resep.id_pasien', 'left');
+        $builder->join('users', 'users.id = resep.id_dokter', 'left');
+        $builder->join('obat', 'obat.id_obat = resep.id_obat', 'left');
+        $builder->where('resep.id', $id);
+        $resep = $builder->get()->getRowArray();
+        
+        if (empty($resep)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Resep tidak ditemukan');
+        }
+        
+        // Ambil semua resep untuk pasien yang sama di tanggal yang sama
+        $semua_resep = $resepModel->builder()
+            ->select('resep.*, obat.nama_obat as nama_obat_db, obat.harga_jual, obat.satuan as satuan_db')
+            ->join('obat', 'obat.id_obat = resep.id_obat', 'left')
+            ->where('resep.id_pasien', $resep['id_pasien'])
+            ->where('DATE(resep.tanggal_resep)', date('Y-m-d', strtotime($resep['tanggal_resep'])))
+            ->orderBy('resep.tanggal_resep', 'asc')
+            ->get()->getResultArray();
+        
+        // Hitung total biaya
+        $total_biaya = 0;
+        foreach ($semua_resep as &$item) {
+            // Pilih nama obat (prioritas obat dari DB, fallback ke manual)
+            $item['nama_obat_final'] = !empty($item['nama_obat_db']) ? $item['nama_obat_db'] : $item['nama_obat'];
+            $item['satuan_final'] = !empty($item['satuan_db']) ? $item['satuan_db'] : ($item['satuan'] ?? 'pcs');
+            
+            // Hitung subtotal
+            $harga = $item['harga_jual'] ?? 0;
+            $jumlah = $item['jumlah'] ?? 1;
+            $item['subtotal'] = $harga * $jumlah;
+            $total_biaya += $item['subtotal'];
+        }
+        
+        // Hitung umur pasien
+        $umur = '-';
+        if (!empty($resep['tanggal_lahir'])) {
+            $lahir = new \DateTime($resep['tanggal_lahir']);
+            $sekarang = new \DateTime();
+            $umur = $sekarang->diff($lahir)->y . ' tahun';
+        }
+        
+        $data = [
+            'title' => 'Struk Resep Obat',
+            'resep' => $resep,
+            'semua_resep' => $semua_resep,
+            'total_biaya' => $total_biaya,
+            'umur' => $umur
+        ];
+        
+        return view('farmasi/print_struk_resep', $data);
+    }
+    
+    public function laporanFarmasi()
+    {
+        $db = \Config\Database::connect();
+        
+        // Summary Cards
+        $today = date('Y-m-d');
+        
+        // Total resep hari ini
+        $totalResepHariIni = $db->table('resep')
+            ->where('DATE(tanggal_resep)', $today)
+            ->countAllResults();
+        
+        // Total obat keluar hari ini
+        $totalObatKeluar = $db->table('resep')
+            ->selectSum('jumlah')
+            ->where('DATE(tanggal_resep)', $today)
+            ->where('status', 'completed')
+            ->get()->getRow()->jumlah ?? 0;
+        
+        // Nilai transaksi hari ini
+        $nilaiTransaksi = $db->table('resep r')
+            ->select('SUM(r.jumlah * o.harga_jual) as total')
+            ->join('obat o', 'o.id_obat = r.id_obat', 'left')
+            ->where('DATE(r.tanggal_resep)', $today)
+            ->where('r.status', 'completed')
+            ->get()->getRow()->total ?? 0;
+        
+        // Obat hampir expired (3 bulan ke depan)
+        $threeMonthsLater = date('Y-m-d', strtotime('+3 months'));
+        $obatHampirExpired = $db->table('obat')
+            ->where('tanggal_expired <=', $threeMonthsLater)
+            ->where('tanggal_expired >=', $today)
+            ->where('stok >', 0)
+            ->orderBy('tanggal_expired', 'ASC')
+            ->get()->getResultArray();
+        
+        $data = [
+            'title' => 'Laporan Farmasi - SIMRS',
+            'pageTitle' => 'Laporan Farmasi',
+            'totalResepHariIni' => $totalResepHariIni,
+            'totalObatKeluar' => $totalObatKeluar,
+            'nilaiTransaksi' => $nilaiTransaksi,
+            'obatHampirExpired' => $obatHampirExpired
+        ];
+        
+        return view('farmasi/laporan_farmasi', $data);
+    }
+    
+    public function getLaporanPemakaian()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid request']);
+        }
+        
+        $db = \Config\Database::connect();
+        $startDate = $this->request->getGet('start_date') ?? date('Y-m-d');
+        $endDate = $this->request->getGet('end_date') ?? date('Y-m-d');
+        
+        $laporan = $db->query("
+            SELECT 
+                o.nama_obat,
+                o.satuan,
+                o.harga_jual as harga,
+                SUM(r.jumlah) as total_jumlah,
+                SUM(r.jumlah * o.harga_jual) as total_nilai,
+                COUNT(DISTINCT r.id) as jumlah_transaksi
+            FROM resep r
+            LEFT JOIN obat o ON o.id_obat = r.id_obat
+            WHERE r.status = 'completed'
+            AND DATE(r.tanggal_resep) BETWEEN ? AND ?
+            GROUP BY r.id_obat
+            ORDER BY total_nilai DESC
+        ", [$startDate, $endDate])->getResultArray();
+        
+        $grandTotal = array_sum(array_column($laporan, 'total_nilai'));
+        
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $laporan,
+            'grandTotal' => $grandTotal,
+            'periode' => [
+                'start' => $startDate,
+                'end' => $endDate
+            ]
+        ]);
+    }
     
 }

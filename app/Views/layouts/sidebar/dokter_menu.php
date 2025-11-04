@@ -19,3 +19,14 @@
         <span class="nav-text">Data Dokter</span>
     </a>
 </li>
+
+<!-- Sub Header - Data Medis -->
+<li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Data Medis</li>
+
+<!-- Rekam Medis -->
+<li class="nav-item">
+    <a href="<?= base_url('rekam-medis') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Rekam Medis Pasien">
+        <i class="fas fa-folder-open nav-icon"></i>
+        <span class="nav-text">Rekam Medis</span>
+    </a>
+</li>

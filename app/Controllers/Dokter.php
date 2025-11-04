@@ -95,17 +95,14 @@ class Dokter extends BaseController
         $builder->orderBy('antrian_poli.created_at', 'asc');
         $antrianPoli = $builder->get()->getResultArray();
 
-        // Kirim data ke view antrian dokter
-        $bulan = [1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        // Convert created_at to ISO 8601 for timeago.js
+        // Data di database sudah dalam timezone Asia/Jakarta
         foreach ($antrianPoli as &$row) {
             if (isset($row['created_at']) && $row['created_at']) {
-                $dt = new \DateTime($row['created_at'], new \DateTimeZone('UTC'));
-                $dt->setTimezone(new \DateTimeZone('Asia/Jakarta'));
-                $tgl = (int)$dt->format('d');
-                $bln = $bulan[(int)$dt->format('m')];
-                $thn = $dt->format('Y');
-                $jam = $dt->format('H:i');
-                $row['created_at'] = $tgl . ' ' . $bln . ' ' . $thn . ' ' . $jam . ' WIB';
+                // Parse sebagai Asia/Jakarta (sesuai dengan data di database)
+                $dt = new \DateTime($row['created_at'], new \DateTimeZone('Asia/Jakarta'));
+                // Format untuk timeago.js dengan timezone offset
+                $row['created_at'] = $dt->format('c'); // ISO 8601 dengan timezone: 2025-11-04T18:23:00+07:00
             }
         }
         return view('dokter/antrian_dokter', ['antrianPoli' => $antrianPoli]);
@@ -122,6 +119,23 @@ class Dokter extends BaseController
         }
         // Ambil data pasien dari no_rm di antrian
         $pasien = $db->table('pasien')->where('no_rekam_medis', $antrian['no_rm'])->get()->getFirstRow('array');
+        
+        // Hitung usia pasien berdasarkan tanggal lahir
+        if ($pasien && !empty($pasien['tanggal_lahir'])) {
+            try {
+                $lahir = new \DateTime($pasien['tanggal_lahir']);
+                $today = new \DateTime();
+                $pasien['usia'] = $today->diff($lahir)->y;
+                $pasien['tgl_lahir'] = $pasien['tanggal_lahir']; 
+            } catch (\Exception $e) {
+                $pasien['usia'] = 0;
+                $pasien['tgl_lahir'] = $pasien['tanggal_lahir'];
+            }
+        } else {
+            $pasien['usia'] = 0;
+            $pasien['tgl_lahir'] = '';
+        }
+        
         // Ambil data poli dari id_poli di antrian
         $poli = $db->table('poliklinik')->where('id', $antrian['id_poli'])->get()->getFirstRow('array');
         // Ambil data dokter dari session
@@ -149,28 +163,60 @@ class Dokter extends BaseController
     public function hasilPemeriksaanDokter($id = null)
     {
         $db = \Config\Database::connect();
-        // Ambil semua pemeriksaan SOAP hari ini (atau bisa filter sesuai kebutuhan)
+        
+        // Ambil ID dan role user yang sedang login
+        $id_dokter = $this->session->get('id');
+        $userRole = $this->session->get('role');
+        
+        // Ambil semua pemeriksaan SOAP hari ini
         $builder = $db->table('pemeriksaan_soap');
         $builder->select('pemeriksaan_soap.id as id_pemeriksaan, pemeriksaan_soap.*, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis, users.nama_lengkap as dokter, poliklinik.nama as poli');
         $builder->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left');
         $builder->join('users', 'users.id = pemeriksaan_soap.id_dokter', 'left');
-        $builder->join('antrian_poli', 'CAST(antrian_poli.no_rm AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left');
+        // JOIN antrian_poli hanya yang hari ini untuk menghindari duplikasi
+        $builder->join('antrian_poli', 'CAST(antrian_poli.no_rm AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR) AND DATE(antrian_poli.created_at) = DATE(pemeriksaan_soap.created_at)', 'left');
         $builder->join('poliklinik', 'poliklinik.id = antrian_poli.id_poli', 'left');
+        
+        
+        if ($userRole === 'dokter') {
+            $builder->where('pemeriksaan_soap.id_dokter', $id_dokter);
+        }
+        
+        
         $builder->where('DATE(pemeriksaan_soap.created_at)', date('Y-m-d'));
+        $builder->groupBy('pemeriksaan_soap.id'); // Hindari duplikasi
         $builder->orderBy('pemeriksaan_soap.created_at', 'desc');
         $list_pemeriksaan = $builder->get()->getResultArray();
+        
+        // Format waktu pemeriksaan untuk setiap record dengan timezone WIB
+        foreach ($list_pemeriksaan as &$item) {
+            if (!empty($item['created_at'])) {
+                $datetime = new \DateTime($item['created_at']);
+                $datetime->setTimezone(new \DateTimeZone('Asia/Jakarta'));
+                $item['waktu_pemeriksaan'] = $datetime->format('d-m-Y H:i');
+            } else {
+                $item['waktu_pemeriksaan'] = '-';
+            }
+        }
+        unset($item); // Hapus referensi
 
         // Siapkan detail jika ada $id
         $pemeriksaan = null;
         if ($id) {
-            $row = $db->table('pemeriksaan_soap')
-                ->select('pemeriksaan_soap.id as id_pemeriksaan, pemeriksaan_soap.*, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis, users.nama_lengkap as dokter, poliklinik.nama as poli')
-                ->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left')
-                ->join('users', 'users.id = pemeriksaan_soap.id_dokter', 'left')
-                ->join('antrian_poli', 'CAST(antrian_poli.no_rm AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left')
-                ->join('poliklinik', 'poliklinik.id = antrian_poli.id_poli', 'left')
-                ->where('pemeriksaan_soap.id', $id)
-                ->get()->getFirstRow('array');
+            $detailBuilder = $db->table('pemeriksaan_soap');
+            $detailBuilder->select('pemeriksaan_soap.id as id_pemeriksaan, pemeriksaan_soap.*, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis, users.nama_lengkap as dokter, poliklinik.nama as poli');
+            $detailBuilder->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left');
+            $detailBuilder->join('users', 'users.id = pemeriksaan_soap.id_dokter', 'left');
+            $detailBuilder->join('antrian_poli', 'CAST(antrian_poli.no_rm AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left');
+            $detailBuilder->join('poliklinik', 'poliklinik.id = antrian_poli.id_poli', 'left');
+            $detailBuilder->where('pemeriksaan_soap.id', $id);
+            
+            // Filter berdasarkan role: Dokter hanya lihat pasiennya, Admin lihat semua
+            if ($userRole === 'dokter') {
+                $detailBuilder->where('pemeriksaan_soap.id_dokter', $id_dokter);
+            }
+            
+            $row = $detailBuilder->get()->getFirstRow('array');
             if ($row) {
                 // Usia
                 $row['usia'] = '-';
@@ -267,28 +313,44 @@ class Dokter extends BaseController
             $id_pemeriksaan = $db->insertID();
 
             // Simpan resep obat ke tabel resep untuk farmasi
-            $this->simpanResepObat($id_pemeriksaan, $data['no_rm'], $obat_manual, $obat_db, $id_dokter);
+            $jumlahResep = $this->simpanResepObat($id_pemeriksaan, $data['no_rm'], $obat_manual, $obat_db, $id_dokter);
+
+            // Tentukan status selanjutnya berdasarkan ada/tidaknya resep
+            // Jika ada resep -> Menunggu Farmasi
+            // Jika tidak ada resep -> Menunggu Kasir (langsung bayar)
+            if ($jumlahResep > 0) {
+                $statusSelanjutnya = 'Menunggu Farmasi';
+            } else {
+                $statusSelanjutnya = 'Menunggu Kasir';
+            }
 
             // Update status antrian jika id_antrian dikirim
             $id_antrian = $this->request->getPost('id_antrian');
+            log_message('info', '[Dokter::simpanPemeriksaanSoap] id_antrian: ' . ($id_antrian ?? 'NULL'));
+            log_message('info', '[Dokter::simpanPemeriksaanSoap] Jumlah resep: ' . $jumlahResep);
+            log_message('info', '[Dokter::simpanPemeriksaanSoap] Status selanjutnya: ' . $statusSelanjutnya);
+            
             if ($id_antrian) {
                 // Update di antrian_poli
-                $db->table('antrian_poli')->where('id', $id_antrian)->update(['status' => 'Menunggu Farmasi']);
-                // Update juga di antrian utama jika ada (untuk sinkronisasi dashboard admisi)
+                $db->table('antrian_poli')->where('id', $id_antrian)->update(['status' => $statusSelanjutnya]);
+                log_message('info', '[Dokter::simpanPemeriksaanSoap] Updated antrian_poli id=' . $id_antrian);
+                
+                // Ambil id_antrian_perawat dari antrian_poli untuk update antrian utama
                 $antrianPoli = $db->table('antrian_poli')->where('id', $id_antrian)->get()->getFirstRow('array');
-                if ($antrianPoli && isset($antrianPoli['no_rm'])) {
-                    // Ambil antrian utama terbaru hari ini untuk no_rm tsb
-                    $antrianUtama = $db->table('antrian')
-                        ->where('no_rm', $antrianPoli['no_rm'])
-                        ->where('DATE(created_at)', date('Y-m-d'))
-                        ->orderBy('id', 'desc')
-                        ->get(1)->getFirstRow('array');
-                    if ($antrianUtama && in_array($antrianUtama['status'], ['Menunggu Dokter', 'Dalam Pemeriksaan', 'Menunggu Pemeriksaan'])) {
-                        $db->table('antrian')
-                            ->where('id', $antrianUtama['id'])
-                            ->update(['status' => 'Menunggu Farmasi']);
-                    }
+                log_message('info', '[Dokter::simpanPemeriksaanSoap] Antrian poli data: ' . json_encode($antrianPoli));
+                
+                if ($antrianPoli && isset($antrianPoli['id_antrian_perawat'])) {
+                    // Update antrian utama berdasarkan ID langsung (lebih reliable)
+                    $updated = $db->table('antrian')
+                        ->where('id', $antrianPoli['id_antrian_perawat'])
+                        ->update(['status' => $statusSelanjutnya]);
+                    
+                    log_message('info', '[Dokter::simpanPemeriksaanSoap] Updated antrian id=' . $antrianPoli['id_antrian_perawat'] . ' to "' . $statusSelanjutnya . '", rows affected: ' . $updated);
+                } else {
+                    log_message('warning', '[Dokter::simpanPemeriksaanSoap] Antrian poli not found or id_antrian_perawat missing');
                 }
+            } else {
+                log_message('warning', '[Dokter::simpanPemeriksaanSoap] id_antrian is NULL');
             }
 
             $db->transComplete();
@@ -309,12 +371,13 @@ class Dokter extends BaseController
     private function simpanResepObat($id_pemeriksaan, $no_rm, $obat_manual, $obat_db, $id_dokter)
     {
         $db = \Config\Database::connect();
+        $jumlahResepDisimpan = 0;
         
         // Ambil data pasien
         $pasien = $db->table('pasien')->where('no_rekam_medis', $no_rm)->get()->getFirstRow('array');
         if (!$pasien) {
             log_message('warning', 'Pasien tidak ditemukan untuk no_rm: ' . $no_rm);
-            return;
+            return 0;
         }
 
         // Ambil data tambahan dari POST
@@ -341,6 +404,7 @@ class Dokter extends BaseController
                         'created_at' => date('Y-m-d H:i:s')
                     ];
                     $db->table('resep')->insert($resepData);
+                    $jumlahResepDisimpan++;
                 }
             }
         }
@@ -368,10 +432,13 @@ class Dokter extends BaseController
                             'created_at' => date('Y-m-d H:i:s')
                         ];
                         $db->table('resep')->insert($resepData);
+                        $jumlahResepDisimpan++;
                     }
                 }
             }
         }
+
+        return $jumlahResepDisimpan;
     }
 
 
@@ -380,17 +447,28 @@ class Dokter extends BaseController
     {
         $db = \Config\Database::connect();
         $pemeriksaan = null;
+        
+        // Ambil ID dan role user yang sedang login
+        $id_dokter = $this->session->get('id');
+        $userRole = $this->session->get('role');
+        
         // Debug: pastikan id yang diterima benar
         // log_message('debug', 'detailPemeriksaanPasien id: ' . print_r($id, true));
         if ($id) {
-            $row = $db->table('pemeriksaan_soap')
-                ->select('pemeriksaan_soap.id as id_pemeriksaan, pemeriksaan_soap.*, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis, users.nama_lengkap as dokter, poliklinik.nama as poli')
-                ->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left')
-                ->join('users', 'users.id = pemeriksaan_soap.id_dokter', 'left')
-                ->join('antrian_poli', 'CAST(antrian_poli.no_rm AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left')
-                ->join('poliklinik', 'poliklinik.id = antrian_poli.id_poli', 'left')
-                ->where('pemeriksaan_soap.id', $id)
-                ->get()->getFirstRow('array');
+            $builder = $db->table('pemeriksaan_soap');
+            $builder->select('pemeriksaan_soap.id as id_pemeriksaan, pemeriksaan_soap.*, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis, users.nama_lengkap as dokter, poliklinik.nama as poli');
+            $builder->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left');
+            $builder->join('users', 'users.id = pemeriksaan_soap.id_dokter', 'left');
+            $builder->join('antrian_poli', 'CAST(antrian_poli.no_rm AS CHAR) = CAST(pemeriksaan_soap.no_rm AS CHAR)', 'left');
+            $builder->join('poliklinik', 'poliklinik.id = antrian_poli.id_poli', 'left');
+            $builder->where('pemeriksaan_soap.id', $id);
+            
+            // Filter berdasarkan role: Dokter hanya lihat pasiennya, Admin lihat semua
+            if ($userRole === 'dokter') {
+                $builder->where('pemeriksaan_soap.id_dokter', $id_dokter);
+            }
+            
+            $row = $builder->get()->getFirstRow('array');
             if ($row) {
                 // Usia
                 $row['usia'] = '-';
@@ -400,6 +478,16 @@ class Dokter extends BaseController
                     $today = new \DateTime();
                     $row['usia'] = $today->diff($lahir)->y;
                 }
+                
+                // Format waktu pemeriksaan dengan timezone WIB
+                if (!empty($row['created_at'])) {
+                    $datetime = new \DateTime($row['created_at']);
+                    $datetime->setTimezone(new \DateTimeZone('Asia/Jakarta'));
+                    $row['waktu_pemeriksaan'] = $datetime->format('d-m-Y H:i');
+                } else {
+                    $row['waktu_pemeriksaan'] = '-';
+                }
+                
                 // Obat manual dan db (decode json)
                 $obat_manual = !empty($row['obat_manual']) ? json_decode($row['obat_manual'], true) : [];
                 $obat_db = !empty($row['obat_db']) ? json_decode($row['obat_db'], true) : [];

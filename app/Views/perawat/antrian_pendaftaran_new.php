@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <button class="btn btn-success btn-block btn-mulai-pemeriksaan" data-id="{{id}}">
-                        <i class="fas fa-stethoscope mr-2"></i>Mulai Pemeriksaan
+                        <i class="fas fa-stethoscope mr-3"></i>Mulai Pemeriksaan
                     </button>
                 </div>
             </div>

@@ -65,7 +65,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <i class="fas fa-clock text-primary mr-2"></i>
-                                                    <span class="small">Menunggu sejak <?= esc($antrian['created_at'] ?? '-') ?></span>
+                                                    <span class="small">Menunggu sejak <time class="timeago" datetime="<?= esc($antrian['created_at'] ?? '') ?>"><?= esc($antrian['created_at'] ?? '-') ?></time></span>
                                                 </div>
                                             </div>
                                                 <button class="btn btn-success btn-block btn-mulai-pemeriksaan-dokter" onclick="window.location.href='/dokter/pemeriksaan/<?= esc($antrian['id']) ?>'">
@@ -114,7 +114,7 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <i class="fas fa-clock text-primary mr-2"></i>
-                            <span class="small">Menunggu sejak {{created_at}}</span>
+                            <span class="small">Menunggu sejak <time class="timeago" datetime="{{created_at}}">{{created_at}}</time></span>
                         </div>
                     </div>
                     <button class="btn btn-success btn-block btn-mulai-pemeriksaan-dokter" onclick="window.location.href='/dokter/pemeriksaan/{{id}}'">
@@ -130,5 +130,49 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/jquery.timeago.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/locales/jquery.timeago.id.js"></script>
-<script src="<?= base_url('js/antrian-dokter.js') ?>"></script>
+<script>
+$(document).ready(function() {
+    // Set locale ke Bahasa Indonesia
+    jQuery.timeago.settings.strings = {
+        prefixAgo: null,
+        prefixFromNow: null,
+        suffixAgo: "yang lalu",
+        suffixFromNow: "dari sekarang",
+        seconds: "kurang dari semenit",
+        minute: "sekitar semenit",
+        minutes: "%d menit",
+        hour: "sekitar sejam",
+        hours: "sekitar %d jam",
+        day: "sehari",
+        days: "%d hari",
+        month: "sekitar sebulan",
+        months: "%d bulan",
+        year: "sekitar setahun",
+        years: "%d tahun",
+        wordSeparator: " ",
+        numbers: []
+    };
+
+    // Aktifkan timeago untuk semua elemen dengan class timeago
+    $("time.timeago").timeago();
+
+    // Update setiap 60 detik
+    setInterval(function() {
+        $("time.timeago").timeago('update');
+    }, 60000);
+});
+
+// Fungsi reload data antrian
+function loadAntrianDokterData() {
+    location.reload();
+}
+
+// Search functionality
+$('#searchInput').on('keyup', function() {
+    var value = $(this).val().toLowerCase();
+    $('#antrianDokterContainer .col-md-6').filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+});
+</script>
 <?= $this->endSection() ?>

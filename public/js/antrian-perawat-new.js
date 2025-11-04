@@ -32,6 +32,9 @@ const loadAntrianData = () => {
             const template = document.getElementById('antrianCardTemplate').innerHTML;
             
             response.data.forEach(antrian => {
+                // Debug: log created_at untuk memastikan format benar
+                console.log('Antrian:', antrian.no_antrian, 'Created at:', antrian.created_at);
+                
                 const cardHtml = template
                     .replace(/{{id}}/g, antrian.id)
                     .replace(/{{no_antrian}}/g, antrian.no_antrian)
@@ -44,7 +47,8 @@ const loadAntrianData = () => {
                 container.append(cardHtml);
             });
 
-            // Initialize timeago
+            // Initialize timeago with Indonesian locale
+            jQuery.timeago.settings.allowFuture = true;
             jQuery.timeago.settings.lang = "id";
             $("time.timeago").timeago();
         },

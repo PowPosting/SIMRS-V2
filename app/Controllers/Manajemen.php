@@ -33,23 +33,4 @@ class Manajemen extends BaseController
         return view('manajemen/dashboard', $data);
     }
 
-    public function reports()
-    {
-        $data = [
-            'title' => 'Laporan - SIMRS',
-            'pageTitle' => 'Laporan Manajemen'
-        ];
-
-        return view('manajemen/reports', $data);
-    }
-
-    public function statistics()
-    {
-        $data = [
-            'title' => 'Statistik - SIMRS',
-            'pageTitle' => 'Statistik Rumah Sakit'
-        ];
-
-        return view('manajemen/statistics', $data);
-    }
 }

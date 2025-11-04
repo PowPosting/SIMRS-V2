@@ -101,18 +101,18 @@
                 </div>
 
                 <!-- Tabel Data Pasien -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap" id="tablePasien">
+                <div class="card-body table-responsive p-0" style="overflow-x: auto;">
+                    <table class="table table-hover" id="tablePasien" style="min-width: 1200px;">
                         <thead class="thead-light">
                             <tr>
-                                <th>No</th>
-                                <th>No. Rekam Medis</th>
-                                <th>Nama Lengkap Pasien</th>
-                                <th>Nurs Station</th>
-                                <th>SOAP</th>
-                                <th>Farmasi</th>
-                                <th>Kasir</th>
-                                <th>Status</th>
+                                <th style="width: 50px;">No</th>
+                                <th style="width: 150px;">No. Rekam Medis</th>
+                                <th style="width: 250px;">Nama Lengkap Pasien</th>
+                                <th style="width: 130px; text-align: center;">Nurs Station</th>
+                                <th style="width: 130px; text-align: center;">SOAP</th>
+                                <th style="width: 130px; text-align: center;">Farmasi</th>
+                                <th style="width: 130px; text-align: center;">Kasir</th>
+                                <th style="width: 180px; text-align: center;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,68 +121,81 @@
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td><span class="badge bg-light text-primary"><?= esc($p['no_rekam_medis']) ?></span></td>
-                                        <td><strong><?= esc($p['title']) ?> <?= esc($p['nama_lengkap']) ?></strong></td>
                                         <td>
+                                            <strong><?= esc($p['title']) ?> <?= esc($p['nama_lengkap']) ?></strong>
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;">
                                             <?php
+                                            // Nurse Station selesai jika sudah lewat tahap ini
                                             $nursSelesai = in_array($p['status'], [
                                                 'Menunggu Dokter', 'Dalam Pemeriksaan', 'Menunggu Kasir', 'Menunggu Farmasi', 'Selesai'
                                             ]);
+                                            $nursProses = in_array($p['status'], ['Menunggu Perawat', 'Dalam Pemeriksaan Perawat']);
                                             ?>
                                             <?php if ($nursSelesai): ?>
-                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                                <span class="badge bg-success text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                            <?php elseif ($nursProses): ?>
+                                                <span class="badge bg-warning text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php else: ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                                <span class="badge bg-secondary text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-clock mr-1"></i> Menunggu</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td>
+                                        <td style="text-align: center; vertical-align: middle;">
                                             <?php
+                                            // SOAP selesai jika sudah lewat tahap dokter
                                             $soapSelesai = in_array($p['status'], [
                                                 'Menunggu Kasir', 'Menunggu Farmasi', 'Selesai'
                                             ]);
+                                            $soapProses = in_array($p['status'], ['Menunggu Dokter', 'Dalam Pemeriksaan']);
                                             ?>
                                             <?php if ($soapSelesai): ?>
-                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                                <span class="badge bg-success text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                            <?php elseif ($soapProses): ?>
+                                                <span class="badge bg-warning text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php else: ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                                <span class="badge bg-secondary text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-clock mr-1"></i> Menunggu</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td>
+                                        <td style="text-align: center; vertical-align: middle;">
                                             <?php
-                                            $farmasiSelesai = ($p['status'] === 'Menunggu Kasir' || $p['status'] === 'Selesai');
+                                            // Farmasi selesai jika sudah lewat tahap farmasi
+                                            $farmasiSelesai = in_array($p['status'], ['Menunggu Kasir', 'Selesai']);
                                             $farmasiProses = ($p['status'] === 'Menunggu Farmasi');
                                             ?>
                                             <?php if ($farmasiSelesai): ?>
-                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                                <span class="badge bg-success text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
                                             <?php elseif ($farmasiProses): ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                                <span class="badge bg-warning text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php else: ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                                <span class="badge bg-secondary text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-clock mr-1"></i> Menunggu</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td>
+                                        <td style="text-align: center; vertical-align: middle;">
                                             <?php
+                                            // Kasir selesai jika sudah selesai semua
                                             $kasirSelesai = ($p['status'] === 'Selesai');
                                             $kasirProses = ($p['status'] === 'Menunggu Kasir');
                                             ?>
                                             <?php if ($kasirSelesai): ?>
-                                                <span class="badge bg-success text-white"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
+                                                <span class="badge bg-success text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-check-circle mr-1"></i> Selesai</span>
                                             <?php elseif ($kasirProses): ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                                <span class="badge bg-warning text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
                                             <?php else: ?>
-                                                <span class="badge bg-secondary text-white"><i class="fas fa-spinner fa-spin mr-1"></i> Proses</span>
+                                                <span class="badge bg-secondary text-white" style="padding: 6px 12px; font-size: 13px;"><i class="fas fa-clock mr-1"></i> Menunggu</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td>
+                                        <td style="text-align: center; vertical-align: middle;">
                                             <?php
                                             $status = isset($p['status']) ? $p['status'] : '';
                                             if ($status === 'Selesai') {
-                                                echo '<span class="badge bg-success text-white">'.esc($status).'</span>';
+                                                echo '<span class="badge bg-success text-white" style="padding: 6px 12px; font-size: 13px;">'.esc($status).'</span>';
                                             } elseif ($status) {
-                                                echo '<span class="badge bg-info text-white">'.esc($status).'</span>';
+                                                echo '<span class="badge bg-info text-white" style="padding: 6px 12px; font-size: 13px;">'.esc($status).'</span>';
                                             } else {
                                                 echo '<span class="badge bg-light text-secondary">-</span>';
                                             }
                                             ?>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>

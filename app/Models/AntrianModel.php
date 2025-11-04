@@ -29,7 +29,6 @@ class AntrianModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
@@ -67,11 +66,21 @@ class AntrianModel extends Model
         // Filter tanggal dengan format Y-m-d agar lebih akurat
         $startDate = $date . ' 00:00:00';
         $endDate = $date . ' 23:59:59';
+        
+        // Generate prefix untuk filter
+        $prefix = chr(64 + $idPoli); // A untuk poli 1, B untuk poli 2, dst
+        
+        log_message('info', '[getLastAntrian] Searching for poli: ' . $idPoli . ', prefix: ' . $prefix . ', date: ' . $date);
+        
         $result = $this->where('id_poli', $idPoli)
             ->where('created_at >=', $startDate)
             ->where('created_at <=', $endDate)
-            ->orderBy('no_antrian', 'DESC')
+            ->like('no_antrian', $prefix, 'after')  // Filter by prefix
+            ->orderBy('id', 'DESC')  // Order by id instead of no_antrian for consistency
             ->first();
+        
+        log_message('info', '[getLastAntrian] Found: ' . ($result ? $result['no_antrian'] : 'NULL'));
+        
         return $result ? $result['no_antrian'] : null;
     }
 }

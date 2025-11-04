@@ -193,7 +193,7 @@
           <span class="h4">Nomor Antrian:</span><br>
           <span class="display-4 font-weight-bold text-success" id="noAntrianDaftarUlang">-</span>
         </div>
-        <button class="btn btn-primary" id="btnExportWordAntrian"><i class="fa fa-file-word mr-1"></i> Export ke Word</button>
+        <button class="btn btn-primary" id="btnExportWordAntrian"><i class="fa fa-print mr-1"></i> Cetak Antrian</button>
       </div>
     </div>
   </div>
@@ -346,7 +346,7 @@ document.getElementById('btnDaftarUlangPasien').onclick = function() {
                     document.getElementById('noAntrianDaftarUlang').textContent = data.no_antrian;
                     $('#modalDaftarUlangSukses').modal('show');
                     document.getElementById('btnExportWordAntrian').onclick = function() {
-                        window.open('/exportword/antrian/' + encodeURIComponent(data.no_antrian), '_blank');
+                        window.open('<?= base_url('admisi/print-antrian/') ?>' + encodeURIComponent(data.no_antrian), '_blank');
                     };
                 } else {
                     document.getElementById('pesanDaftarUlangError').textContent = 'Gagal daftar ulang: ' + (data.message || 'Terjadi kesalahan.');
