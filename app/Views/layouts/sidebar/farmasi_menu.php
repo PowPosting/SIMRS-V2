@@ -1,31 +1,31 @@
 <!-- Farmasi Menu -->
-<!-- Farmasi -->
+<!-- Data Master Obat -->
 <li class="nav-item">
-    <a href="<?= base_url('farmasi') ?>" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Farmasi">
-        <i class="fas fa-pills nav-icon"></i>
-        <span class="nav-text">Farmasi</span>
-    </a>
-</li>
-
-<!-- Stok Obat -->
-<li class="nav-item">
-    <a href="<?= base_url('farmasi/medicine-stock') ?>" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Stok Obat">
+    <a href="<?= base_url('farmasi/data-master-obat') ?>" class="nav-link">
         <i class="fas fa-boxes nav-icon"></i>
-        <span class="nav-text">Stok Obat</span>
+        <span class="nav-text">Data Master Obat</span>
     </a>
 </li>
 
-<!-- Resep Obat -->
+<!-- Permintaan Obat -->
 <li class="nav-item">
-    <a href="<?= base_url('farmasi/prescriptions') ?>" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Resep Obat">
+    <a href="<?= base_url('farmasi/permintaan-obat') ?>" class="nav-link">
         <i class="fas fa-prescription nav-icon"></i>
-        <span class="nav-text">Resep Obat</span>
+        <span class="nav-text">Permintaan Obat</span>
+    </a>
+</li>
+
+<!-- Riwayat Permintaan Obat -->
+<li class="nav-item">
+    <a href="<?= base_url('farmasi/riwayat-permintaan') ?>" class="nav-link">
+        <i class="fas fa-history nav-icon"></i>
+        <span class="nav-text">Riwayat Permintaan</span>
     </a>
 </li>
 
 <!-- Laporan Farmasi -->
 <li class="nav-item">
-    <a href="<?= base_url('farmasi/reports') ?>" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Laporan Farmasi">
+    <a href="<?= base_url('farmasi/laporan') ?>" class="nav-link">
         <i class="fas fa-chart-line nav-icon"></i>
         <span class="nav-text">Laporan Farmasi</span>
     </a>

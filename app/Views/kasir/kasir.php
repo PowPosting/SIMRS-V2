@@ -149,45 +149,17 @@
 </div>
     <!-- Quick Actions -->
     <div class="row g-3 mt-2">
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm action-card">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm action-card">
                 <div class="card-body text-center p-4">
-                    <div class="action-icon bg-primary text-white mb-3">
-                        <i class="bi bi-clock-history"></i>
+                    <div class="action-icon bg-primary text-white mb-3 mx-auto" style="width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="bi bi-clock-history fs-3"></i>
                     </div>
                     <h6 class="card-title mb-2">Riwayat Pembayaran</h6>
                     <p class="card-text text-muted small mb-3">Lihat history pembayaran pasien</p>
-                    <a href="<?= base_url('kasir/riwayat-pembayaran') ?>" class="btn btn-outline-primary btn-sm">
+                    <a href="<?= base_url('kasir/riwayat-pembayaran') ?>" class="btn btn-primary btn-sm">
                         <i class="bi bi-eye me-1"></i>Lihat Riwayat
                     </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm action-card">
-                <div class="card-body text-center p-4">
-                    <div class="action-icon bg-success text-white mb-3">
-                        <i class="bi bi-graph-up"></i>
-                    </div>
-                    <h6 class="card-title mb-2">Laporan Harian</h6>
-                    <p class="card-text text-muted small mb-3">Laporan pendapatan hari ini</p>
-                    <button class="btn btn-outline-success btn-sm" onclick="lihatLaporan()">
-                        <i class="bi bi-file-earmark-text me-1"></i>Lihat Laporan
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm action-card">
-                <div class="card-body text-center p-4">
-                    <div class="action-icon bg-info text-white mb-3">
-                        <i class="bi bi-printer"></i>
-                    </div>
-                    <h6 class="card-title mb-2">Print Struk</h6>
-                    <p class="card-text text-muted small mb-3">Cetak ulang struk pembayaran</p>
-                    <button class="btn btn-outline-info btn-sm" onclick="printStruk()">
-                        <i class="bi bi-printer me-1"></i>Print Struk
-                    </button>
                 </div>
             </div>
         </div>
@@ -526,16 +498,6 @@ function prosesPembayaran() {
         btn.disabled = false;
         btn.innerHTML = originalText;
     });
-}
-
-function lihatLaporan() {
-    // Implementasi laporan
-    console.log('Membuka laporan...');
-}
-
-function printStruk() {
-    // Implementasi print struk
-    console.log('Print struk...');
 }
 
 // Helper function
