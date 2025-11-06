@@ -31,14 +31,26 @@ class PasienModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    protected $validationRules = [
+    protected $validationRules = [];
+    
+    // Validation rules untuk insert (new record)
+    protected $insertValidationRules = [
         'nama_lengkap' => 'required|min_length[3]|max_length[100]',
         'jenis_kelamin' => 'required|in_list[L,P]',
         'tempat_lahir' => 'required|max_length[50]',
         'tanggal_lahir' => 'required|valid_date',
         'no_rekam_medis' => 'required|is_unique[pasien.no_rekam_medis]',
         'nomor_identitas' => 'required|is_unique[pasien.nomor_identitas]',
-        'email' => 'permit_empty|is_unique[pasien.email]',
+        'email' => 'permit_empty|valid_email|is_unique[pasien.email]',
+        'status_aktif' => 'permit_empty|in_list[0,1]'
+    ];
+    
+    // Validation rules untuk update (existing record)
+    protected $updateValidationRules = [
+        'nama_lengkap' => 'required|min_length[3]|max_length[100]',
+        'jenis_kelamin' => 'required|in_list[L,P]',
+        'tempat_lahir' => 'required|max_length[50]',
+        'tanggal_lahir' => 'required|valid_date',
         'status_aktif' => 'permit_empty|in_list[0,1]'
     ];
 
@@ -138,6 +150,67 @@ class PasienModel extends Model
 
             
         ];
+    }
+    
+    /**
+     * Override insert method untuk menggunakan insertValidationRules
+     */
+    public function insert($data = null, bool $returnID = true)
+    {
+        $this->validationRules = $this->insertValidationRules;
+        return parent::insert($data, $returnID);
+    }
+    
+    /**
+     * Override update method untuk menggunakan updateValidationRules
+     * dan mengecualikan record yang sedang diupdate dari uniqueness check
+     */
+    public function update($id = null, $data = null): bool
+    {
+        log_message('info', '[PasienModel::update] ID: ' . $id);
+        log_message('info', '[PasienModel::update] Data: ' . json_encode($data));
+        
+        // Set validation rules untuk update (tanpa is_unique checks)
+        $this->validationRules = $this->updateValidationRules;
+        
+        // Jika nomor_identitas berubah, cek uniqueness (kecuali untuk record ini)
+        if (isset($data['nomor_identitas'])) {
+            $existingData = $this->find($id);
+            if ($existingData && $existingData['nomor_identitas'] !== $data['nomor_identitas']) {
+                // Nomor identitas berubah, cek apakah sudah dipakai
+                $check = $this->where('nomor_identitas', $data['nomor_identitas'])
+                    ->where('id !=', $id)
+                    ->first();
+                if ($check) {
+                    $this->errors = ['nomor_identitas' => 'Nomor identitas sudah terdaftar'];
+                    return false;
+                }
+            }
+        }
+        
+        // Jika email berubah, validasi dan cek uniqueness (kecuali untuk record ini)
+        if (isset($data['email']) && !empty($data['email'])) {
+            // Validasi format email
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $this->errors = ['email' => 'Format email tidak valid'];
+                log_message('error', '[PasienModel::update] Email tidak valid: ' . $data['email']);
+                return false;
+            }
+            
+            $existingData = $existingData ?? $this->find($id);
+            if ($existingData && ($existingData['email'] ?? '') !== $data['email']) {
+                // Email berubah, cek apakah sudah dipakai
+                $check = $this->where('email', $data['email'])
+                    ->where('id !=', $id)
+                    ->first();
+                if ($check) {
+                    $this->errors = ['email' => 'Email sudah terdaftar'];
+                    return false;
+                }
+            }
+        }
+        
+        return parent::update($id, $data);
     }
 
 }

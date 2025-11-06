@@ -23,6 +23,14 @@
     </a>
 </li>
 
+<!-- Jadwal Dokter -->
+<li class="nav-item">
+    <a href="<?= base_url('admisi/jadwal-dokter') ?>" class="nav-link">
+        <i class="fas fa-calendar-week nav-icon"></i>
+        <span class="nav-text">Jadwal Praktik Dokter</span>
+    </a>
+</li>
+
 <!-- Sub Header - Data Medis -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Data Medis</li>
 

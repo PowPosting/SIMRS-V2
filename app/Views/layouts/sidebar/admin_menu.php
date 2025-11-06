@@ -33,6 +33,14 @@
                 <span class="submenu-text">Pasien Terdaftar Hari Ini</span>
             </a>
         </li>
+        <!-- Jadwal Dokter -->
+        <li class="submenu-item">
+            <a href="<?= base_url('admisi/jadwal-dokter') ?>" class="submenu-link" data-toggle="tooltip" data-placement="right" title="Jadwal Dokter">
+                <i class="fas fa-calendar-alt submenu-icon"></i>
+                <span class="submenu-text">Jadwal Dokter</span>
+            </a>
+        </li>
+
     </ul>
 </li>
 

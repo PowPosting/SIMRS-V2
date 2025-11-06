@@ -222,9 +222,6 @@
                                                 <button type="button" class="btn btn-sm btn-outline-primary btn-detail" data-id="<?= esc($permintaan['id'] ?? 0) ?>" title="Lihat Detail" style="min-width: 70px;">
                                                     Detail
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-warning btn-batal" data-id="<?= esc($permintaan['id'] ?? 0) ?>" title="Batalkan & Kembalikan Stok" style="min-width: 70px;">
-                                                    <i class="bi bi-arrow-counterclockwise"></i> Batal
-                                                </button>
                                             <?php endif; ?>
                                         </div>
                                     </td>
@@ -433,20 +430,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Button batal (untuk processing dan completed)
+    // Button batal (untuk processing)
     document.querySelectorAll('.btn-batal').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = this.getAttribute('data-id');
-            const isCompleted = this.closest('tr').querySelector('[data-status]').getAttribute('data-status') === 'completed';
             
-            let confirmMessage = 'Yakin ingin membatalkan proses permintaan ini?';
-            if (isCompleted) {
-                confirmMessage = 'Yakin ingin membatalkan permintaan yang sudah selesai? Stok obat akan dikembalikan.';
-            }
-            
-            if (confirm(confirmMessage)) {
-                window.location.href = '/farmasi/batal-permintaan/' + id;
-            }
+            Swal.fire({
+                title: 'Konfirmasi Pembatalan',
+                text: 'Yakin ingin membatalkan proses permintaan ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Batalkan',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/farmasi/batal-permintaan/' + id;
+                }
+            });
         });
     });
 

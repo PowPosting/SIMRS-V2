@@ -82,6 +82,9 @@ $routes->group('admisi', ['filter' => 'auth'], function($routes) {
     $routes->get('edit-pasien/(:num)', 'Admisi::editPasien/$1');
     $routes->post('update-pasien/(:num)', 'Admisi::updatePasien/$1');
     $routes->delete('delete-pasien/(:num)', 'Admisi::deletePasien/$1');
+    
+    // Jadwal Dokter
+    $routes->get('jadwal-dokter', 'Admisi::jadwalDokter');
 });
 
 // Admin Routes

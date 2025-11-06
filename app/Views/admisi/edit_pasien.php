@@ -137,6 +137,65 @@
         margin-top: 2rem;
     }
 
+    .form-control.is-invalid {
+        border-color: #dc3545 !important;
+        background-color: #fff5f5 !important;
+    }
+
+    .form-control.is-invalid:focus {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .alert {
+        animation: slideDown 0.5s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* SweetAlert2 Custom Styles */
+    .swal2-popup.animated-popup {
+        border-radius: 15px !important;
+        padding: 2rem !important;
+    }
+
+    .swal2-title {
+        font-size: 1.75rem !important;
+        font-weight: 700 !important;
+        color: #2c3e50 !important;
+    }
+
+    .swal2-html-container {
+        font-size: 1rem !important;
+        color: #6c757d !important;
+    }
+
+    .swal2-confirm {
+        border-radius: 25px !important;
+        padding: 10px 30px !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+    }
+
+    .swal2-icon {
+        border-width: 4px !important;
+    }
+
     @media (max-width: 768px) {
         .section-body {
             padding: 1.5rem;
@@ -163,25 +222,7 @@
         <p class="mb-0 mt-2" style="opacity: 0.9;">Perbarui informasi data pasien dengan lengkap dan akurat</p>
     </div>
 
-    <!-- Alert Messages -->
-    <?php if (session()->has('errors')): ?>
-        <div class="alert alert-danger alert-dismissible fade show" style="border-radius: 15px;">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h6><i class="fas fa-exclamation-triangle mr-2"></i>Terjadi Kesalahan:</h6>
-            <ul class="mb-0">
-                <?php foreach (session('errors') as $error): ?>
-                    <li><?= esc($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
 
-    <?php if (session()->has('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show" style="border-radius: 15px;">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <i class="fas fa-check-circle mr-2"></i><?= session('success') ?>
-        </div>
-    <?php endif; ?>
     
     <!-- Form -->
     <form action="<?= base_url('admisi/update-pasien/' . $pasien['id']) ?>" method="post" id="editPasienForm">
@@ -312,7 +353,9 @@
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" 
-                                   value="<?= esc($pasien['email'] ?? '') ?>">
+                                   value="<?= esc($pasien['email'] ?? '') ?>"
+                                   placeholder="contoh@email.com">
+                            <small class="text-muted">Format email harus lengkap (contoh: nama@domain.com)</small>
                         </div>
                     </div>
                 </div>
@@ -511,35 +554,160 @@
 <?= $this->section('scripts') ?>
 <script>
 $(document).ready(function() {
+    console.log('Form loaded, checking data...');
+    console.log('Form action:', $('#editPasienForm').attr('action'));
+    console.log('Form method:', $('#editPasienForm').attr('method'));
+    
+    // Show SweetAlert for session messages
+    <?php if (session()->has('success')): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '<?= session('success') ?>',
+            confirmButtonColor: '#28a745',
+            timer: 3000,
+            timerProgressBar: true
+        });
+    <?php endif; ?>
+    
+    <?php if (session()->has('error')): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menyimpan Data!',
+            html: '<p><?= addslashes(session('error')) ?></p>',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc3545'
+        });
+    <?php endif; ?>
+    
+    <?php if (session()->has('errors')): ?>
+        <?php 
+        $errorList = '';
+        foreach (session('errors') as $error) {
+            $errorList .= '<div style="margin-bottom: 10px; padding-left: 10px; text-align: left;">' .
+                         '<span style="color: #dc3545; font-weight: bold;">✖</span> ' . 
+                         '<span>' . esc($error) . '</span>' .
+                         '</div>';
+        }
+        ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan!',
+            html: '<div style="text-align: left; margin: 0 auto; display: inline-block;"><?= $errorList ?></div>',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc3545'
+        });
+    <?php endif; ?>
+    
     // Form validation
     $('#editPasienForm').on('submit', function(e) {
+        console.log('Form submit triggered');
         let isValid = true;
+        let invalidFields = [];
         
         // Check required fields
         $(this).find('[required]').each(function() {
             if ($(this).val() === '') {
                 isValid = false;
                 $(this).addClass('is-invalid');
+                invalidFields.push($(this).attr('name') || $(this).attr('id'));
             } else {
                 $(this).removeClass('is-invalid');
             }
         });
         
+        // Validate email format if filled
+        const emailField = $('#email');
+        const emailValue = emailField.val().trim();
+        if (emailValue !== '') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailValue)) {
+                isValid = false;
+                emailField.addClass('is-invalid');
+                invalidFields.push('Email (format tidak valid - harus: nama@domain.com)');
+                console.log('Email validation failed:', emailValue);
+                
+                // Add error message below email field
+                if (!emailField.next('.invalid-feedback').length) {
+                    emailField.after('<div class="invalid-feedback d-block">Format email tidak valid. Contoh: nama@email.com</div>');
+                }
+            } else {
+                emailField.removeClass('is-invalid');
+                emailField.next('.invalid-feedback').remove();
+            }
+        }
+        
         if (!isValid) {
             e.preventDefault();
+            console.log('Form validation failed. Invalid fields:', invalidFields);
+            
+            // Scroll to first invalid field
+            const firstInvalid = $('.is-invalid').first();
+            if (firstInvalid.length) {
+                $('html, body').animate({
+                    scrollTop: firstInvalid.offset().top - 100
+                }, 500);
+            }
+            
+            // Show simple SweetAlert
             Swal.fire({
-                icon: 'error',
-                title: 'Form Tidak Lengkap',
-                text: 'Mohon lengkapi semua field yang wajib diisi (bertanda *)',
+                icon: 'warning',
+                title: 'Form Belum Lengkap!',
+                confirmButtonText: 'OK',
                 confirmButtonColor: '#667eea'
             });
+            return false;
         }
+        
+        console.log('Form validation passed, submitting...');
+        console.log('Form data:', $(this).serialize());
+        
+        // Show loading state
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+        submitBtn.prop('disabled', true);
+        submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
+        
+        // Show loading SweetAlert
+        Swal.fire({
+            title: 'Menyimpan Data',
+            html: 'Mohon tunggu sebentar...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Let form submit naturally
+        return true;
     });
     
     // Remove invalid class on input
     $('.form-control').on('input change', function() {
         if ($(this).val() !== '') {
             $(this).removeClass('is-invalid');
+            $(this).next('.invalid-feedback').remove();
+        }
+    });
+    
+    // Real-time email validation
+    $('#email').on('blur', function() {
+        const emailValue = $(this).val().trim();
+        if (emailValue !== '') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailValue)) {
+                $(this).addClass('is-invalid');
+                if (!$(this).next('.invalid-feedback').length) {
+                    $(this).after('<div class="invalid-feedback d-block"><i class="fas fa-exclamation-triangle mr-1"></i>Format email tidak valid. Contoh: nama@email.com</div>');
+                }
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).next('.invalid-feedback').remove();
+            }
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).next('.invalid-feedback').remove();
         }
     });
 });

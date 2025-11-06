@@ -985,6 +985,16 @@ class Admisi extends BaseController
      */
     public function updatePasien($id)
     {
+        log_message('info', '[updatePasien] Method dipanggil untuk ID: ' . $id);
+        log_message('info', '[updatePasien] Request Method: ' . $this->request->getMethod());
+        log_message('info', '[updatePasien] POST Data: ' . json_encode($this->request->getPost()));
+        
+        // Check if request is POST
+        if (!$this->request->is('post')) {
+            log_message('error', '[updatePasien] Bukan POST request');
+            return redirect()->back()->with('error', 'Invalid request method');
+        }
+        
         // Inisialisasi model yang diperlukan
         $infoTambahanModel = new \App\Models\InfoTambahanPasienModel();
         $infoMedisModel = new \App\Models\InfoMedisPasienModel();
@@ -992,15 +1002,23 @@ class Admisi extends BaseController
 
         // Validasi input data
         if (!$this->validasiDataPasien()) {
+            log_message('error', '[updatePasien] Validasi gagal: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        log_message('info', '[updatePasien] Validasi berhasil, memulai transaction');
+        
         // Mulai database transaction
         $this->db->transStart();
 
         try {
             // Update data utama pasien
-            $this->updateDataUtamaPasien($id);
+            if (!$this->updateDataUtamaPasien($id)) {
+                $this->db->transRollback();
+                $errors = $this->pasienModel->errors();
+                log_message('error', '[updatePasien] Gagal update data utama: ' . json_encode($errors));
+                return redirect()->back()->withInput()->with('error', 'Gagal mengupdate data pasien: ' . (isset($errors['email']) ? $errors['email'] : 'Data tidak valid'));
+            }
             
             // Update alamat pasien
             $this->updateAlamatPasien($id);
@@ -1019,16 +1037,17 @@ class Admisi extends BaseController
 
             // Cek status transaction
             if ($this->db->transStatus() === false) {
-                log_message('error', 'Transaction gagal untuk pasien ID: ' . $id);
-                return redirect()->back()->withInput()->with('error', 'Gagal mengupdate data pasien');
+                log_message('error', '[updatePasien] Transaction gagal untuk pasien ID: ' . $id);
+                return redirect()->back()->withInput()->with('error', 'Gagal mengupdate data pasien. Silakan coba lagi.');
             }
 
-            log_message('info', 'Data pasien berhasil diupdate. ID: ' . $id);
+            log_message('info', '[updatePasien] Data pasien berhasil diupdate. ID: ' . $id);
             return redirect()->to('admisi/datapasien')->with('success', 'Data pasien berhasil diupdate');
 
         } catch (\Exception $e) {
             $this->db->transRollback();
-            log_message('error', 'Exception saat update pasien: ' . $e->getMessage());
+            log_message('error', '[updatePasien] Exception: ' . $e->getMessage());
+            log_message('error', '[updatePasien] Trace: ' . $e->getTraceAsString());
             return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -1068,7 +1087,7 @@ class Admisi extends BaseController
      * Termasuk: title, nama, jenis kelamin, tempat/tanggal lahir, identitas, kontak
      * 
      * @param int $id ID pasien
-     * @return void
+     * @return bool True jika berhasil, false jika gagal
      */
     private function updateDataUtamaPasien($id)
     {
@@ -1084,7 +1103,27 @@ class Admisi extends BaseController
             'email' => $this->request->getPost('email')
         ];
 
-        $this->pasienModel->update($id, $pasienData);
+        log_message('info', '[updateDataUtamaPasien] Data yang akan diupdate: ' . json_encode($pasienData));
+        log_message('info', '[updateDataUtamaPasien] ID Pasien: ' . $id);
+        
+        // Cek data pasien sebelum update
+        $existingData = $this->pasienModel->find($id);
+        log_message('info', '[updateDataUtamaPasien] Data sebelum update: ' . json_encode($existingData));
+        
+        $result = $this->pasienModel->update($id, $pasienData);
+        
+        // Log error jika ada
+        if (!$result) {
+            $errors = $this->pasienModel->errors();
+            log_message('error', '[updateDataUtamaPasien] Model errors: ' . json_encode($errors));
+            $dbError = $this->db->error();
+            log_message('error', '[updateDataUtamaPasien] DB Error: ' . json_encode($dbError));
+        }
+        
+        log_message('info', '[updateDataUtamaPasien] Update result: ' . ($result ? 'success' : 'failed'));
+        log_message('info', '[updateDataUtamaPasien] Affected rows: ' . $this->db->affectedRows());
+        
+        return $result;
     }
 
     /**
@@ -1245,6 +1284,50 @@ class Admisi extends BaseController
         ];
         
         return view('admisi/antrian_admisi', $data);
+    }
+
+    public function jadwalDokter()
+    {
+        // Get all doctors
+        $db = \Config\Database::connect();
+        
+        $dokterList = $db->table('users')
+            ->where('role', 'dokter')
+            ->orderBy('nama_lengkap', 'ASC')
+            ->get()
+            ->getResultArray();
+        
+        // Get schedule for each doctor
+        $jadwalList = [];
+        foreach ($dokterList as $dokter) {
+            $jadwal = $db->table('dokter_jadwal dj')
+                ->select('dj.*, p.nama as nama_poli')
+                ->join('poliklinik p', 'p.id = dj.poliklinik_id', 'left')
+                ->where('dj.dokter_id', $dokter['id'])
+                ->orderBy('
+                    FIELD(dj.hari, "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu")
+                ')
+                ->orderBy('dj.jam_mulai', 'ASC')
+                ->get()
+                ->getResultArray();
+            
+            $jadwalList[$dokter['id']] = $jadwal;
+        }
+        
+        // Get poliklinik list for filter
+        $poli_list = $db->table('poliklinik')
+            ->orderBy('nama', 'ASC')
+            ->get()
+            ->getResultArray();
+        
+        $data = [
+            'title' => 'Jadwal Praktik Dokter - SIMRS',
+            'dokterList' => $dokterList,
+            'jadwalList' => $jadwalList,
+            'poli_list' => $poli_list
+        ];
+        
+        return view('admisi/JadwalDokter', $data);
     }
 }
 

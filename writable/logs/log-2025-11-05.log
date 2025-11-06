@@ -1,0 +1,906 @@
+DEBUG - 2025-11-05 17:45:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 17:46:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 17:46:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:15:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:15:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:16:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:17:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:17:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:21:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:23:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:25:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:26:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:27:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:28:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:29:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:29:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:36:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:36:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:36:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:36:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:36:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:37:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:37:24 --> Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 18:37:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:37:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:37:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:37:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:38:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:38:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:38:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:38:43 --> Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 18:38:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:39:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:39:13 --> [registrasiPasien] Session dibersihkan untuk pendaftaran baru
+DEBUG - 2025-11-05 18:42:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:42:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:42:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:42:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:42:47 --> [updatePasien] Method dipanggil untuk ID: 2
+INFO - 2025-11-05 18:42:47 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:42:47 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","agama":"Islam","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.com","golongan_darah":"A","pendidikan_terakhir":"Sarjana","pekerjaan":"Ibu Rumah Tangga","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"jl.jabir no.8 005\/007 ragunan\r\npasar minggu","kode_pos":"12550","kelurahan":"RAGUNAN","kecamatan":"PASAR MINGGU","kabupaten_kota":"jakarta selatan","provinsi":"Daerah Khusus Ibukota Jakarta","nama_kontak":"pow","hubungan":"suami","nomor_hp_darurat":"085782222873","alamat_darurat":"Jl,Raya Dangdeur"}
+INFO - 2025-11-05 18:42:47 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:42:47 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.com"}
+INFO - 2025-11-05 18:42:47 --> [updateDataUtamaPasien] Update result: failed
+INFO - 2025-11-05 18:42:47 --> [updatePasien] Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 18:42:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:46:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:46:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:46:18 --> [updatePasien] Method dipanggil untuk ID: 2
+INFO - 2025-11-05 18:46:18 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:46:18 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","agama":"Islam","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.com","golongan_darah":"A","pendidikan_terakhir":"Sarjana","pekerjaan":"Ibu Rumah Tangga","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"jl.jabir no.8 005\/007 ragunan\r\npasar minggu","kode_pos":"12550","kelurahan":"RAGUNAN","kecamatan":"PASAR MINGGU","kabupaten_kota":"jakarta selatan","provinsi":"Daerah Khusus Ibukota Jakarta","nama_kontak":"pow","hubungan":"suami","nomor_hp_darurat":"085782222873","alamat_darurat":"Jl,Raya Dangdeur"}
+INFO - 2025-11-05 18:46:18 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:46:18 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.com"}
+INFO - 2025-11-05 18:46:18 --> [updateDataUtamaPasien] ID Pasien: 2
+INFO - 2025-11-05 18:46:18 --> [updateDataUtamaPasien] Data sebelum update: {"id":"2","no_rekam_medis":"RM000002","title":"Ny","nama_lengkap":"Rea","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","status_perkawinan":"menikah","nomor_identitas":"3047128731321","email":"rea@gmail.com","nomor_hp":"086312321635","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:33:29","tanggal_hapus":null,"created_at":"2025-07-23 03:33:29","updated_at":null,"foto_identitas":""}
+INFO - 2025-11-05 18:46:18 --> [PasienModel::update] ID: 2
+INFO - 2025-11-05 18:46:18 --> [PasienModel::update] Data: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.com"}
+INFO - 2025-11-05 18:46:18 --> [updateDataUtamaPasien] Update result: success
+INFO - 2025-11-05 18:46:18 --> [updateDataUtamaPasien] Affected rows: 1
+INFO - 2025-11-05 18:46:18 --> [updatePasien] Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 18:46:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:46:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:46:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:46:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:47:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:47:02 --> [updatePasien] Method dipanggil untuk ID: 3
+INFO - 2025-11-05 18:47:02 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:47:02 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Tn","nama_lengkap":"Dean KT","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","agama":"Islam","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail","golongan_darah":"O","pendidikan_terakhir":"","pekerjaan":"Pegawai","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"Jl.Raya Jakarta","kode_pos":"41212","kelurahan":"Cibinong","kecamatan":"Cibinong","kabupaten_kota":"Jakarta","provinsi":"Jakarta","nama_kontak":"das","hubungan":"ayah","nomor_hp_darurat":"085782222873","alamat_darurat":"jl.jabir no.8 005\/007 ragunanpasar minggu"}
+INFO - 2025-11-05 18:47:02 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:47:02 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Tn","nama_lengkap":"Dean KT","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail"}
+INFO - 2025-11-05 18:47:02 --> [updateDataUtamaPasien] ID Pasien: 3
+INFO - 2025-11-05 18:47:02 --> [updateDataUtamaPasien] Data sebelum update: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":null,"foto_identitas":""}
+INFO - 2025-11-05 18:47:02 --> [PasienModel::update] ID: 3
+INFO - 2025-11-05 18:47:02 --> [PasienModel::update] Data: {"title":"Tn","nama_lengkap":"Dean KT","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail"}
+ERROR - 2025-11-05 18:47:02 --> [updateDataUtamaPasien] Model errors: {"email":"The email field must contain a valid email address."}
+ERROR - 2025-11-05 18:47:02 --> Exception saat update pasien: Array to string conversion
+DEBUG - 2025-11-05 18:47:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:47:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:47:15 --> [updatePasien] Method dipanggil untuk ID: 3
+INFO - 2025-11-05 18:47:15 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:47:15 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Tn","nama_lengkap":"Dean kt","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","agama":"Islam","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail","golongan_darah":"O","pendidikan_terakhir":"","pekerjaan":"Pegawai","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"Jl.Raya Jakarta","kode_pos":"41212","kelurahan":"Cibinong","kecamatan":"Cibinong","kabupaten_kota":"Jakarta","provinsi":"Jakarta","nama_kontak":"das","hubungan":"ayah","nomor_hp_darurat":"085782222873","alamat_darurat":"jl.jabir no.8 005\/007 ragunanpasar minggu"}
+INFO - 2025-11-05 18:47:15 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:47:15 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Tn","nama_lengkap":"Dean kt","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail"}
+INFO - 2025-11-05 18:47:15 --> [updateDataUtamaPasien] ID Pasien: 3
+INFO - 2025-11-05 18:47:15 --> [updateDataUtamaPasien] Data sebelum update: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":null,"foto_identitas":""}
+INFO - 2025-11-05 18:47:15 --> [PasienModel::update] ID: 3
+INFO - 2025-11-05 18:47:15 --> [PasienModel::update] Data: {"title":"Tn","nama_lengkap":"Dean kt","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail"}
+ERROR - 2025-11-05 18:47:15 --> [updateDataUtamaPasien] Model errors: {"email":"The email field must contain a valid email address."}
+ERROR - 2025-11-05 18:47:15 --> Exception saat update pasien: Array to string conversion
+DEBUG - 2025-11-05 18:47:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:48:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:48:00 --> [updatePasien] Method dipanggil untuk ID: 3
+INFO - 2025-11-05 18:48:00 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:48:00 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","agama":"Islam","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail","golongan_darah":"O","pendidikan_terakhir":"","pekerjaan":"Pegawai","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"Jl.Raya Jakarta","kode_pos":"41212","kelurahan":"Cibinong","kecamatan":"Cibinong","kabupaten_kota":"Jakarta","provinsi":"Jakarta","nama_kontak":"das","hubungan":"ayah","nomor_hp_darurat":"085782222873","alamat_darurat":"jl.jabir no.8 005\/007 ragunanpasar minggu"}
+INFO - 2025-11-05 18:48:00 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:48:00 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail"}
+INFO - 2025-11-05 18:48:00 --> [updateDataUtamaPasien] ID Pasien: 3
+INFO - 2025-11-05 18:48:00 --> [updateDataUtamaPasien] Data sebelum update: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":null,"foto_identitas":""}
+INFO - 2025-11-05 18:48:00 --> [PasienModel::update] ID: 3
+INFO - 2025-11-05 18:48:00 --> [PasienModel::update] Data: {"title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail"}
+ERROR - 2025-11-05 18:48:00 --> [updateDataUtamaPasien] Model errors: {"email":"The email field must contain a valid email address."}
+ERROR - 2025-11-05 18:48:00 --> Exception saat update pasien: Array to string conversion
+DEBUG - 2025-11-05 18:48:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:48:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:48:30 --> [updatePasien] Method dipanggil untuk ID: 3
+INFO - 2025-11-05 18:48:30 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:48:30 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","agama":"Islam","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail.com","golongan_darah":"O","pendidikan_terakhir":"Sarjana","pekerjaan":"Pegawai","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"Jl.Raya Jakarta","kode_pos":"41212","kelurahan":"Cibinong","kecamatan":"Cibinong","kabupaten_kota":"Jakarta","provinsi":"Jakarta","nama_kontak":"das","hubungan":"ayah","nomor_hp_darurat":"085782222873","alamat_darurat":"jl.jabir no.8 005\/007 ragunanpasar minggu"}
+INFO - 2025-11-05 18:48:30 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:48:30 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail.com"}
+INFO - 2025-11-05 18:48:30 --> [updateDataUtamaPasien] ID Pasien: 3
+INFO - 2025-11-05 18:48:30 --> [updateDataUtamaPasien] Data sebelum update: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":null,"foto_identitas":""}
+INFO - 2025-11-05 18:48:30 --> [PasienModel::update] ID: 3
+INFO - 2025-11-05 18:48:30 --> [PasienModel::update] Data: {"title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail.com"}
+INFO - 2025-11-05 18:48:30 --> [updateDataUtamaPasien] Update result: success
+INFO - 2025-11-05 18:48:30 --> [updateDataUtamaPasien] Affected rows: 1
+INFO - 2025-11-05 18:48:30 --> [updatePasien] Data pasien berhasil diupdate. ID: 3
+DEBUG - 2025-11-05 18:48:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:48:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:48:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:48:44 --> [updatePasien] Method dipanggil untuk ID: 3
+INFO - 2025-11-05 18:48:44 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:48:44 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","agama":"Islam","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail.com","golongan_darah":"O","pendidikan_terakhir":"Sarjana","pekerjaan":"Pegawai","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"Jl.Raya Jakarta","kode_pos":"41212","kelurahan":"Cibinong","kecamatan":"Cibinong","kabupaten_kota":"Jakarta","provinsi":"Jakarta","nama_kontak":"das","hubungan":"ayah","nomor_hp_darurat":"085782222873","alamat_darurat":"jl.jabir no.8 005\/007 ragunanpasar minggu"}
+INFO - 2025-11-05 18:48:44 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:48:44 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail.com"}
+INFO - 2025-11-05 18:48:44 --> [updateDataUtamaPasien] ID Pasien: 3
+INFO - 2025-11-05 18:48:44 --> [updateDataUtamaPasien] Data sebelum update: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail.com","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":"2025-11-05 18:48:30","foto_identitas":""}
+INFO - 2025-11-05 18:48:44 --> [PasienModel::update] ID: 3
+INFO - 2025-11-05 18:48:44 --> [PasienModel::update] Data: {"title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","nomor_identitas":"32131232131","status_perkawinan":"belum_menikah","nomor_hp":"0863217312","email":"dean@gmail.com"}
+INFO - 2025-11-05 18:48:44 --> [updateDataUtamaPasien] Update result: success
+INFO - 2025-11-05 18:48:44 --> [updateDataUtamaPasien] Affected rows: 1
+INFO - 2025-11-05 18:48:44 --> [updatePasien] Data pasien berhasil diupdate. ID: 3
+DEBUG - 2025-11-05 18:48:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:49:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:49:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:49:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:49:32 --> [registrasiPasien] Session dibersihkan untuk pendaftaran baru
+DEBUG - 2025-11-05 18:51:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:57:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:57:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 18:57:47 --> [updatePasien] Method dipanggil untuk ID: 2
+INFO - 2025-11-05 18:57:47 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 18:57:47 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","agama":"Islam","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.co","golongan_darah":"A","pendidikan_terakhir":"Sarjana","pekerjaan":"Ibu Rumah Tangga","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"jl.jabir no.8 005\/007 ragunan\r\npasar minggu","kode_pos":"12550","kelurahan":"RAGUNAN","kecamatan":"PASAR MINGGU","kabupaten_kota":"jakarta selatan","provinsi":"Daerah Khusus Ibukota Jakarta","nama_kontak":"pow","hubungan":"suami","nomor_hp_darurat":"085782222873","alamat_darurat":"Jl,Raya Dangdeur"}
+INFO - 2025-11-05 18:57:47 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 18:57:47 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.co"}
+INFO - 2025-11-05 18:57:47 --> [updateDataUtamaPasien] ID Pasien: 2
+INFO - 2025-11-05 18:57:47 --> [updateDataUtamaPasien] Data sebelum update: {"id":"2","no_rekam_medis":"RM000002","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","status_perkawinan":"menikah","nomor_identitas":"3047128731321","email":"rea@gmail.com","nomor_hp":"086312321635","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:33:29","tanggal_hapus":null,"created_at":"2025-07-23 03:33:29","updated_at":"2025-11-05 18:46:18","foto_identitas":""}
+INFO - 2025-11-05 18:57:47 --> [PasienModel::update] ID: 2
+INFO - 2025-11-05 18:57:47 --> [PasienModel::update] Data: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rea@gmail.co"}
+INFO - 2025-11-05 18:57:47 --> [updateDataUtamaPasien] Update result: success
+INFO - 2025-11-05 18:57:47 --> [updateDataUtamaPasien] Affected rows: 1
+INFO - 2025-11-05 18:57:47 --> [updatePasien] Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 18:57:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 18:57:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:00:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:00:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:02:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:03:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:03:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:03:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:03:57 --> [pasienHariIni] Today: 2025-11-05
+INFO - 2025-11-05 19:03:57 --> [pasienHariIni] DB NOW: 2025-11-05 19:03:57, CURDATE: 2025-11-05, TZ: +07:00
+INFO - 2025-11-05 19:03:57 --> [pasienHariIni] Query: SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC
+INFO - 2025-11-05 19:03:57 --> [pasienHariIni] Total rows: 0
+DEBUG - 2025-11-05 19:11:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:14:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:14:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:14:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:15:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:15:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:15:16 --> [registrasiPasien] Session dibersihkan untuk pendaftaran baru
+DEBUG - 2025-11-05 19:18:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:18:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:21:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:22:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:22:12 --> [updatePasien] Method dipanggil untuk ID: 2
+INFO - 2025-11-05 19:22:12 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 19:22:12 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","agama":"Islam","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"","golongan_darah":"A","pendidikan_terakhir":"Sarjana","pekerjaan":"Ibu Rumah Tangga","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"jl.jabir no.8 005\/007 ragunan\r\npasar minggu","kode_pos":"12550","kelurahan":"RAGUNAN","kecamatan":"PASAR MINGGU","kabupaten_kota":"jakarta selatan","provinsi":"Daerah Khusus Ibukota Jakarta","nama_kontak":"pow","hubungan":"suami","nomor_hp_darurat":"085782222873","alamat_darurat":"Jl,Raya Dangdeur"}
+INFO - 2025-11-05 19:22:12 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 19:22:12 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":""}
+INFO - 2025-11-05 19:22:12 --> [updateDataUtamaPasien] ID Pasien: 2
+INFO - 2025-11-05 19:22:12 --> [updateDataUtamaPasien] Data sebelum update: {"id":"2","no_rekam_medis":"RM000002","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","status_perkawinan":"menikah","nomor_identitas":"3047128731321","email":"rea@gmail.co","nomor_hp":"086312321635","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:33:29","tanggal_hapus":null,"created_at":"2025-07-23 03:33:29","updated_at":"2025-11-05 18:57:47","foto_identitas":""}
+INFO - 2025-11-05 19:22:12 --> [PasienModel::update] ID: 2
+INFO - 2025-11-05 19:22:12 --> [PasienModel::update] Data: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":""}
+INFO - 2025-11-05 19:22:12 --> [updateDataUtamaPasien] Update result: success
+INFO - 2025-11-05 19:22:12 --> [updateDataUtamaPasien] Affected rows: 1
+INFO - 2025-11-05 19:22:12 --> [updatePasien] Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 19:22:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:22:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:22:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:22:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:22:52 --> [updatePasien] Method dipanggil untuk ID: 2
+INFO - 2025-11-05 19:22:52 --> [updatePasien] Request Method: POST
+INFO - 2025-11-05 19:22:52 --> [updatePasien] POST Data: {"csrf_test_name":"e5c0a1a4760ded341b25df6aa8edbeaa","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","agama":"Islam","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rasea@gmail.com","golongan_darah":"A","pendidikan_terakhir":"Sarjana","pekerjaan":"Ibu Rumah Tangga","kewarganegaraan":"Indonesia","suku":"Sunda","alamat_lengkap":"jl.jabir no.8 005\/007 ragunan\r\npasar minggu","kode_pos":"12550","kelurahan":"RAGUNAN","kecamatan":"PASAR MINGGU","kabupaten_kota":"jakarta selatan","provinsi":"Daerah Khusus Ibukota Jakarta","nama_kontak":"pow","hubungan":"suami","nomor_hp_darurat":"085782222873","alamat_darurat":"Jl,Raya Dangdeur"}
+INFO - 2025-11-05 19:22:52 --> [updatePasien] Validasi berhasil, memulai transaction
+INFO - 2025-11-05 19:22:52 --> [updateDataUtamaPasien] Data yang akan diupdate: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rasea@gmail.com"}
+INFO - 2025-11-05 19:22:52 --> [updateDataUtamaPasien] ID Pasien: 2
+INFO - 2025-11-05 19:22:52 --> [updateDataUtamaPasien] Data sebelum update: {"id":"2","no_rekam_medis":"RM000002","title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","status_perkawinan":"menikah","nomor_identitas":"3047128731321","email":"","nomor_hp":"086312321635","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:33:29","tanggal_hapus":null,"created_at":"2025-07-23 03:33:29","updated_at":"2025-11-05 19:22:12","foto_identitas":""}
+INFO - 2025-11-05 19:22:52 --> [PasienModel::update] ID: 2
+INFO - 2025-11-05 19:22:52 --> [PasienModel::update] Data: {"title":"Ny","nama_lengkap":"Rea Rosian","jenis_kelamin":"P","tempat_lahir":"Bogor","tanggal_lahir":"2001-02-12","nomor_identitas":"3047128731321","status_perkawinan":"menikah","nomor_hp":"086312321635","email":"rasea@gmail.com"}
+INFO - 2025-11-05 19:22:52 --> [updateDataUtamaPasien] Update result: success
+INFO - 2025-11-05 19:22:52 --> [updateDataUtamaPasien] Affected rows: 1
+INFO - 2025-11-05 19:22:52 --> [updatePasien] Data pasien berhasil diupdate. ID: 2
+DEBUG - 2025-11-05 19:22:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:23:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:23:24 --> [pasienHariIni] Today: 2025-11-05
+INFO - 2025-11-05 19:23:24 --> [pasienHariIni] DB NOW: 2025-11-05 19:23:24, CURDATE: 2025-11-05, TZ: +07:00
+INFO - 2025-11-05 19:23:24 --> [pasienHariIni] Query: SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC
+INFO - 2025-11-05 19:23:24 --> [pasienHariIni] Total rows: 0
+DEBUG - 2025-11-05 19:23:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:23:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:23:35 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 19:23:35 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 19:23:35 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 19:23:35 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 19:23:35 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 19:23:35 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 19:23:35 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 19:23:35 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 19:23:35 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 19:23:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:23:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:23:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:24:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:24:02 --> [generateNoAntrian] Generating for poli: 1, prefix: A, date: 2025-11-05
+INFO - 2025-11-05 19:24:02 --> [getLastAntrian] Searching for poli: 1, prefix: A, date: 2025-11-05
+INFO - 2025-11-05 19:24:02 --> [getLastAntrian] Found: NULL
+INFO - 2025-11-05 19:24:02 --> [generateNoAntrian] Last antrian found: NULL
+INFO - 2025-11-05 19:24:02 --> [generateNoAntrian] Generated unique no_antrian: A001
+INFO - 2025-11-05 19:24:02 --> [daftarUlangPasien] Data antrian: {"no_antrian":"A001","no_rm":"RM000003","id_poli":"1","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:24:02"}
+INFO - 2025-11-05 19:24:02 --> [daftarUlangPasien] Berhasil insert antrian dengan ID: 113
+INFO - 2025-11-05 19:24:02 --> [daftarUlangPasien] Data tersimpan di DB: {"id":"113","no_antrian":"A001","no_rm":"RM000003","id_poli":"1","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:24:02","updated_at":"2025-11-05 19:24:02"}
+DEBUG - 2025-11-05 19:24:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:24:05 --> [printAntrian] No Antrian: A001, Date: 2025-11-05
+INFO - 2025-11-05 19:24:05 --> [printAntrian] Query Result: {"id":"113","no_antrian":"A001","no_rm":"RM000003","id_poli":"1","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:24:02","updated_at":"2025-11-05 19:24:02","nama_lengkap":"Dean sibutuan","tanggal_lahir":"1992-02-01","jenis_kelamin":"L","no_rekam_medis":"RM000003"}
+INFO - 2025-11-05 19:24:05 --> [printAntrian] Last Query: SELECT `a`.*, `p`.`nama_lengkap`, `p`.`tanggal_lahir`, `p`.`jenis_kelamin`, `p`.`no_rekam_medis`
+FROM `antrian` `a`
+LEFT JOIN `pasien` `p` ON `p`.`no_rekam_medis` = `a`.`no_rm`
+WHERE `a`.`no_antrian` = 'A001'
+AND DATE(a.created_at) = '2025-11-05'
+ORDER BY `a`.`id` DESC
+ LIMIT 1
+INFO - 2025-11-05 19:24:05 --> [View antrian_admisi] Data antrian: {"id":"113","no_antrian":"A001","no_rm":"RM000003","id_poli":"1","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:24:02","updated_at":"2025-11-05 19:24:02","nama_lengkap":"Dean sibutuan","tanggal_lahir":"1992-02-01","jenis_kelamin":"L","no_rekam_medis":"RM000003"}
+DEBUG - 2025-11-05 19:24:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:24:14 --> [pasienHariIni] Today: 2025-11-05
+INFO - 2025-11-05 19:24:14 --> [pasienHariIni] DB NOW: 2025-11-05 19:24:14, CURDATE: 2025-11-05, TZ: +07:00
+INFO - 2025-11-05 19:24:14 --> [pasienHariIni] Query: SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC
+INFO - 2025-11-05 19:24:14 --> [pasienHariIni] Total rows: 1
+INFO - 2025-11-05 19:24:14 --> [pasienHariIni] Pasien: RM000003 - Status: Menunggu Pemeriksaan
+DEBUG - 2025-11-05 19:24:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:24:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:24:24 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 19:24:24 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 19:24:24 --> [getAntrianPendaftaran] Total rows: 1
+INFO - 2025-11-05 19:24:24 --> [getAntrianPendaftaran] Data: [{"id":"113","no_antrian":"A001","no_rm":"RM000003","nama_pasien":"Dean sibutuan","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:24:02","created_date":"2025-11-05"}]
+DEBUG - 2025-11-05 19:24:24 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 19:24:24 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 19:24:24 --> [Perawat::getAntrianPendaftaran] Data count: 1
+DEBUG - 2025-11-05 19:24:24 --> [Perawat::getAntrianPendaftaran] Data: [{"id":"113","no_antrian":"A001","no_rm":"RM000003","nama_pasien":"Dean sibutuan","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-11-05T19:24:02+07:00","created_date":"2025-11-05"}]
+DEBUG - 2025-11-05 19:24:24 --> Response: {"data":[{"id":"113","no_antrian":"A001","no_rm":"RM000003","nama_pasien":"Dean sibutuan","poli_tujuan":"Poli Umum","status":"Menunggu Pemeriksaan","created_at":"2025-11-05T19:24:02+07:00","created_date":"2025-11-05"}],"recordsTotal":1,"recordsFiltered":1,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 19:24:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:24:31 --> [Perawat::tandaVitalPasien] Data ke view: Array
+(
+    [id] => 113
+    [no_antrian] => A001
+    [no_rm] => RM000003
+    [id_poli] => 1
+    [status] => Menunggu Pemeriksaan
+    [created_at] => 2025-11-05 19:24:02
+    [updated_at] => 2025-11-05 19:24:02
+    [nama_pasien] => Dean sibutuan
+    [poli_tujuan] => Poli Umum
+)
+
+DEBUG - 2025-11-05 19:35:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:35:24 --> [Perawat::tandaVitalPasien] Data ke view: Array
+(
+    [id] => 113
+    [no_antrian] => A001
+    [no_rm] => RM000003
+    [id_poli] => 1
+    [status] => Menunggu Pemeriksaan
+    [created_at] => 2025-11-05 19:24:02
+    [updated_at] => 2025-11-05 19:24:02
+    [nama_pasien] => Dean sibutuan
+    [poli_tujuan] => Poli Umum
+)
+
+DEBUG - 2025-11-05 19:35:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:35:29 --> [Perawat::tandaVitalPasien] Data ke view: Array
+(
+    [id] => 113
+    [no_antrian] => A001
+    [no_rm] => RM000003
+    [id_poli] => 1
+    [status] => Menunggu Pemeriksaan
+    [created_at] => 2025-11-05 19:24:02
+    [updated_at] => 2025-11-05 19:24:02
+    [nama_pasien] => Dean sibutuan
+    [poli_tujuan] => Poli Umum
+)
+
+DEBUG - 2025-11-05 19:37:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:37:35 --> [Perawat::simpanPemeriksaan] Data masuk: {"id_antrian":"113","tekanan_darah":"120\/80","detak_jantung":"60","suhu_tubuh":"36","pernafasan":"16","berat_badan":"65","tinggi_badan":"172","keluhan":""}
+INFO - 2025-11-05 19:37:35 --> [Perawat::simpanPemeriksaan] Generated unique no_antrian: UMUM001 for poli UMUM
+DEBUG - 2025-11-05 19:37:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:38:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:38:21 --> [cetakAntrianPoli] No Antrian: UMUM001, Date: 2025-11-05
+INFO - 2025-11-05 19:38:21 --> [cetakAntrianPoli] Query Result: {"id":"55","no_antrian":"UMUM001","no_rm":"RM000003","id_poli":"1","id_antrian_perawat":"113","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:37:35","updated_at":null,"nama_lengkap":"Dean sibutuan","tanggal_lahir":"1992-02-01","jenis_kelamin":"L","no_rekam_medis":"RM000003","nama_poli":"Poli Umum","kode_poli":"UMUM"}
+INFO - 2025-11-05 19:38:21 --> [cetakAntrianPoli] Last Query: SELECT `ap`.*, `p`.`nama_lengkap`, `p`.`tanggal_lahir`, `p`.`jenis_kelamin`, `p`.`no_rekam_medis`, `pol`.`nama` as `nama_poli`, `pol`.`kode` as `kode_poli`
+FROM `antrian_poli` `ap`
+LEFT JOIN `pasien` `p` ON `p`.`no_rekam_medis` = `ap`.`no_rm`
+LEFT JOIN `poliklinik` `pol` ON `pol`.`id` = `ap`.`id_poli`
+WHERE `ap`.`no_antrian` = 'UMUM001'
+AND DATE(ap.created_at) = '2025-11-05'
+ORDER BY `ap`.`id` DESC
+ LIMIT 1
+INFO - 2025-11-05 19:38:21 --> [View antrian_perawat] Data antrian: {"id":"55","no_antrian":"UMUM001","no_rm":"RM000003","id_poli":"1","id_antrian_perawat":"113","status":"Menunggu Pemeriksaan","created_at":"2025-11-05 19:37:35","updated_at":null,"nama_lengkap":"Dean sibutuan","tanggal_lahir":"1992-02-01","jenis_kelamin":"L","no_rekam_medis":"RM000003","nama_poli":"Poli Umum","kode_poli":"UMUM"}
+DEBUG - 2025-11-05 19:38:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:38:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:38:30 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 19:38:30 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 19:38:30 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 19:38:30 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 19:38:30 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 19:38:30 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 19:38:30 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 19:38:30 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 19:38:30 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 19:38:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:38:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:38:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:38:45 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 19:38:45 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 19:38:45 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 19:38:45 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 19:38:45 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 19:38:45 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 19:38:45 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 19:38:45 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 19:38:45 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 19:38:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 19:45:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 19:45:00 --> [pasienHariIni] Today: 2025-11-05
+INFO - 2025-11-05 19:45:00 --> [pasienHariIni] DB NOW: 2025-11-05 19:45:00, CURDATE: 2025-11-05, TZ: +07:00
+INFO - 2025-11-05 19:45:00 --> [pasienHariIni] Query: SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC
+INFO - 2025-11-05 19:45:00 --> [pasienHariIni] Total rows: 1
+INFO - 2025-11-05 19:45:00 --> [pasienHariIni] Pasien: RM000003 - Status: Menunggu Dokter
+DEBUG - 2025-11-05 19:50:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 21:33:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 21:33:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 21:33:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:15:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:16:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:16:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:16:03 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 22:16:03 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 22:16:03 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 22:16:03 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:16:03 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 22:16:03 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 22:16:03 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 22:16:03 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:16:03 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 22:16:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:16:33 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 22:16:33 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 22:16:33 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 22:16:33 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:16:33 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 22:16:33 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 22:16:33 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 22:16:33 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:16:33 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 22:17:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:17:03 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 22:17:03 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 22:17:03 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 22:17:03 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:17:03 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 22:17:03 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 22:17:03 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 22:17:03 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:17:03 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 22:17:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:17:33 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 22:17:33 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 22:17:33 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 22:17:33 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:17:33 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 22:17:33 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 22:17:33 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 22:17:33 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 22:17:33 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 22:17:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:18:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:19:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:20:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:21:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:21:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:22:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:22:02 --> SOAP SUBMIT: method=POST POST={"csrf_test_name":"9be9049ae45f91d5fa4b986378094942","no_rm":"RM000003","id_antrian":"55","keluhan_utama":"test","riwayat_penyakit":"test","riwayat_alergi":"test","tekanan_darah":"180\/20","denyut_nadi":"80","suhu_tubuh":"36","respirasi":"20","pemeriksaan_fisik":"test","diagnosis":"test","prognosis":"test","obat_manual":[""],"obat_db":["13"],"jumlah_obat":["1"],"instruksi_obat":["3x1\/hari"],"edukasi":"test"}
+INFO - 2025-11-05 22:22:02 --> [Dokter::simpanPemeriksaanSoap] id_antrian: 55
+INFO - 2025-11-05 22:22:02 --> [Dokter::simpanPemeriksaanSoap] Jumlah resep: 1
+INFO - 2025-11-05 22:22:02 --> [Dokter::simpanPemeriksaanSoap] Status selanjutnya: Menunggu Farmasi
+INFO - 2025-11-05 22:22:02 --> [Dokter::simpanPemeriksaanSoap] Updated antrian_poli id=55
+INFO - 2025-11-05 22:22:02 --> [Dokter::simpanPemeriksaanSoap] Antrian poli data: {"id":"55","no_antrian":"UMUM001","no_rm":"RM000003","id_poli":"1","id_antrian_perawat":"113","status":"Menunggu Farmasi","created_at":"2025-11-05 19:37:35","updated_at":null}
+INFO - 2025-11-05 22:22:02 --> [Dokter::simpanPemeriksaanSoap] Updated antrian id=113 to "Menunggu Farmasi", rows affected: 1
+DEBUG - 2025-11-05 22:22:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:22:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:22:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:22:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:23:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:23:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:24:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:26:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:26:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:26:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:26:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:28:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:28:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:28:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:28:08 --> Completing medicine request ID: 51 for patient: RM000003
+INFO - 2025-11-05 22:28:08 --> Updated stock for medicine ID: 13 from 218 to 217
+INFO - 2025-11-05 22:28:08 --> Remaining pending medicine requests for RM000003: 0
+INFO - 2025-11-05 22:28:09 --> Created billing for patient RM000003 with total: 147000
+INFO - 2025-11-05 22:28:09 --> Updated antrian id=113 status to Menunggu Kasir for no_rm: RM000003, rows affected: 1
+DEBUG - 2025-11-05 22:28:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:28:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:28:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:29:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:29:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:30:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:32:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:32:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:32:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:35:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:35:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:36:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:38:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:38:12 --> detailTagihan called with idPasien: RM000003, tanggal: 2025-11-05
+INFO - 2025-11-05 22:38:12 --> Models initialized successfully
+INFO - 2025-11-05 22:38:12 --> Tagihan query executed. Result: {"id_tagihan":"19","no_rm":"RM000003","no_resep":"51","total_biaya":"147000.00","detail_tagihan":"[{\"nama_obat\":\"Amoxicillin 500mg\",\"jumlah\":\"1\",\"satuan\":\"Kapsul\",\"harga_satuan\":\"12000.00\",\"subtotal\":12000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":35000},{\"nama_item\":\"Biaya Dokter\",\"harga\":100000}]","status":"pending","tanggal_tagihan":"2025-11-05 22:28:08","tanggal_bayar":null,"metode_pembayaran":null,"jumlah_bayar":"0.00","kembalian":"0.00","kasir_id":null,"keterangan":null,"created_at":"2025-11-05 22:28:08","updated_at":"2025-11-05 22:28:08","nama_pasien":"Dean sibutuan","tanggal_lahir":"1992-02-01"}
+INFO - 2025-11-05 22:38:12 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-11-05 22:38:12 --> Detail tagihan parsed: [{"nama_obat":"Amoxicillin 500mg","jumlah":"1","satuan":"Kapsul","harga_satuan":"12000.00","subtotal":12000},{"nama_item":"Biaya Administrasi","harga":35000},{"nama_item":"Biaya Dokter","harga":100000}]
+INFO - 2025-11-05 22:38:12 --> Processed obat item: Amoxicillin 500mg with price: 12000.00
+INFO - 2025-11-05 22:38:12 --> Resep list processed. Total obat: 12000
+INFO - 2025-11-05 22:38:12 --> Additional models initialized
+INFO - 2025-11-05 22:38:12 --> Pasien info query executed: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail.com","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":"2025-11-05 18:48:44","foto_identitas":"","nama_dokter":"Administrator"}
+INFO - 2025-11-05 22:38:12 --> Age calculated: 33 tahun
+INFO - 2025-11-05 22:38:12 --> Data array prepared successfully
+INFO - 2025-11-05 22:38:12 --> Processing detailed view, returning modal view
+DEBUG - 2025-11-05 22:39:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:39:26 --> Proses Pembayaran Data: idPasien=RM000003, tanggal=2025-11-05, jumlahBayar=200000, metodeBayar=cash, totalTagihan=147000
+INFO - 2025-11-05 22:39:26 --> Update Data: {"status":"paid","tanggal_bayar":"2025-11-05 22:39:26","metode_pembayaran":"cash","jumlah_bayar":200000,"kembalian":53000,"kasir_id":"1","keterangan":"Pembayaran berhasil - Cash"}
+INFO - 2025-11-05 22:39:26 --> Tagihan ID to update: 19
+INFO - 2025-11-05 22:39:26 --> Total Biaya: 147000.00
+INFO - 2025-11-05 22:39:26 --> Jumlah Bayar (float): 200000
+INFO - 2025-11-05 22:39:26 --> Kembalian (calculated): 53000
+INFO - 2025-11-05 22:39:26 --> Update Result: SUCCESS
+INFO - 2025-11-05 22:39:26 --> Updated antrian id=113 status to Selesai for no_rm: RM000003
+DEBUG - 2025-11-05 22:39:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:39:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:40:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:40:44 --> detailTagihan called with idPasien: RM000003, tanggal: 2025-11-05
+INFO - 2025-11-05 22:40:44 --> Models initialized successfully
+INFO - 2025-11-05 22:40:44 --> Tagihan query executed. Result: {"id_tagihan":"19","no_rm":"RM000003","no_resep":"51","total_biaya":"147000.00","detail_tagihan":"[{\"nama_obat\":\"Amoxicillin 500mg\",\"jumlah\":\"1\",\"satuan\":\"Kapsul\",\"harga_satuan\":\"12000.00\",\"subtotal\":12000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":35000},{\"nama_item\":\"Biaya Dokter\",\"harga\":100000}]","status":"paid","tanggal_tagihan":"2025-11-05 22:28:08","tanggal_bayar":"2025-11-05 22:39:26","metode_pembayaran":"","jumlah_bayar":"200000.00","kembalian":"53000.00","kasir_id":"1","keterangan":"Pembayaran berhasil - Cash","created_at":"2025-11-05 22:28:08","updated_at":"2025-11-05 22:39:26","nama_pasien":"Dean sibutuan","tanggal_lahir":"1992-02-01"}
+INFO - 2025-11-05 22:40:44 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-11-05 22:40:44 --> Detail tagihan parsed: [{"nama_obat":"Amoxicillin 500mg","jumlah":"1","satuan":"Kapsul","harga_satuan":"12000.00","subtotal":12000},{"nama_item":"Biaya Administrasi","harga":35000},{"nama_item":"Biaya Dokter","harga":100000}]
+INFO - 2025-11-05 22:40:44 --> Processed obat item: Amoxicillin 500mg with price: 12000.00
+INFO - 2025-11-05 22:40:45 --> Resep list processed. Total obat: 12000
+INFO - 2025-11-05 22:40:45 --> Additional models initialized
+INFO - 2025-11-05 22:40:45 --> Pasien info query executed: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail.com","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":"2025-11-05 18:48:44","foto_identitas":"","nama_dokter":"Administrator"}
+INFO - 2025-11-05 22:40:45 --> Age calculated: 33 tahun
+INFO - 2025-11-05 22:40:45 --> Data array prepared successfully
+INFO - 2025-11-05 22:40:45 --> Processing simple view type
+INFO - 2025-11-05 22:40:45 --> Simple data prepared, returning JSON
+DEBUG - 2025-11-05 22:41:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:45:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:45:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:45:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:45:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:45:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:46:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:47:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:47:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:48:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:52:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:52:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:52:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:52:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:52:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:52:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:52:55 --> Completing medicine request ID: 42 for patient: RM2025110003
+INFO - 2025-11-05 22:52:55 --> Updated stock for medicine ID: 8 from 487 to 486
+INFO - 2025-11-05 22:52:55 --> Remaining pending medicine requests for RM2025110003: 0
+INFO - 2025-11-05 22:52:55 --> Created billing for patient RM2025110003 with total: 135000
+WARNING - 2025-11-05 22:52:55 --> No antrian_poli or id_antrian_perawat found for no_rm: RM2025110003 today
+DEBUG - 2025-11-05 22:52:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:53:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:53:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:53:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 22:53:52 --> detailTagihan called with idPasien: RM000003, tanggal: 2025-11-05
+INFO - 2025-11-05 22:53:52 --> Models initialized successfully
+INFO - 2025-11-05 22:53:52 --> Tagihan query executed. Result: {"id_tagihan":"19","no_rm":"RM000003","no_resep":"51","total_biaya":"147000.00","detail_tagihan":"[{\"nama_obat\":\"Amoxicillin 500mg\",\"jumlah\":\"1\",\"satuan\":\"Kapsul\",\"harga_satuan\":\"12000.00\",\"subtotal\":12000},{\"nama_item\":\"Biaya Administrasi\",\"harga\":35000},{\"nama_item\":\"Biaya Dokter\",\"harga\":100000}]","status":"paid","tanggal_tagihan":"2025-11-05 22:28:08","tanggal_bayar":"2025-11-05 22:39:26","metode_pembayaran":"","jumlah_bayar":"200000.00","kembalian":"53000.00","kasir_id":"1","keterangan":"Pembayaran berhasil - Cash","created_at":"2025-11-05 22:28:08","updated_at":"2025-11-05 22:39:26","nama_pasien":"Dean sibutuan","tanggal_lahir":"1992-02-01"}
+INFO - 2025-11-05 22:53:52 --> Tagihan found, parsing detail_tagihan
+INFO - 2025-11-05 22:53:52 --> Detail tagihan parsed: [{"nama_obat":"Amoxicillin 500mg","jumlah":"1","satuan":"Kapsul","harga_satuan":"12000.00","subtotal":12000},{"nama_item":"Biaya Administrasi","harga":35000},{"nama_item":"Biaya Dokter","harga":100000}]
+INFO - 2025-11-05 22:53:52 --> Processed obat item: Amoxicillin 500mg with price: 12000.00
+INFO - 2025-11-05 22:53:52 --> Resep list processed. Total obat: 12000
+INFO - 2025-11-05 22:53:52 --> Additional models initialized
+INFO - 2025-11-05 22:53:52 --> Pasien info query executed: {"id":"3","no_rekam_medis":"RM000003","title":"Tn","nama_lengkap":"Dean sibutuan","jenis_kelamin":"L","tempat_lahir":"Jakarta","tanggal_lahir":"1992-02-01","status_perkawinan":"belum_menikah","nomor_identitas":"32131232131","email":"dean@gmail.com","nomor_hp":"0863217312","status_aktif":"aktif","tanggal_daftar":"2025-07-23 03:41:45","tanggal_hapus":null,"created_at":"2025-07-23 03:41:45","updated_at":"2025-11-05 18:48:44","foto_identitas":"","nama_dokter":"Administrator"}
+INFO - 2025-11-05 22:53:52 --> Age calculated: 33 tahun
+INFO - 2025-11-05 22:53:52 --> Data array prepared successfully
+INFO - 2025-11-05 22:53:52 --> Processing simple view type
+INFO - 2025-11-05 22:53:52 --> Simple data prepared, returning JSON
+DEBUG - 2025-11-05 22:53:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:53:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:54:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:54:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:54:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:54:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:54:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:54:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 22:58:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:01:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:01:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 23:01:36 --> [pasienHariIni] Today: 2025-11-05
+INFO - 2025-11-05 23:01:36 --> [pasienHariIni] DB NOW: 2025-11-05 23:01:36, CURDATE: 2025-11-05, TZ: +07:00
+INFO - 2025-11-05 23:01:36 --> [pasienHariIni] Query: SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC
+INFO - 2025-11-05 23:01:36 --> [pasienHariIni] Total rows: 1
+INFO - 2025-11-05 23:01:36 --> [pasienHariIni] Pasien: RM000003 - Status: Selesai
+DEBUG - 2025-11-05 23:01:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:01:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-05 23:01:48 --> [getAntrianPendaftaran] CURDATE: 2025-11-05
+INFO - 2025-11-05 23:01:48 --> [getAntrianPendaftaran] Query: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+INFO - 2025-11-05 23:01:48 --> [getAntrianPendaftaran] Total rows: 0
+INFO - 2025-11-05 23:01:48 --> [getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 23:01:48 --> [Perawat::getAntrianPendaftaran] Builder state before execute
+DEBUG - 2025-11-05 23:01:48 --> [Perawat::getAntrianPendaftaran] SQL: SELECT 
+                    a.id,
+                    a.no_antrian,
+                    a.no_rm,
+                    p.nama_lengkap as nama_pasien,
+                    pol.nama as poli_tujuan,
+                    a.status,
+                    a.created_at,
+                    DATE(a.created_at) as created_date
+                FROM antrian a
+                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm
+                LEFT JOIN poliklinik pol ON pol.id = a.id_poli
+                WHERE a.status = 'Menunggu Pemeriksaan'
+                  AND DATE(a.created_at) = CURDATE()
+                ORDER BY a.created_at ASC
+DEBUG - 2025-11-05 23:01:48 --> [Perawat::getAntrianPendaftaran] Data count: 0
+DEBUG - 2025-11-05 23:01:48 --> [Perawat::getAntrianPendaftaran] Data: []
+DEBUG - 2025-11-05 23:01:48 --> Response: {"data":[],"recordsTotal":0,"recordsFiltered":0,"debug":{"sql":"SELECT \n                    a.id,\n                    a.no_antrian,\n                    a.no_rm,\n                    p.nama_lengkap as nama_pasien,\n                    pol.nama as poli_tujuan,\n                    a.status,\n                    a.created_at,\n                    DATE(a.created_at) as created_date\n                FROM antrian a\n                LEFT JOIN pasien p ON BINARY p.no_rekam_medis = BINARY a.no_rm\n                LEFT JOIN poliklinik pol ON pol.id = a.id_poli\n                WHERE a.status = 'Menunggu Pemeriksaan'\n                  AND DATE(a.created_at) = CURDATE()\n                ORDER BY a.created_at ASC","error":null}}
+DEBUG - 2025-11-05 23:01:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:01:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:02:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:02:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:02:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:02:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-05 23:02:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
