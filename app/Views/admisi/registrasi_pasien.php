@@ -253,7 +253,7 @@ label {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="nomor_identitas">Nomor KTP/SIM/Passport <span class="text-danger">*</span></label>
+                                    <label for="nomor_identitas">Nomor KTP/SIM <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="nomor_identitas" name="nomor_identitas" required autocomplete="off">
                                     <small id="nomor_identitas_feedback" class="form-text"></small>
                                 </div>

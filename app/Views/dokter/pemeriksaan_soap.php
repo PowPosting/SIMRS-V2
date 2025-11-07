@@ -337,7 +337,7 @@ select.form-control {
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="form-label" for="keluhan_utama">
-                                    <i class="bi bi-exclamation-circle me-2"></i>Keluhan Utama
+                                    <i class="bi bi-exclamation-circle me-2"></i>Keluhan Utama <span style="color: #dc3545;">*</span>
                                 </label>
                                 <textarea class="form-control" id="keluhan_utama" name="keluhan_utama" rows="4" placeholder="Deskripsikan keluhan utama pasien dengan detail..." required></textarea>
                             </div>
@@ -371,45 +371,45 @@ select.form-control {
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label" for="tekanan_darah">
-                                    <i class="bi bi-heart-pulse me-2"></i>Tekanan Darah
+                                    <i class="bi bi-heart-pulse me-2"></i>Tekanan Darah <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="text" class="form-control" id="tekanan_darah" name="tekanan_darah" placeholder="120/80" pattern="[0-9]+/[0-9]+" title="Format: sistole/diastole (contoh: 120/80)">
+                                <input type="text" class="form-control" id="tekanan_darah" name="tekanan_darah" placeholder="120/80" pattern="[0-9]+/[0-9]+" title="Format: sistole/diastole (contoh: 120/80)" required>
                                 <small class="text-muted">Format: sistole/diastole</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label" for="denyut_nadi">
-                                    <i class="bi bi-heart me-2"></i>Denyut Nadi
+                                    <i class="bi bi-heart me-2"></i>Denyut Nadi <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="number" class="form-control" id="denyut_nadi" name="denyut_nadi" placeholder="80" min="0" max="300" step="1">
+                                <input type="number" class="form-control" id="denyut_nadi" name="denyut_nadi" placeholder="80" min="0" max="300" step="1" required>
                                 <small class="text-muted">Normal: 60-100 x/menit</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label" for="suhu_tubuh">
-                                    <i class="bi bi-thermometer-half me-2"></i>Suhu Tubuh
+                                    <i class="bi bi-thermometer-half me-2"></i>Suhu Tubuh <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="number" class="form-control" id="suhu_tubuh" name="suhu_tubuh" placeholder="36.5" min="30" max="45" step="0.1">
+                                <input type="number" class="form-control" id="suhu_tubuh" name="suhu_tubuh" placeholder="36.5" min="30" max="45" step="0.1" required>
                                 <small class="text-muted">Normal: 36.1-37.2°C</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label" for="respirasi">
-                                    <i class="bi bi-lungs me-2"></i>Respirasi
+                                    <i class="bi bi-lungs me-2"></i>Respirasi <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="number" class="form-control" id="respirasi" name="respirasi" placeholder="20" min="0" max="100" step="1">
+                                <input type="number" class="form-control" id="respirasi" name="respirasi" placeholder="20" min="0" max="100" step="1" required>
                                 <small class="text-muted">Normal: 16-24 x/menit</small>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label class="form-label" for="pemeriksaan_fisik">
-                                    <i class="bi bi-search me-2"></i>Pemeriksaan Fisik
+                                    <i class="bi bi-search me-2"></i>Pemeriksaan Fisik</>
                                 </label>
-                                <textarea class="form-control" id="pemeriksaan_fisik" name="pemeriksaan_fisik" rows="4" placeholder="Hasil pemeriksaan fisik lengkap (inspeksi, palpasi, perkusi, auskultasi)..."></textarea>
+                                <textarea class="form-control" id="pemeriksaan_fisik" name="pemeriksaan_fisik" rows="4" placeholder="Hasil pemeriksaan fisik lengkap (inspeksi, palpasi, perkusi, auskultasi)..." ></textarea>
                             </div>
                         </div>
                     </div>

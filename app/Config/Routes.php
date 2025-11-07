@@ -188,6 +188,8 @@ $routes->group('dokter', function($routes) {
         return view('dokter/pemeriksaasn_soap_sukses');
     });
     $routes->get('detailpemeriksaanpasien/(:num)', 'Dokter::detailPemeriksaanPasien/$1');
+    $routes->get('catatan-pemeriksaan', 'Dokter::catatanPemeriksaan');
+    $routes->get('detail-pemeriksaan/(:num)', 'Dokter::detailPemeriksaan/$1');
 });
 
 // Rekam Medis Routes (Multi-role: admin, dokter, perawat, admisi)

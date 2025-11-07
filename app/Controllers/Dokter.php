@@ -520,5 +520,54 @@ class Dokter extends BaseController
         return view('dokter/detailpemeriksaanpasien', $data);
     }
 
+    public function catatanPemeriksaan()
+    {
+        $db = \Config\Database::connect();
+        
+        // Query untuk mengambil data pemeriksaan_awal
+        $builder = $db->table('pemeriksaan_awal pa');
+        $builder->select('pa.*, a.no_rm, p.nama_lengkap');
+        $builder->join('antrian a', 'a.id = pa.id_antrian', 'left');
+        $builder->join('pasien p', 'LOWER(p.no_rekam_medis) = LOWER(a.no_rm)', 'left');
+        $builder->orderBy('pa.created_at', 'DESC');
+        
+        $list_pemeriksaan = $builder->get()->getResultArray();
+        
+        $data = [
+            'title' => 'Catatan Pemeriksaan Pasien - SIMRS',
+            'pageTitle' => 'Catatan Pemeriksaan Pasien',
+            'list_pemeriksaan' => $list_pemeriksaan,
+        ];
+        
+        return view('dokter/catatan_pemeriksaan', $data);
+    }
+
+    public function detailPemeriksaan($id = null)
+    {
+        if (!$id) {
+            return '<div class="alert alert-danger">ID tidak valid</div>';
+        }
+        
+        $db = \Config\Database::connect();
+        
+        // Ambil detail pemeriksaan_awal
+        $pemeriksaan = $db->table('pemeriksaan_awal pa')
+            ->select('pa.*, a.no_rm as no_rekam_medis, p.nama_lengkap')
+            ->join('antrian a', 'a.id = pa.id_antrian', 'left')
+            ->join('pasien p', 'LOWER(p.no_rekam_medis) = LOWER(a.no_rm)', 'left')
+            ->where('pa.id', $id)
+            ->get()->getRowArray();
+        
+        if (!$pemeriksaan) {
+            return '<div class="alert alert-danger">Data tidak ditemukan</div>';
+        }
+        
+        $data = [
+            'pemeriksaan' => $pemeriksaan,
+        ];
+        
+        return view('dokter/detail_pemeriksaan_partial', $data);
+    }
+
 
 }

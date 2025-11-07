@@ -1,0 +1,107 @@
+DEBUG - 2025-11-07 00:41:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:42:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:42:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:42:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:42:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:42:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:46:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:46:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:48:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:48:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:51:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:56:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:56:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:57:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:57:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 00:57:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:00:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:04:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:04:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:04:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:09:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:19:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:19:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:21:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:21:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:22:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:22:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:25:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-07 01:25:37 --> Completing medicine request ID: 53 for patient: RM2025110001
+INFO - 2025-11-07 01:25:37 --> Updated stock for medicine ID: 19 from 60 to 59
+INFO - 2025-11-07 01:25:37 --> Remaining pending medicine requests for RM2025110001: 0
+INFO - 2025-11-07 01:25:37 --> Created billing for patient RM2025110001 with total: 135000
+WARNING - 2025-11-07 01:25:37 --> No antrian_poli or id_antrian_perawat found for no_rm: RM2025110001 today
+DEBUG - 2025-11-07 01:25:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:26:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-07 01:27:39 --> Completing medicine request ID: 52 for patient: RM2025110001
+INFO - 2025-11-07 01:27:39 --> Remaining pending medicine requests for RM2025110001: 0
+WARNING - 2025-11-07 01:27:39 --> No antrian_poli or id_antrian_perawat found for no_rm: RM2025110001 today
+DEBUG - 2025-11-07 01:27:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:27:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-07 01:27:46 --> Completing medicine request ID: 54 for patient: RM2025110001
+INFO - 2025-11-07 01:27:46 --> Updated stock for medicine ID: 16 from 64 to 62
+INFO - 2025-11-07 01:27:46 --> Remaining pending medicine requests for RM2025110001: 0
+WARNING - 2025-11-07 01:27:46 --> No antrian_poli or id_antrian_perawat found for no_rm: RM2025110001 today
+DEBUG - 2025-11-07 01:27:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:28:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:28:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:28:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:28:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:34:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:34:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:36:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:36:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:37:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:37:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:38:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:38:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 01:38:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:13:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:14:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:14:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:14:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-07 11:14:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-07 11:14:16 --> [generateNoAntrian] Generating for poli: 1, prefix: A, date: 2025-11-07
+INFO - 2025-11-07 11:14:16 --> [getLastAntrian] Searching for poli: 1, prefix: A, date: 2025-11-07
+INFO - 2025-11-07 11:14:16 --> [getLastAntrian] Found: NULL
+INFO - 2025-11-07 11:14:16 --> [generateNoAntrian] Last antrian found: NULL
+INFO - 2025-11-07 11:14:16 --> [generateNoAntrian] Generated unique no_antrian: A001
+INFO - 2025-11-07 11:14:16 --> [daftarUlangPasien] Data antrian: {"no_antrian":"A001","no_rm":"RM2025070004","id_poli":"1","status":"Menunggu Pemeriksaan","created_at":"2025-11-07 11:14:16"}
+INFO - 2025-11-07 11:14:16 --> [daftarUlangPasien] Berhasil insert antrian dengan ID: 116
+INFO - 2025-11-07 11:14:16 --> [daftarUlangPasien] Data tersimpan di DB: {"id":"116","no_antrian":"A001","no_rm":"RM2025070004","id_poli":"1","status":"Menunggu Pemeriksaan","created_at":"2025-11-07 11:14:16","updated_at":"2025-11-07 11:14:16"}
+DEBUG - 2025-11-07 11:14:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-11-07 11:14:20 --> [pasienHariIni] Today: 2025-11-07
+INFO - 2025-11-07 11:14:20 --> [pasienHariIni] DB NOW: 2025-11-07 11:14:20, CURDATE: 2025-11-07, TZ: +07:00
+INFO - 2025-11-07 11:14:20 --> [pasienHariIni] Query: SELECT 
+                    a.id,
+                    a.no_rm,
+                    a.no_antrian,
+                    a.id_poli,
+                    a.status,
+                    a.created_at,
+                    p.title, 
+                    p.nama_lengkap, 
+                    p.jenis_kelamin, 
+                    p.tanggal_lahir, 
+                    p.no_rekam_medis
+                FROM antrian a
+                LEFT JOIN pasien p ON p.no_rekam_medis = a.no_rm
+                INNER JOIN (
+                    SELECT no_rm, MAX(id) as max_id
+                    FROM antrian
+                    WHERE DATE(created_at) = CURDATE()
+                    GROUP BY no_rm
+                ) latest_antrian ON latest_antrian.max_id = a.id
+                ORDER BY a.created_at DESC
+INFO - 2025-11-07 11:14:20 --> [pasienHariIni] Total rows: 1
+INFO - 2025-11-07 11:14:20 --> [pasienHariIni] Pasien: RM2025070004 - Status: Menunggu Pemeriksaan

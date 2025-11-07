@@ -91,7 +91,7 @@
             </div>
             <div class="card-footer text-end">
                 <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Simpan</button>
-                <a href="<?= base_url('farmasi/stokobat') ?>" class="btn btn-secondary ms-2">Batal</a>
+                <a href="<?= base_url('farmasi/data-master-obat') ?>" class="btn btn-secondary ms-2">Batal</a>
             </div>
         </form>
     </div>

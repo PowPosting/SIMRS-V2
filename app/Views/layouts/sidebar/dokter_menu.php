@@ -30,3 +30,11 @@
         <span class="nav-text">Rekam Medis</span>
     </a>
 </li>
+
+<!-- Catatan Pemeriksaan -->
+<li class="nav-item">
+    <a href="<?= base_url('dokter/catatan-pemeriksaan') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Triase & Pemeriksaan">
+        <i class="fa-solid fa-book-medical nav-icon"></i>
+        <span class="nav-text">Catatan Pemeriksaan</span>
+    </a>
+</li>
