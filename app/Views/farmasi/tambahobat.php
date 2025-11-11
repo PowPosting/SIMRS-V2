@@ -32,17 +32,6 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Kategori <span class="text-danger">*</span></label>
-                        <select name="kategori" class="form-control" required>
-                            <option value="">- Pilih Kategori -</option>
-                            <option>Generik</option>
-                            <option>Paten</option>
-                            <option>Psikotropika</option>
-                            <option>Narkotika</option>
-                            <option>Lainnya</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
                         <label class="form-label">Satuan <span class="text-danger">*</span></label>
                         <select name="satuan" class="form-control" required>
                             <option value="">- Pilih Satuan -</option>

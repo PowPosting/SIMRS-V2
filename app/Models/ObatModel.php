@@ -16,7 +16,6 @@ class ObatModel extends Model
         'kode_obat',
         'nama_obat',
         'jenis_obat',
-        'kategori',
         'satuan',
         'harga_beli',
         'harga_jual',

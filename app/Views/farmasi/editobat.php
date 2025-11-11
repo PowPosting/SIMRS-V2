@@ -29,16 +29,6 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Kategori <span class="text-danger">*</span></label>
-                        <select name="kategori" class="form-control" required>
-                            <option value="">- Pilih Kategori -</option>
-                            <?php $kategoriList = ['Generik','Paten','Psikotropika','Narkotika','Lainnya'];
-                            foreach($kategoriList as $kat): ?>
-                                <option value="<?= $kat ?>" <?= ($obat['kategori']??'')===$kat?'selected':'' ?>><?= $kat ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
                         <label class="form-label">Satuan <span class="text-danger">*</span></label>
                         <select name="satuan" class="form-control" required>
                             <option value="">- Pilih Satuan -</option>
