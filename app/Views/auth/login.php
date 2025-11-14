@@ -199,27 +199,29 @@
                 <?= csrf_field() ?>
                 
                 <!-- Flash Messages -->
-                <?php if (session()->getFlashdata('error')): ?>
+                <?php if (session()->getFlashdata('error') && !empty(trim(session()->getFlashdata('error')))): ?>
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-circle me-2"></i>
                         <?= session()->getFlashdata('error') ?>
                     </div>
                 <?php endif; ?>
                 
-                <?php if (session()->getFlashdata('success')): ?>
+                <?php if (session()->getFlashdata('success') && !empty(trim(session()->getFlashdata('success')))): ?>
                     <div class="alert alert-success" role="alert">
                         <i class="fas fa-check-circle me-2"></i>
                         <?= session()->getFlashdata('success') ?>
                     </div>
                 <?php endif; ?>
                 
-                <?php if (session()->getFlashdata('errors')): ?>
+                <?php if (session()->getFlashdata('errors') && !empty(session()->getFlashdata('errors'))): ?>
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i>
                         <strong>Terjadi kesalahan:</strong>
                         <ul class="mb-0 mt-2">
                             <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                                <li><?= esc($error) ?></li>
+                                <?php if (!empty(trim($error))): ?>
+                                    <li><?= esc($error) ?></li>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
                     </div>

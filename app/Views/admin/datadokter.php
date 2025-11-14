@@ -20,7 +20,6 @@
                             <th>Email</th>
                             <th>Telepon</th>
                             <th>Status</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,11 +53,6 @@
                                         <span class="badge <?= $badgeClass ?>">
                                             <?= ucfirst($status) ?>
                                         </span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" title="Hapus Dokter" onclick="return confirm('Yakin ingin menghapus dokter ini?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
