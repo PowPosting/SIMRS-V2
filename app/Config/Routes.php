@@ -162,6 +162,7 @@ $routes->group('farmasi', function($routes) {
     //laporan
     $routes->get('laporan', 'Farmasi::laporanFarmasi');
     $routes->get('getLaporanPemakaian', 'Farmasi::getLaporanPemakaian');
+    $routes->get('exportLaporanPemakaian', 'Farmasi::exportLaporanPemakaian');
 
 });
 

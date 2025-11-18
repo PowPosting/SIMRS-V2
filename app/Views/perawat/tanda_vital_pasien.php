@@ -7,7 +7,7 @@
             <!-- Page Header -->
             <div class="mb-4">
                 <h2 class="h4 mb-0 text-gray-800">
-                    <i class="fas fa-heartbeat text-danger mr-2"></i>
+                    <i class="bi bi-activity mr-2"></i>
                     Form Tanda Vital Pasien
                 </h2>
                 <p class="text-muted small mb-0">Pengukuran dan pencatatan tanda-tanda vital pasien</p>
@@ -71,7 +71,7 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="tekanan_darah" class="font-weight-bold">
-                                        <i class="fas fa-tint text-danger mr-2"></i>Tekanan Darah
+                                        <i class="bi bi-droplet mr-2"></i>Tekanan Darah
                                     </label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="tekanan_darah" 
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="detak_jantung" class="font-weight-bold">
-                                        <i class="fas fa-heartbeat text-danger mr-2"></i>Detak Jantung
+                                        <i class="bi bi-heart-pulse mr-2"></i>Denyut Nadi
                                     </label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" id="detak_jantung" 
@@ -101,7 +101,7 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="suhu_tubuh" class="font-weight-bold">
-                                        <i class="fas fa-thermometer-half text-warning mr-2"></i>Suhu Tubuh
+                                        <i class="bi bi-thermometer-half mr-2"></i>Suhu Tubuh
                                     </label>
                                     <div class="input-group">
                                         <input type="number" step="0.1" min="30" max="45" class="form-control" 
@@ -119,7 +119,7 @@
                             <hr class="my-4">
 
                             <!-- Pengukuran Fisik -->
-                            <h5 class="text-success mb-3">
+                            <h5 class="text-primary mb-3">
                                 <i class="fas fa-ruler-combined mr-2"></i>
                                 Pengukuran Fisik
                             </h5>
@@ -127,7 +127,7 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="pernafasan" class="font-weight-bold">
-                                        <i class="fas fa-lungs text-info mr-2"></i>Pernafasan
+                                        <i class="bi bi-lungs mr-2"></i>Respirasi
                                     </label>
                                     <div class="input-group">
                                         <input type="number" min="10" max="60" class="form-control" 
@@ -137,12 +137,12 @@
                                         </div>
                                     </div>
                                     <small class="form-text text-success">
-                                        <i class="fas fa-check-circle mr-1"></i>Normal: 16-20 x/menit
+                                        <i class="fas fa-check-circle mr-1"></i>Normal: 16-24 x/menit
                                     </small>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="berat_badan" class="font-weight-bold">
-                                        <i class="fas fa-weight text-success mr-2"></i>Berat Badan
+                                        <i class="bi bi-bag-check mr-2"></i>Berat Badan
                                     </label>
                                     <div class="input-group">
                                         <input type="number" step="0.1" min="1" max="300" class="form-control" 
@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="tinggi_badan" class="font-weight-bold">
-                                        <i class="fas fa-ruler-vertical text-success mr-2"></i>Tinggi Badan
+                                        <i class="bi bi-rulers mr-2"></i>Tinggi Badan
                                     </label>
                                     <div class="input-group">
                                         <input type="number" min="30" max="250" class="form-control" 
@@ -175,14 +175,14 @@
                             <hr class="my-4">
 
                             <!-- Keluhan & Catatan -->
-                            <h5 class="text-warning mb-3">
+                            <h5 class="text-primary mb-3">
                                 <i class="fas fa-clipboard-list mr-2"></i>
                                 Keluhan & Catatan
                             </h5>
                             
                             <div class="form-group">
                                 <label for="keluhan" class="font-weight-bold">
-                                    <i class="fas fa-comment-medical text-warning mr-2"></i>Keluhan Pasien
+                                    <i class="fas fa-comment-medical text-primary mr-2"></i>Keluhan Pasien
                                 </label>
                                 <textarea class="form-control" id="keluhan" name="keluhan" rows="4" 
                                           placeholder="Deskripsikan keluhan utama atau gejala yang dialami pasien..."></textarea>

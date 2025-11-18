@@ -1035,4 +1035,135 @@ class Farmasi extends BaseController
         ]);
     }
     
+    public function exportLaporanPemakaian()
+    {
+        $db = \Config\Database::connect();
+        $startDate = $this->request->getGet('start_date') ?? date('Y-m-d');
+        $endDate = $this->request->getGet('end_date') ?? date('Y-m-d');
+        
+        // Query data laporan
+        $laporan = $db->query("
+            SELECT 
+                o.nama_obat,
+                o.satuan,
+                o.harga_jual as harga,
+                SUM(r.jumlah) as total_jumlah,
+                SUM(r.jumlah * o.harga_jual) as total_nilai,
+                COUNT(DISTINCT r.id) as jumlah_transaksi
+            FROM resep r
+            LEFT JOIN obat o ON o.id_obat = r.id_obat
+            WHERE r.status = 'completed'
+            AND DATE(r.tanggal_resep) BETWEEN ? AND ?
+            GROUP BY r.id_obat
+            ORDER BY total_nilai DESC
+        ", [$startDate, $endDate])->getResultArray();
+        
+        $grandTotal = array_sum(array_column($laporan, 'total_nilai'));
+        
+        // Load template
+        $templatePath = APPPATH . 'Templates/excel/template_laporan_farmasi.xlsx';
+        
+        if (!file_exists($templatePath)) {
+            log_message('error', 'Template tidak ditemukan: ' . $templatePath);
+            return $this->response->setStatusCode(500)->setJSON([
+                'success' => false,
+                'message' => 'Template Excel tidak ditemukan'
+            ]);
+        }
+        
+        try {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($templatePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            
+            // Update periode di template
+            $periodeText = 'Periode: ' . date('d/m/Y', strtotime($startDate)) . ' s/d ' . date('d/m/Y', strtotime($endDate));
+            $sheet->setCellValue('A3', $periodeText);
+            
+            // Data rows mulai dari row 6
+            $row = 6;
+            $no = 1;
+            foreach ($laporan as $item) {
+                $sheet->setCellValue('A' . $row, $no++);
+                $sheet->setCellValue('B' . $row, $item['nama_obat']);
+                $sheet->setCellValue('C' . $row, $item['satuan']);
+                $sheet->setCellValue('D' . $row, $item['harga']);
+                $sheet->setCellValue('E' . $row, $item['total_jumlah']);
+                $sheet->setCellValue('F' . $row, $item['jumlah_transaksi']);
+                $sheet->setCellValue('G' . $row, $item['total_nilai']);
+                
+                // Format currency
+                $sheet->getStyle('D' . $row)->getNumberFormat()
+                    ->setFormatCode('#,##0');
+                $sheet->getStyle('G' . $row)->getNumberFormat()
+                    ->setFormatCode('#,##0');
+                
+                // Center align numbers
+                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                
+                // Right align currency
+                $sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                
+                // Add borders
+                $styleArray = [
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => 'FF000000'],
+                        ],
+                    ],
+                ];
+                $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($styleArray);
+                
+                $row++;
+            }
+            
+            // Grand Total
+            if (!empty($laporan)) {
+                $sheet->setCellValue('A' . $row, 'GRAND TOTAL');
+                $sheet->mergeCells('A' . $row . ':F' . $row);
+                $sheet->setCellValue('G' . $row, $grandTotal);
+                
+                $sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
+                $sheet->getStyle('A' . $row . ':G' . $row)->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FFFFEB3B');
+                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                
+                // Add borders to grand total
+                $styleArray = [
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => 'FF000000'],
+                        ],
+                    ],
+                ];
+                $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray($styleArray);
+            }
+            
+            // Output file
+            $filename = 'Laporan_Pemakaian_Obat_' . date('Ymd', strtotime($startDate)) . '_' . date('Ymd', strtotime($endDate)) . '.xlsx';
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $filename . '"');
+            header('Cache-Control: max-age=0');
+            
+            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            $writer->save('php://output');
+            exit;
+            
+        } catch (\Exception $e) {
+            log_message('error', 'Export Excel error: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON([
+                'success' => false,
+                'message' => 'Gagal export Excel: ' . $e->getMessage()
+            ]);
+        }
+    }
+    
 }

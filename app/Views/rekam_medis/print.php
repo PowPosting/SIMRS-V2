@@ -21,32 +21,56 @@
         }
 
         .header {
-            text-align: center;
-            border-bottom: 3px solid #000;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            flex: 1;
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            margin-bottom: 3px;
             color: #000;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
         .header p {
-            font-size: 11px;
-            color: #666;
-            margin: 2px 0;
+            font-size: 10px;
+            color: #333;
+            margin: 1px 0;
+            line-height: 1.4;
+        }
+
+        .header-right {
+            text-align: right;
+            border-left: 2px solid #000;
+            padding-left: 15px;
         }
 
         .rm-number {
-            text-align: center;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
-            margin: 15px 0;
-            padding: 10px;
-            background: #f5f5f5;
-            border: 2px dashed #333;
+            color: #000;
+        }
+
+        .rm-label {
+            font-size: 10px;
+            color: #666;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .doc-info {
+            margin-top: 5px;
+            font-size: 9px;
+            color: #666;
         }
 
         .section {
@@ -54,44 +78,58 @@
         }
 
         .section-title {
-            background: #000;
-            color: white;
-            padding: 8px 12px;
+            background: #e8e8e8;
+            color: #000;
+            padding: 6px 10px;
             font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 13px;
+            margin-bottom: 8px;
+            margin-top: 15px;
+            font-size: 12px;
+            border-left: 4px solid #000;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .info-table td {
-            padding: 6px 10px;
+            padding: 4px 8px;
             vertical-align: top;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .info-table td:first-child {
-            width: 30%;
-            font-weight: bold;
+            width: 28%;
+            font-weight: normal;
+            color: #666;
+            font-size: 11px;
         }
 
         .info-table td:nth-child(2) {
-            width: 5%;
+            width: 2%;
+            color: #666;
+        }
+
+        .info-table td:nth-child(3) {
+            font-weight: 500;
+            color: #000;
         }
 
         .kunjungan-item {
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            margin-bottom: 12px;
             page-break-inside: avoid;
+            background: #fff;
         }
 
         .kunjungan-header {
-            background: #f8f9fa;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            background: #f5f5f5;
+            padding: 8px 10px;
+            border-bottom: 1px solid #ccc;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -103,14 +141,15 @@
 
         .kunjungan-header-left h4 {
             margin: 0;
-            font-size: 14px;
+            font-size: 12px;
             color: #000;
+            font-weight: bold;
         }
 
         .kunjungan-header-left p {
             margin: 2px 0 0 0;
-            font-size: 11px;
-            color: #666;
+            font-size: 10px;
+            color: #555;
         }
 
         .kunjungan-header-right {
@@ -119,12 +158,13 @@
 
         .badge {
             display: inline-block;
-            padding: 4px 8px;
-            background: #007bff;
+            padding: 3px 8px;
+            background: #333;
             color: white;
-            border-radius: 3px;
-            font-size: 11px;
+            border-radius: 2px;
+            font-size: 10px;
             font-weight: bold;
+            font-family: 'Courier New', monospace;
         }
 
         .kunjungan-body {
@@ -149,23 +189,27 @@
         }
 
         .vital-item {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 4px;
-            border-left: 3px solid #007bff;
+            background: #fafafa;
+            padding: 6px 10px;
+            border-radius: 0;
+            border: 1px solid #ddd;
+            border-left: 3px solid #333;
             flex: 0 0 calc(33.333% - 10px);
         }
 
         .vital-label {
-            font-size: 10px;
+            font-size: 9px;
             color: #666;
             display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .vital-value {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             color: #000;
+            margin-top: 2px;
         }
 
         .soap-section {
@@ -179,16 +223,20 @@
         .soap-label {
             font-weight: bold;
             color: #000;
-            font-size: 12px;
+            font-size: 11px;
             margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .soap-content {
-            padding: 8px;
-            background: #f8f9fa;
-            border-left: 3px solid #28a745;
+            padding: 8px 10px;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-left: 3px solid #333;
             font-size: 11px;
             white-space: pre-line;
+            line-height: 1.6;
         }
 
         .footer {
@@ -218,20 +266,23 @@
         }
     </style>
 </head>
-<body onload="window.print(); setTimeout(() => window.close(), 500);">
+<body onload="window.print();">
     <div class="header">
-        <h1>REKAM MEDIS PASIEN</h1>
-        <p>SIMRS HAMORI</p>
-        <p>Jl. Contoh No. 123, Telp: (0123) 456789</p>
-    </div>
-
-    <div class="rm-number">
-        NO. REKAM MEDIS: <?= $pasien['no_rekam_medis'] ?>
+        <div class="header-left">
+             <div>RS Hamori</div>
+                <div>Jl.Pagaden Ds.Jabong, Kota Subang</div>
+                <div>Telp: 0260-4250 888</div>
+        </div>
+        <div class="header-right">
+            <span class="rm-label">No. Rekam Medis</span>
+            <div class="rm-number"><?= $pasien['no_rekam_medis'] ?></div>
+            <div class="doc-info">Dicetak: <?= date('d/m/Y H:i') ?></div>
+        </div>
     </div>
 
     <!-- Data Pasien -->
     <div class="section">
-        <div class="section-title">DATA PASIEN</div>
+        <div class="section-title">I. Data Identitas Pasien</div>
         <table class="info-table">
             <tr>
                 <td>Nama Lengkap</td>
@@ -278,7 +329,7 @@
 
     <!-- Riwayat Kunjungan -->
     <div class="section">
-        <div class="section-title">RIWAYAT KUNJUNGAN (<?= count($riwayatKunjungan) ?> Kunjungan Terakhir)</div>
+        <div class="section-title">II. Riwayat Kunjungan & Pemeriksaan (<?= count($riwayatKunjungan) ?> Kunjungan)</div>
         
         <?php if (empty($riwayatKunjungan)): ?>
             <div class="no-data">Belum ada riwayat kunjungan</div>
@@ -421,8 +472,9 @@
     </div>
 
     <div class="footer">
-        <p>Dokumen ini dicetak pada <?= date('d F Y, H:i:s') ?> WIB</p>
-        <p>© <?= date('Y') ?> SIMRS HAMORI - Sistem Informasi Manajemen Rumah Sakit</p>
+        <p style="margin-bottom: 5px; font-weight: bold; color: #333;">Dokumen Rahasia - Rekam Medis Pasien</p>
+        <p style="font-size: 9px;">Dokumen ini dicetak pada <?= date('d F Y, H:i:s') ?> WIB dari SIMRS Hamori</p>
+        <p style="font-size: 9px; margin-top: 3px;">Dokumen ini adalah milik Rumah Sakit Hamori dan bersifat rahasia. Dilarang memperbanyak tanpa izin.</p>
     </div>
 </body>
 </html>
