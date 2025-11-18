@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <div class="container mt-4" style="max-width:700px;">
     <div class="card shadow-sm">
-        <div class="card-header bg-warning text-dark">
+        <div class="card-header bg-primary text-white">
             <h4 class="mb-0"><i class="bi bi-pencil me-2"></i>Edit Data Obat</h4>
         </div>
         <form action="<?= base_url('farmasi/update-obat/' . ($obat['id_obat'] ?? '')) ?>" method="post" autocomplete="off">
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="card-footer text-end">
-                <button type="submit" class="btn btn-warning text-dark"><i class="bi bi-save me-1"></i> Update</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
                 <a href="<?= base_url('farmasi/data-master-obat') ?>" class="btn btn-secondary ms-2">Batal</a>
             </div>
         </form>
