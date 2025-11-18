@@ -154,51 +154,6 @@ class Farmasi extends BaseController
         // Ambil semua permintaan obat dengan detail terkait
         $list_permintaan = $resepModel->getResepWithDetails();
         
-        // Jika data kosong, gunakan data dummy untuk testing
-        if (empty($list_permintaan)) {
-            $list_permintaan = [
-                [
-                    'id' => 1,
-                    'tanggal_resep' => date('Y-m-d H:i:s'),
-                    'no_rm' => 'RM001',
-                    'nama_pasien' => 'Ahmad Santoso',
-                    'nama_dokter' => 'Dr. Budi Hartanto',
-                    'diagnosis' => 'Hipertensi',
-                    'nama_obat' => 'Amlodipine 5mg',
-                    'jumlah' => 30,
-                    'satuan' => 'tablet',
-                    'instruksi' => '1x1 sehari setelah makan',
-                    'status' => 'pending'
-                ],
-                [
-                    'id' => 2,
-                    'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-1 hour')),
-                    'no_rm' => 'RM002',
-                    'nama_pasien' => 'Siti Nurhaliza',
-                    'nama_dokter' => 'Dr. Sarah Wijaya',
-                    'diagnosis' => 'Diabetes Mellitus',
-                    'nama_obat' => 'Metformin 500mg',
-                    'jumlah' => 60,
-                    'satuan' => 'tablet',
-                    'instruksi' => '2x1 sebelum makan',
-                    'status' => 'processing'
-                ],
-                [
-                    'id' => 3,
-                    'tanggal_resep' => date('Y-m-d H:i:s', strtotime('-2 hours')),
-                    'no_rm' => 'RM003',
-                    'nama_pasien' => 'Andi Prasetyo',
-                    'nama_dokter' => 'Dr. Eko Susanto',
-                    'diagnosis' => 'Gastritis',
-                    'nama_obat' => 'Omeprazole 20mg',
-                    'jumlah' => 14,
-                    'satuan' => 'kapsul',
-                    'instruksi' => '1x1 pagi sebelum makan',
-                    'status' => 'completed'
-                ]
-            ];
-        }
-        
         // Ubah nama kolom tanggal_resep menjadi tanggal_permintaan untuk konsistensi dengan view
         foreach ($list_permintaan as &$permintaan) {
             if (isset($permintaan['tanggal_resep'])) {
