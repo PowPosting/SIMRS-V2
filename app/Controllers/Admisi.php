@@ -118,17 +118,33 @@ class Admisi extends BaseController
     // Step 1: Form pendaftaran awal
     public function registrasiPasien()
     {
-        // Bersihkan semua session dari pendaftaran sebelumnya
-        $this->session->remove(['pasien_step1', 'pasien_step2', 'pasien_step3', 'pasien_step4', 'registration_data']);
+        // Hanya bersihkan session jika benar-benar memulai dari awal
+        // Jangan hapus jika user kembali dari step berikutnya
+        $fromReset = $this->request->getGet('reset');
+        if ($fromReset === 'true') {
+            $this->session->remove(['pasien_step1', 'pasien_step2', 'pasien_step3', 'pasien_step4', 'registration_data']);
+            log_message('info', '[registrasiPasien] Session dibersihkan untuk pendaftaran baru');
+        }
         
-        log_message('info', '[registrasiPasien] Session dibersihkan untuk pendaftaran baru');
+        $data['step1_data'] = $this->session->get('pasien_step1') ?? [];
         
-        return view('admisi/registrasi_pasien');
+        return view('admisi/registrasi_pasien', $data);
     }
 
     // Simpan data step 1
     public function save()
     {
+        // Cek apakah nomor identitas sudah terdaftar
+        $nomorIdentitas = $this->request->getPost('nomor_identitas');
+        if ($nomorIdentitas) {
+            $existingPasien = $this->pasienModel->where('nomor_identitas', $nomorIdentitas)->first();
+            if ($existingPasien) {
+                return redirect()->back()->withInput()->with('errors', [
+                    'nomor_identitas' => 'Nomor identitas sudah terdaftar atas nama ' . $existingPasien['nama_lengkap'] . ' (No. RM: ' . $existingPasien['no_rekam_medis'] . '). Silakan gunakan fitur daftar ulang di menu Pasien Hari Ini jika ingin mendaftar ke poli lain.'
+                ]);
+            }
+        }
+
         $rules = [
             'title' => 'required',
             'nama_lengkap' => 'required|min_length[3]',
@@ -202,6 +218,7 @@ class Admisi extends BaseController
         
         // Ambil data dari session jika ada
         $data['pasien_data'] = $this->session->get('pasien_step1');
+        $data['step2_data'] = $this->session->get('pasien_step2') ?? [];
         
         return view('admisi/registrasi_pasien_step2', $data);
     }
@@ -246,7 +263,10 @@ class Admisi extends BaseController
         if (!$this->session->has('pasien_step2')) {
             return redirect()->to('admisi/registrasi-pasien/step2');
         }
-        return view('admisi/registrasi_pasien_step3');
+        
+        $data['step3_data'] = $this->session->get('pasien_step3') ?? [];
+        
+        return view('admisi/registrasi_pasien_step3', $data);
     }
 
     // Simpan data step 3
@@ -275,7 +295,9 @@ class Admisi extends BaseController
             return redirect()->to('admisi/registrasi-pasien/step3');
         }
 
-        return view('admisi/registrasi_pasien_step4');
+        $data['step4_data'] = $this->session->get('pasien_step4') ?? [];
+        
+        return view('admisi/registrasi_pasien_step4', $data);
     }
 
     // Simpan data step 4
@@ -854,21 +876,22 @@ class Admisi extends BaseController
             ]);
         }
         $today = date('Y-m-d');
-        // Cek apakah sudah terdaftar hari ini di poli yang sama atau ada data antrian dengan created_at NULL
+        
+        // Cek apakah sudah terdaftar hari ini di poli yang sama dengan status aktif
         $cek = $this->antrianModel
             ->where('no_rm', $no_rm)
             ->where('id_poli', $id_poli)
-            ->groupStart()
-                ->where("DATE(created_at) = ", $today, false)
-                ->orWhere('created_at IS NULL', null, false)
-            ->groupEnd()
+            ->where("DATE(created_at)", $today)
+            ->whereNotIn('status', ['Selesai', 'Batal'])
             ->first();
+            
         if ($cek) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Pasien sudah terdaftar di antrian hari ini pada poli ini.'
+                'message' => 'Pasien sudah memiliki antrian aktif hari ini di poli yang sama (No. Antrian: ' . $cek['no_antrian'] . '). Silakan tunggu hingga pemeriksaan selesai atau pilih poli lain jika diperlukan.'
             ]);
         }
+        
         // Generate nomor antrian untuk poli terpilih
         $no_antrian = $this->generateNoAntrian($id_poli);
         

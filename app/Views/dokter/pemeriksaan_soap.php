@@ -11,7 +11,7 @@
     transition: box-shadow 0.3s;
 }
 .modern-header {
-    background: linear-gradient(90deg, #007bff 0%, #6f42c1 100%);
+    background-color: #007BFF;
     color: #fff;
     padding: 10px 20px 18px 20px;
     position: relative;
@@ -108,7 +108,7 @@ select.form-control {
     box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
 .btn-primary {
-    background: linear-gradient(90deg, #007bff 0%, #6f42c1 100%);
+    background-color: #007BFF;
     color: #fff;
 }
 .btn-primary:hover {
@@ -180,7 +180,7 @@ select.form-control {
     }
 }
 .gradient-text {
-    background: linear-gradient(90deg, #007bff 0%, #6f42c1 100%);
+    background-color: #007BFF;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -373,7 +373,9 @@ select.form-control {
                                 <label class="form-label" for="tekanan_darah">
                                     <i class="bi bi-heart-pulse me-2"></i>Tekanan Darah <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="text" class="form-control" id="tekanan_darah" name="tekanan_darah" placeholder="120/80" pattern="[0-9]+/[0-9]+" title="Format: sistole/diastole (contoh: 120/80)" required>
+                                <input type="text" class="form-control" id="tekanan_darah" name="tekanan_darah" 
+                                       value="<?= isset($tanda_vital['tekanan_darah']) ? esc($tanda_vital['tekanan_darah']) : '' ?>" 
+                                       placeholder="120/80" pattern="[0-9]+/[0-9]+" title="Format: sistole/diastole (contoh: 120/80)" required>
                                 <small class="text-muted">Format: sistole/diastole</small>
                             </div>
                         </div>
@@ -382,7 +384,9 @@ select.form-control {
                                 <label class="form-label" for="denyut_nadi">
                                     <i class="bi bi-heart me-2"></i>Denyut Nadi <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="number" class="form-control" id="denyut_nadi" name="denyut_nadi" placeholder="80" min="0" max="300" step="1" required>
+                                <input type="number" class="form-control" id="denyut_nadi" name="denyut_nadi" 
+                                       value="<?= isset($tanda_vital['detak_jantung']) ? esc($tanda_vital['detak_jantung']) : '' ?>" 
+                                       placeholder="80" min="0" max="300" step="1" required>
                                 <small class="text-muted">Normal: 60-100 x/menit</small>
                             </div>
                         </div>
@@ -391,7 +395,9 @@ select.form-control {
                                 <label class="form-label" for="suhu_tubuh">
                                     <i class="bi bi-thermometer-half me-2"></i>Suhu Tubuh <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="number" class="form-control" id="suhu_tubuh" name="suhu_tubuh" placeholder="36.5" min="30" max="45" step="0.1" required>
+                                <input type="number" class="form-control" id="suhu_tubuh" name="suhu_tubuh" 
+                                       value="<?= isset($tanda_vital['suhu_tubuh']) ? esc($tanda_vital['suhu_tubuh']) : '' ?>" 
+                                       placeholder="36.5" min="30" max="45" step="0.1" required>
                                 <small class="text-muted">Normal: 36.1-37.2°C</small>
                             </div>
                         </div>
@@ -400,14 +406,16 @@ select.form-control {
                                 <label class="form-label" for="respirasi">
                                     <i class="bi bi-lungs me-2"></i>Respirasi <span style="color: #dc3545;">*</span>
                                 </label>
-                                <input type="number" class="form-control" id="respirasi" name="respirasi" placeholder="20" min="0" max="100" step="1" required>
+                                <input type="number" class="form-control" id="respirasi" name="respirasi" 
+                                       value="<?= isset($tanda_vital['pernafasan']) ? esc($tanda_vital['pernafasan']) : '' ?>" 
+                                       placeholder="20" min="0" max="100" step="1" required>
                                 <small class="text-muted">Normal: 16-24 x/menit</small>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label class="form-label" for="pemeriksaan_fisik">
-                                    <i class="bi bi-search me-2"></i>Pemeriksaan Fisik</>
+                                    <i class="bi bi-search me-2"></i>Pemeriksaan Fisik </>
                                 </label>
                                 <textarea class="form-control" id="pemeriksaan_fisik" name="pemeriksaan_fisik" rows="4" placeholder="Hasil pemeriksaan fisik lengkap (inspeksi, palpasi, perkusi, auskultasi)..." ></textarea>
                             </div>
@@ -467,7 +475,9 @@ select.form-control {
                                                 <div class="autocomplete-list shadow-sm" style="position:absolute;top:100%;left:0;right:0;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:0.5rem;max-height:200px;overflow-y:auto;display:none;"></div>
                                             </div>
                                             <div class="col-3 mb-3">
-                                                <label class="small text-muted mb-1">Jumlah</label>
+                                                <label class="small text-muted mb-1">
+                                                    Jumlah <span class="satuan-label badge badge-primary text-white" style="font-size:10px;display:none;padding:3px 8px;font-weight:600;"></span>
+                                                </label>
                                                 <input type="number" class="form-control" name="jumlah_obat[]" placeholder="1" min="1" value="1">
                                             </div>
                                             <div class="col-3 mb-3">
@@ -562,7 +572,7 @@ function cariObat(input) {
             item.style.padding = '8px 14px';
             item.style.cursor = 'pointer';
             item.style.borderBottom = '1px solid #eee';
-            item.innerHTML = `<strong>${obat.nama_obat}</strong> <span class='badge badge-light text-dark ml-2' style='font-size:11px;'>Stok: ${obat.stok}</span>`;
+            item.innerHTML = `<strong>${obat.nama_obat}</strong> <span class='badge badge-primary text-white ml-2' style='font-size:11px; font-weight:600; background-color:#007bff !important;'>${obat.satuan}</span> <span class='badge badge-primary text-white ml-1' style='font-size:11px; background-color:#007bff !important;'>Stok: ${obat.stok}</span>`;
             
             item.addEventListener('mouseenter', function() {
                 this.style.backgroundColor = '#f8f9fa';
@@ -575,21 +585,25 @@ function cariObat(input) {
                 input.value = obat.nama_obat;
                 hidden.value = obat.id_obat;
                 list.style.display = 'none';
+                
+                // Update satuan label
+                const satuanLabel = wrapper.parentElement.querySelector('.satuan-label');
+                if(satuanLabel) {
+                    satuanLabel.textContent = obat.satuan;
+                    satuanLabel.style.display = 'inline-block';
+                    satuanLabel.className = 'badge badge-primary text-white';
+                    satuanLabel.style.backgroundColor = '#007bff';
+                    satuanLabel.style.color = '#fff';
+                }
+                
                 if(stokSpan) { 
                     stokSpan.textContent = 'Stok: ' + obat.stok; 
                     stokSpan.style.display = 'inline-block'; 
-                    stokSpan.className = 'badge badge-success mb-1';
+                    stokSpan.className = 'badge badge-primary text-white mb-1';
                     stokSpan.style.fontSize = '10px';
                     stokSpan.style.padding = '2px 6px';
-                    
-                    // Color coding based on stock level
-                    if (obat.stok <= 10) {
-                        stokSpan.className = 'badge badge-danger mb-1';
-                    } else if (obat.stok <= 50) {
-                        stokSpan.className = 'badge badge-warning mb-1';
-                    } else {
-                        stokSpan.className = 'badge badge-success mb-1';
-                    }
+                    stokSpan.style.backgroundColor = '#007bff';
+                    stokSpan.style.color = '#fff';
                 }
             };
             list.appendChild(item);
@@ -606,31 +620,50 @@ function cariObat(input) {
         item.textContent = 'Obat tidak ditemukan';
         list.appendChild(item);
         list.style.display = 'block';
+        
+        // Reset satuan label
+        const satuanLabel = wrapper.parentElement.querySelector('.satuan-label');
+        if(satuanLabel) {
+            satuanLabel.style.display = 'none';
+        }
+        
         if(stokSpan) { 
             stokSpan.style.display = 'none'; 
             stokSpan.textContent = ''; 
         }
     }
     
-    // Jika user ketik nama yang match, langsung tampilkan stok (tanpa klik)
+    // Jika user ketik nama yang match, langsung tampilkan stok dan satuan (tanpa klik)
     const match = obatList.find(obat => obat.nama_obat.toLowerCase() === val);
-    if(match && stokSpan) {
-        stokSpan.textContent = 'Stok: ' + match.stok;
-        stokSpan.style.display = 'inline-block';
-        stokSpan.style.fontSize = '10px';
-        stokSpan.style.padding = '2px 6px';
-        
-        // Color coding based on stock level
-        if (match.stok <= 10) {
-            stokSpan.className = 'badge badge-danger mb-1';
-        } else if (match.stok <= 50) {
-            stokSpan.className = 'badge badge-warning mb-1';
-        } else {
-            stokSpan.className = 'badge badge-success mb-1';
+    if(match) {
+        // Update satuan label
+        const satuanLabel = wrapper.parentElement.querySelector('.satuan-label');
+        if(satuanLabel) {
+            satuanLabel.textContent = match.satuan;
+            satuanLabel.style.display = 'inline-block';
+            satuanLabel.className = 'badge badge-primary text-white';
+            satuanLabel.style.backgroundColor = '#007bff';
+            satuanLabel.style.color = '#fff';
         }
-    } else if(stokSpan && !found) {
-        stokSpan.style.display = 'none';
-        stokSpan.textContent = '';
+        
+        if(stokSpan) {
+            stokSpan.textContent = 'Stok: ' + match.stok;
+            stokSpan.style.display = 'inline-block';
+            stokSpan.style.fontSize = '10px';
+            stokSpan.style.padding = '2px 6px';
+            stokSpan.className = 'badge badge-primary text-white mb-1';
+            stokSpan.style.backgroundColor = '#007bff';
+            stokSpan.style.color = '#fff';
+        }
+    } else if(!found) {
+        const satuanLabel = wrapper.parentElement.querySelector('.satuan-label');
+        if(satuanLabel) {
+            satuanLabel.style.display = 'none';
+        }
+        if(stokSpan) {
+            stokSpan.style.display = 'none';
+            stokSpan.textContent = '';
+        }
     }
 }
 
@@ -650,7 +683,9 @@ function tambahObat() {
                     <div class="autocomplete-list shadow-sm" style="position:absolute;top:100%;left:0;right:0;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:0.5rem;max-height:200px;overflow-y:auto;display:none;"></div>
                 </div>
                 <div class="col-3 mb-3">
-                    <label class="small text-muted mb-1">Jumlah</label>
+                    <label class="small text-muted mb-1">
+                        Jumlah <span class="satuan-label badge badge-primary text-white" style="font-size:10px;display:none;padding:3px 8px;font-weight:600;"></span>
+                    </label>
                     <input type="number" class="form-control" name="jumlah_obat[]" placeholder="1" min="1" value="1">
                 </div>
                 <div class="col-3 mb-3">

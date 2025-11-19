@@ -14,7 +14,7 @@ class RekamMedis extends BaseController
         $this->db = \Config\Database::connect();
         $this->pasienModel = new \App\Models\PasienModel();
         
-        // Check if user is logged in and has access
+        // check akses role
         $allowedRoles = ['admin', 'dokter', 'perawat', 'admisi'];
         $userRole = $this->session->get('role');
         

@@ -1,17 +1,27 @@
 <!-- Modal Notifikasi Error Daftar Ulang -->
 <div class="modal fade" id="modalDaftarUlangError" tabindex="-1" role="dialog" aria-labelledby="modalDaftarUlangErrorLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="modalDaftarUlangErrorLabel"><i class="fa fa-times-circle mr-2"></i>Gagal Daftar Ulang</h5>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-danger text-white border-0">
+        <h5 class="modal-title font-weight-bold" id="modalDaftarUlangErrorLabel">
+          <i class="fas fa-exclamation-circle mr-2"></i>Tidak Dapat Mendaftar
+        </h5>
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body text-center">
-        <div class="mb-3">
-          <span class="h5" id="pesanDaftarUlangError">Terjadi kesalahan.</span>
+      <div class="modal-body p-4">
+        <div class="text-center mb-3">
+          <i class="fas fa-times-circle text-danger" style="font-size: 4rem; opacity: 0.8;"></i>
         </div>
+        <div class="alert alert-light border-danger mb-0" role="alert">
+          <p class="mb-0 text-dark" id="pesanDaftarUlangError" style="line-height: 1.6;">Terjadi kesalahan.</p>
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-light">
+        <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i> Tutup
+        </button>
       </div>
     </div>
   </div>
@@ -19,26 +29,27 @@
 <div class="modal fade" id="modalDetailPasienBaru" tabindex="-1" role="dialog" aria-labelledby="modalDetailPasienBaruLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered" role="document" style="max-width:1100px;">
     <div class="modal-content">
-      <div class="modal-header bg-white border-0 pb-0">
-        <div class="d-flex align-items-center w-100">
-          <div class="mr-3">
-            <span class="badge badge-pill badge-info p-1" id="detail_no_rm" style="font-size:1.3em; letter-spacing:2px;">-</span>
+      <div class="modal-header bg-gradient-primary text-white border-0">
+        <div class="d-flex flex-column w-100">
+          <!-- Baris 1: No RM dan Nama -->
+          <div class="d-flex align-items-center mb-2">
+            <span class="badge bg-white text-primary px-3 py-2 mr-3" id="detail_no_rm" style="font-size:1.1em; letter-spacing:1px; font-weight:600;">-</span>
+            <h4 class="mb-0 text-white font-weight-bold" id="detail_nama">-</h4>
           </div>
-          <div class="flex-grow-1 d-flex align-items-center">
-            <i class="fa-solid fa-id-card text-primary">  </i>
-            <h4 class="mb-0 mr-3" id="detail_nama">-</h4>
-            <button id="btnLihatDokumenIdentitas" class="btn btn-sm btn-outline-primary ml-2" style="white-space:nowrap;" type="button">
+          <!-- Baris 2: Action Buttons -->
+          <div class="d-flex align-items-center">
+            <button id="btnLihatDokumenIdentitas" class="btn btn-sm btn-light mr-2" type="button">
               <i class="fas fa-file-alt"></i> Dokumen Identitas
             </button>
-            <button id="btnExportWordDetailPasien" class="btn btn-sm btn-outline-primary ml-2" type="button">
+            <button id="btnExportWordDetailPasien" class="btn btn-sm btn-light mr-2" type="button">
               <i class="fas fa-file-word"></i> Export Word
             </button>
-            <button id="btnDaftarUlangPasien" class="btn btn-sm btn-success ml-2" type="button">
+            <button id="btnDaftarUlangPasien" class="btn btn-sm btn-success" type="button">
               <i class="fa fa-plus-circle"></i> Daftarkan Kembali
             </button>
           </div>
         </div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="position:absolute; right:15px; top:15px;">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -180,20 +191,30 @@
 
 <!-- Modal Notifikasi Daftar Ulang Berhasil -->
 <div class="modal fade" id="modalDaftarUlangSukses" tabindex="-1" role="dialog" aria-labelledby="modalDaftarUlangSuksesLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="modalDaftarUlangSuksesLabel"><i class="fa fa-check-circle mr-2"></i>Pendaftaran Ulang Berhasil</h5>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-success text-white border-0">
+        <h5 class="modal-title font-weight-bold" id="modalDaftarUlangSuksesLabel">
+          <i class="fas fa-check-circle mr-2"></i>Pendaftaran Ulang Berhasil
+        </h5>
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body text-center">
+      <div class="modal-body text-center py-4">
         <div class="mb-3">
-          <span class="h4">Nomor Antrian:</span><br>
-          <span class="display-4 font-weight-bold text-success" id="noAntrianDaftarUlang">-</span>
+          <i class="fas fa-check-circle text-success" style="font-size: 4rem; opacity: 0.8;"></i>
         </div>
-        <button class="btn btn-primary" id="btnExportWordAntrian"><i class="fa fa-print mr-1"></i> Cetak Antrian</button>
+        <p class="text-muted mb-2" style="font-size: 1.1rem;">Nomor Antrian:</p>
+        <h1 class="display-3 font-weight-bold text-success mb-4" id="noAntrianDaftarUlang" style="letter-spacing: 2px;">-</h1>
+        <button class="btn btn-primary btn-lg px-5" id="btnExportWordAntrian">
+          <i class="fas fa-print mr-2"></i> Cetak Antrian
+        </button>
+      </div>
+      <div class="modal-footer border-0 bg-light justify-content-center">
+        <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i> Tutup
+        </button>
       </div>
     </div>
   </div>
@@ -240,22 +261,29 @@ document.getElementById('btnExportWordDetailPasien').onclick = function() {
 var modalPilihPoli = document.createElement('div');
 modalPilihPoli.innerHTML = `
 <div class="modal fade" id="modalPilihPoliDaftarUlang" tabindex="-1" role="dialog" aria-labelledby="modalPilihPoliLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalPilihPoliLabel">Pilih Poli Tujuan</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white border-0">
+        <h5 class="modal-title font-weight-bold" id="modalPilihPoliLabel">
+          <i class="fas fa-hospital mr-2"></i>Pilih Poli Tujuan
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <select class="form-control" id="selectPoliDaftarUlang">
-          <option value=""> Pilih Poli </option>
+      <div class="modal-body py-4">
+        <label class="font-weight-semibold mb-2">Poliklinik Tujuan:</label>
+        <select class="form-control form-control-lg" id="selectPoliDaftarUlang" style="border-radius: 8px;">
+          <option value="">-- Pilih Poli --</option>
         </select>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        <button type="button" class="btn btn-primary" id="btnKonfirmasiPilihPoli">Daftarkan</button>
+      <div class="modal-footer border-0 bg-light">
+        <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i> Batal
+        </button>
+        <button type="button" class="btn btn-primary px-4" id="btnKonfirmasiPilihPoli">
+          <i class="fas fa-check mr-1"></i> Daftarkan
+        </button>
       </div>
     </div>
   </div>
@@ -304,20 +332,31 @@ document.getElementById('btnDaftarUlangPasien').onclick = function() {
         var confirmModal = document.createElement('div');
         confirmModal.innerHTML = `
         <div class="modal fade" id="modalKonfirmasiDaftarUlang" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiDaftarUlangLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalKonfirmasiDaftarUlangLabel"><i class="fa fa-question-circle mr-2"></i>Konfirmasi Daftar Ulang</h5>
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0 shadow-lg">
+              <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title font-weight-bold" id="modalKonfirmasiDaftarUlangLabel">
+                  <i class="fas fa-question-circle mr-2"></i>Konfirmasi Daftar Ulang
+                </h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body text-center">
-                Daftarkan kembali pasien ini ke pendaftaran hari ini di poli terpilih?
+              <div class="modal-body text-center py-4">
+                <div class="mb-3">
+                  <i class="fas fa-user-check text-primary" style="font-size: 3rem; opacity: 0.8;"></i>
+                </div>
+                <p class="mb-0" style="font-size: 1.05rem; line-height: 1.6;">
+                  Daftarkan kembali pasien ini ke pendaftaran hari ini di poli terpilih?
+                </p>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" id="btnKonfirmasiDaftarUlangOK">OK</button>
+              <div class="modal-footer border-0 bg-light justify-content-center">
+                <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">
+                  <i class="fas fa-times mr-1"></i> Batal
+                </button>
+                <button type="button" class="btn btn-primary px-4" id="btnKonfirmasiDaftarUlangOK">
+                  <i class="fas fa-check mr-1"></i> Ya, Daftarkan
+                </button>
               </div>
             </div>
           </div>

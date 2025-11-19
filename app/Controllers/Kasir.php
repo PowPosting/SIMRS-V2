@@ -64,8 +64,8 @@ class Kasir extends BaseController {
             } else {
                 // Pasien tanpa resep obat - hanya biaya konsultasi & admin
                 // Default: Biaya konsultasi + admin
-                $biaya_konsultasi = 50000; // Sesuaikan dengan tarif RS
-                $biaya_admin = 10000;
+                $biaya_konsultasi = 100000; 
+                $biaya_admin = 35000;
                 $total = $biaya_konsultasi + $biaya_admin;
                 
                 $tagihan_list[] = [
@@ -136,8 +136,8 @@ class Kasir extends BaseController {
                 
                 // Buat tagihan sementara untuk pasien tanpa resep
                 $tanpaResep = true;
-                $biaya_konsultasi = 50000;
-                $biaya_admin = 10000;
+                $biaya_konsultasi = 100000;
+                $biaya_admin = 35000;
                 $total = $biaya_konsultasi + $biaya_admin;
                 
                 $tagihan = [
@@ -152,6 +152,17 @@ class Kasir extends BaseController {
                 ];
                 
                 log_message('info', "Pasien tanpa resep, created temporary tagihan: " . json_encode($tagihan));
+            } else {
+                // Cek apakah tagihan ini dari farmasi (ada detail_tagihan) atau manual
+                if (empty($tagihan['detail_tagihan']) || $tagihan['detail_tagihan'] === 'null') {
+                    // Tagihan kosong tanpa detail - berarti pasien tanpa resep
+                    $tanpaResep = true;
+                    log_message('info', "Tagihan found but no detail_tagihan - marked as tanpa resep");
+                } else {
+                    // Tagihan dengan detail - pasien dengan resep
+                    $tanpaResep = false;
+                    log_message('info', "Tagihan found with detail_tagihan - marked as dengan resep");
+                }
             }
             
             log_message('info', "Tagihan found, parsing detail_tagihan");
@@ -219,16 +230,23 @@ class Kasir extends BaseController {
                     'no_rm' => $tagihan['no_rm'],
                     'nama_pasien' => $tagihan['nama_pasien'],
                     'tanggal_resep' => $tagihan['tanggal_tagihan'],
+                    'tanggal_lahir' => $pasienInfo['tanggal_lahir'] ?? $tagihan['tanggal_lahir'] ?? null,
                     'nama_dokter' => $pasienInfo['nama_dokter'] ?? '-',
                     'jenis_kelamin' => $pasienInfo['jenis_kelamin'] ?? '-',
                     'umur' => $umur
+                ],
+                'tagihan_info' => [
+                    'no_tagihan' => $tagihan['no_tagihan'] ?? 'TG-' . str_pad($tagihan['id_tagihan'] ?? 0, 8, '0', STR_PAD_LEFT),
+                    'jenis_layanan' => $tagihan['jenis_layanan'] ?? 'Rawat Jalan',
+                    'metode_pembayaran' => $tagihan['metode_pembayaran'] ?? '-',
+                    'status' => $tagihan['status'] ?? 'pending'
                 ],
                 'total_obat' => $total_obat,
                 'total_tagihan' => $tagihan['total_biaya'],
                 'tanpa_resep' => $tanpaResep, // Flag untuk view
                 'biaya_layanan' => [
-                    'administrasi' => $tanpaResep ? 10000 : 35000,
-                    'konsultasi' => $tanpaResep ? 50000 : 100000
+                    'administrasi' => 35000,
+                    'konsultasi' => 100000
                 ]
             ];
             
@@ -275,6 +293,18 @@ class Kasir extends BaseController {
                         // Kembalian sudah dihitung saat proses pembayaran
                     }
                     
+                    // Mapping metode pembayaran ke label yang lebih user-friendly
+                    $metodeBayar = $tagihan['metode_pembayaran'] ?? '';
+                    $metodeBayarLabel = '-';
+                    if (!empty($metodeBayar)) {
+                        $metodeMap = [
+                            'tunai' => 'Tunai',
+                            'cash' => 'Tunai',
+                            
+                        ];
+                        $metodeBayarLabel = $metodeMap[strtolower($metodeBayar)] ?? ucfirst($metodeBayar);
+                    }
+                    
                     $simpleData = [
                         'success' => true,
                         'data' => [
@@ -287,7 +317,7 @@ class Kasir extends BaseController {
                             'total_biaya' => $totalBiaya,
                             'jumlah_bayar' => $jumlahBayar,
                             'kembalian' => $kembalian,
-                            'metode_pembayaran' => $tagihan['metode_pembayaran'] ?? 'Cash',
+                            'metode_pembayaran' => $metodeBayarLabel,
                             'tanggal_pembayaran' => $tanggalBayarFormatted,
                             'kasir' => $kasirInfo['nama_lengkap'] ?? 'System',
                             'detail_biaya' => '<tr><td>Biaya Administrasi</td><td class="text-end">Rp 35,000</td></tr>
@@ -334,6 +364,16 @@ class Kasir extends BaseController {
             // Debug logging
             log_message('info', "Proses Pembayaran Data: idPasien=$idPasien, tanggal=$tanggal, jumlahBayar=$jumlahBayar, metodeBayar=$metodeBayar, totalTagihan=$totalTagihan");
             
+            // Normalisasi metode pembayaran sesuai dengan enum database
+            $metodeMap = [
+                'cash' => 'tunai',
+                'tunai' => 'tunai',
+                
+            ];
+            
+            $metodeBayarNormalized = isset($metodeMap[strtolower($metodeBayar)]) ? $metodeMap[strtolower($metodeBayar)] : 'tunai';
+            log_message('info', "Metode Bayar original: $metodeBayar, normalized: $metodeBayarNormalized");
+            
             // Validasi input
             if (!$idPasien || !$tanggal || !$jumlahBayar || !$metodeBayar) {
                 throw new \Exception('Data pembayaran tidak lengkap');
@@ -356,8 +396,8 @@ class Kasir extends BaseController {
             if (!$tagihan) {
                 // Pasien tanpa resep - buat tagihan baru untuk biaya konsultasi & admin
                 $isNewTagihan = true;
-                $biaya_konsultasi = 50000;
-                $biaya_admin = 10000;
+                $biaya_konsultasi = 100000;
+                $biaya_admin = 35000;
                 $totalBiaya = $biaya_konsultasi + $biaya_admin;
                 
                 // Buat record tagihan baru
@@ -394,15 +434,17 @@ class Kasir extends BaseController {
             $updateData = [
                 'status' => 'paid',
                 'tanggal_bayar' => date('Y-m-d H:i:s'),
-                'metode_pembayaran' => $metodeBayar,
+                'metode_pembayaran' => $metodeBayarNormalized,
                 'jumlah_bayar' => floatval($jumlahBayar),
                 'kembalian' => $kembalian,
                 'kasir_id' => $this->session->get('user_id') ?? 1,
-                'keterangan' => $isNewTagihan ? 'Pembayaran Konsultasi & Admin - ' . ucfirst($metodeBayar) : 'Pembayaran berhasil - ' . ucfirst($metodeBayar)
+                'keterangan' => $isNewTagihan ? 'Pembayaran Konsultasi & Admin - ' . ucfirst($metodeBayarNormalized) : 'Pembayaran berhasil - ' . ucfirst($metodeBayarNormalized)
             ];
             
+            log_message('info', "=== PROSES PEMBAYARAN ===");
             log_message('info', "Update Data: " . json_encode($updateData));
             log_message('info', "Tagihan ID to update: " . $tagihan['id_tagihan']);
+            log_message('info', "Metode Bayar dari POST: " . $metodeBayar);
             log_message('info', "Total Biaya: " . $totalBiaya);
             log_message('info', "Jumlah Bayar (float): " . floatval($jumlahBayar));
             log_message('info', "Kembalian (calculated): " . $kembalian);
@@ -410,6 +452,11 @@ class Kasir extends BaseController {
             $updateResult = $tagihanModel->update($tagihan['id_tagihan'], $updateData);
             
             log_message('info', "Update Result: " . ($updateResult ? 'SUCCESS' : 'FAILED'));
+            
+            // Verifikasi data tersimpan
+            $verifyTagihan = $tagihanModel->find($tagihan['id_tagihan']);
+            log_message('info', "Verifikasi setelah update - metode_pembayaran: " . ($verifyTagihan['metode_pembayaran'] ?? 'NULL'));
+            log_message('info', "Verifikasi data lengkap: " . json_encode($verifyTagihan));
             
             if ($updateResult) {
                 // Update status antrian pasien menjadi 'Selesai' (menggunakan id_antrian_perawat)
@@ -439,7 +486,7 @@ class Kasir extends BaseController {
                         'total_tagihan' => $totalBiaya,
                         'jumlah_bayar' => $jumlahBayar,
                         'kembalian' => $kembalian,
-                        'metode_bayar' => $metodeBayar
+                        'metode_bayar' => $metodeBayarNormalized
                     ]
                 ]);
             } else {
@@ -468,6 +515,7 @@ class Kasir extends BaseController {
             ->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)', 'left')
             ->join('users', 'users.id = tagihan.kasir_id', 'left')
             ->where('tagihan.status', 'paid')
+            ->where('tagihan.tanggal_bayar IS NOT NULL')
             ->orderBy('tagihan.tanggal_bayar', 'DESC')
             ->limit(100) // Limit untuk performa
             ->get()
@@ -495,52 +543,202 @@ class Kasir extends BaseController {
      */
     public function exportExcel()
     {
-        $tagihanModel = new TagihanModel();
-        
-        // Ambil data riwayat pembayaran
-        $riwayat_pembayaran = $tagihanModel->builder()
-            ->select('tagihan.*, pasien.nama_lengkap as nama_pasien, users.nama_lengkap as nama_kasir')
-            ->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)', 'left')
-            ->join('users', 'users.id = tagihan.kasir_id', 'left')
-            ->where('tagihan.status', 'paid')
-            ->orderBy('tagihan.tanggal_bayar', 'DESC')
-            ->get()
-            ->getResultArray();
-        
-        // Set header untuk download Excel
-        $filename = 'riwayat_pembayaran_' . date('Y-m-d_H-i-s') . '.csv';
-        
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        
-        $output = fopen('php://output', 'w');
-        
-        // Header CSV
-        fputcsv($output, [
-            'Waktu Bayar',
-            'No. RM',
-            'Nama Pasien',
-            'Total Tagihan',
-            'Metode Pembayaran',
-            'Kasir',
-            'Keterangan'
-        ]);
-        
-        // Data CSV
-        foreach ($riwayat_pembayaran as $row) {
-            fputcsv($output, [
-                $row['tanggal_bayar'],
-                $row['no_rm'],
-                $row['nama_pasien'] ?? '-',
-                $row['total_biaya'],
-                $row['metode_pembayaran'] ?? 'Cash',
-                $row['nama_kasir'] ?? 'System',
-                $row['keterangan'] ?? '-'
+        try {
+            log_message('info', '========== EXPORT EXCEL STARTED ==========');
+            
+            $tagihanModel = new TagihanModel();
+            
+            // Get filter parameters
+            $tanggalDari = $this->request->getGet('tanggal_dari');
+            $tanggalSampai = $this->request->getGet('tanggal_sampai');
+            $search = $this->request->getGet('search');
+            
+            log_message('info', 'Filters - Dari: ' . ($tanggalDari ?? 'NULL') . ', Sampai: ' . ($tanggalSampai ?? 'NULL') . ', Search: ' . ($search ?? 'NULL'));
+            
+            // Build query
+            $builder = $tagihanModel->builder()
+                ->select('tagihan.*, pasien.nama_lengkap as nama_pasien, users.nama_lengkap as nama_kasir')
+                ->join('pasien', 'CAST(pasien.no_rekam_medis AS CHAR) = CAST(tagihan.no_rm AS CHAR)', 'left')
+                ->join('users', 'users.id = tagihan.kasir_id', 'left')
+                ->where('tagihan.status', 'paid')
+                ->where('tagihan.tanggal_bayar IS NOT NULL')
+                ->orderBy('tagihan.tanggal_bayar', 'DESC');
+            
+            // Apply filters
+            if ($tanggalDari) {
+                $builder->where('DATE(tagihan.tanggal_bayar) >=', $tanggalDari);
+            }
+            if ($tanggalSampai) {
+                $builder->where('DATE(tagihan.tanggal_bayar) <=', $tanggalSampai);
+            }
+            if ($search) {
+                $builder->groupStart()
+                    ->like('pasien.nama_lengkap', $search)
+                    ->orLike('tagihan.no_rm', $search)
+                    ->groupEnd();
+            }
+            
+            $riwayat_pembayaran = $builder->get()->getResultArray();
+            
+            log_message('info', 'Query executed - Total records: ' . count($riwayat_pembayaran));
+            
+            if (count($riwayat_pembayaran) > 0) {
+                log_message('info', 'Sample first record: ' . json_encode($riwayat_pembayaran[0]));
+                // Log semua data untuk debug
+                foreach ($riwayat_pembayaran as $idx => $record) {
+                    log_message('info', "Record #$idx - No.RM: {$record['no_rm']}, Nama: {$record['nama_pasien']}, Kasir: {$record['nama_kasir']}, Tanggal: {$record['tanggal_bayar']}");
+                }
+            }
+            
+            // Load template Excel
+            $templatePath = APPPATH . 'Templates/excel/template_riwayat_pembayaran.xlsx';
+            
+            log_message('info', 'Template path: ' . $templatePath);
+            
+            if (!file_exists($templatePath)) {
+                log_message('error', 'Template not found at: ' . $templatePath);
+                throw new \Exception('Template Excel tidak ditemukan di: ' . $templatePath);
+            }
+            
+            log_message('info', 'Loading template...');
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $spreadsheet = $reader->load($templatePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            
+            log_message('info', 'Template loaded successfully');
+            
+            // Replace periode placeholder
+            $periode = 'Semua Data';
+            if ($tanggalDari && $tanggalSampai) {
+                $periode = date('d/m/Y', strtotime($tanggalDari)) . ' s/d ' . date('d/m/Y', strtotime($tanggalSampai));
+            }
+            $sheet->setCellValue('A3', 'Periode: ' . $periode);
+            
+            // Remove sample data row (row 6)
+            $sheet->removeRow(6);
+            
+            log_message('info', 'Sample row removed, starting data insertion...');
+            
+            // Insert data rows starting from row 6
+            $row = 6;
+            $no = 1;
+            $totalPendapatan = 0;
+            $skippedCount = 0;
+            
+            foreach ($riwayat_pembayaran as $data) {
+                // Skip jika data tidak valid
+                if (empty($data['no_rm']) || empty($data['tanggal_bayar'])) {
+                    log_message('warning', 'Skipping invalid record: ' . json_encode($data));
+                    $skippedCount++;
+                    continue;
+                }
+                
+                // Pastikan nama kasir tidak kosong
+                $namaKasir = $data['nama_kasir'] ?? 'System';
+                if (empty(trim($namaKasir))) {
+                    $namaKasir = 'System';
+                }
+                
+                log_message('info', "Inserting row $row: No={$no}, RM={$data['no_rm']}, Pasien={$data['nama_pasien']}, Kasir={$namaKasir}");
+                
+                $sheet->setCellValue('A' . $row, $no);
+                $sheet->setCellValue('B' . $row, date('d/m/Y H:i', strtotime($data['tanggal_bayar'])));
+                $sheet->setCellValue('C' . $row, $data['no_rm']);
+                $sheet->setCellValue('D' . $row, $data['nama_pasien'] ?? '-');
+                $sheet->setCellValue('E' . $row, $data['total_biaya']);
+                $sheet->setCellValue('F' . $row, $data['metode_pembayaran'] ?? 'Tunai');
+                $sheet->setCellValue('G' . $row, $namaKasir);
+                
+                // Apply styling
+                $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+                
+                $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['rgb' => 'CCCCCC']
+                        ]
+                    ]
+                ]);
+                
+                if ($row % 2 == 0) {
+                    $sheet->getStyle('A' . $row . ':G' . $row)->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['rgb' => 'F8F9FA']
+                        ]
+                    ]);
+                }
+                
+                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                
+                $totalPendapatan += $data['total_biaya'];
+                $row++;
+                $no++;
+            }
+            
+            log_message('info', 'Data inserted successfully. Valid rows: ' . ($row - 6) . ', Skipped: ' . $skippedCount . ', Total pendapatan: ' . $totalPendapatan);
+            
+            // Total row - update placeholder values
+            $totalRow = $row;
+            $sheet->setCellValue('A' . $totalRow, 'TOTAL PENDAPATAN');
+            $sheet->mergeCells('A' . $totalRow . ':D' . $totalRow);
+            $sheet->setCellValue('E' . $totalRow, $totalPendapatan);
+            $sheet->getStyle('A' . $totalRow . ':G' . $totalRow)->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                    'size' => 12,
+                    'color' => ['rgb' => 'FFFFFF']
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => '28a745']
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM,
+                        'color' => ['rgb' => '000000']
+                    ]
+                ]
             ]);
+            $sheet->getStyle('E' . $totalRow)->getNumberFormat()->setFormatCode('#,##0');
+            
+            // Summary
+            $summaryRow = $totalRow + 2;
+            $sheet->setCellValue('A' . $summaryRow, 'Total Transaksi: ' . count($riwayat_pembayaran));
+            $sheet->mergeCells('A' . $summaryRow . ':G' . $summaryRow);
+            
+            $printRow = $summaryRow + 1;
+            $sheet->setCellValue('A' . $printRow, 'Dicetak pada: ' . date('d/m/Y H:i:s'));
+            $sheet->mergeCells('A' . $printRow . ':G' . $printRow);
+            
+            log_message('info', 'Preparing file for download...');
+            
+            // Set filename
+            $filename = 'Riwayat_Pembayaran_' . date('d-m-Y_His') . '.xlsx';
+            
+            // Write to output
+            $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Cache-Control: max-age=0');
+            
+            log_message('info', 'Writing file: ' . $filename);
+            
+            $writer->save('php://output');
+            
+            log_message('info', '========== EXPORT EXCEL COMPLETED ==========');
+            exit;
+            
+        } catch (\Exception $e) {
+            log_message('error', 'Export Excel Error: ' . $e->getMessage());
+            log_message('error', 'Stack trace: ' . $e->getTraceAsString());
+            throw $e;
         }
-        
-        fclose($output);
-        exit;
     }
 
     /**

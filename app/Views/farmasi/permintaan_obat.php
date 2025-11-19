@@ -309,34 +309,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Helper function untuk mendapatkan tanggal
     function getDateRange(filter) {
+        // Gunakan waktu lokal, bukan UTC
         const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const todayStr = `${year}-${month}-${day}`;
+        
+        console.log('Today (Local):', todayStr);
+        
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
         
         switch (filter) {
             case 'today':
+                console.log('Filter Hari Ini:', todayStr);
                 return {
-                    start: today.toISOString().split('T')[0],
-                    end: today.toISOString().split('T')[0]
+                    start: todayStr,
+                    end: todayStr
                 };
             case 'yesterday':
                 return {
-                    start: yesterday.toISOString().split('T')[0],
-                    end: yesterday.toISOString().split('T')[0]
+                    start: yesterdayStr,
+                    end: yesterdayStr
                 };
             case 'week':
                 const weekAgo = new Date(today);
                 weekAgo.setDate(weekAgo.getDate() - 7);
+                const weekAgoStr = `${weekAgo.getFullYear()}-${String(weekAgo.getMonth() + 1).padStart(2, '0')}-${String(weekAgo.getDate()).padStart(2, '0')}`;
                 return {
-                    start: weekAgo.toISOString().split('T')[0],
-                    end: today.toISOString().split('T')[0]
+                    start: weekAgoStr,
+                    end: todayStr
                 };
             case 'month':
                 const monthAgo = new Date(today);
                 monthAgo.setDate(monthAgo.getDate() - 30);
+                const monthAgoStr = `${monthAgo.getFullYear()}-${String(monthAgo.getMonth() + 1).padStart(2, '0')}-${String(monthAgo.getDate()).padStart(2, '0')}`;
                 return {
-                    start: monthAgo.toISOString().split('T')[0],
-                    end: today.toISOString().split('T')[0]
+                    start: monthAgoStr,
+                    end: todayStr
                 };
             default:
                 return null;
@@ -351,10 +363,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const dateRange = getDateRange(tanggalVal);
         
+        let visibleCount = 0;
+        
+        console.log('=== Filter Debug ===');
+        console.log('Filter Tanggal:', tanggalVal);
+        console.log('Date Range:', dateRange);
+        
         rows.forEach(row => {
             const text = row.textContent.toLowerCase();
             const status = row.getAttribute('data-status');
             const tanggalRow = row.getAttribute('data-tanggal');
+            
+            console.log('Row Tanggal:', tanggalRow);
             
             const matchSearch = text.includes(searchVal);
             const matchStatus = !statusVal || status === statusVal;
@@ -362,10 +382,19 @@ document.addEventListener('DOMContentLoaded', function() {
             let matchTanggal = true;
             if (dateRange && tanggalRow) {
                 matchTanggal = tanggalRow >= dateRange.start && tanggalRow <= dateRange.end;
+                console.log('Match?', tanggalRow, '>=', dateRange.start, '&&', tanggalRow, '<=', dateRange.end, '=', matchTanggal);
             }
             
-            row.style.display = matchSearch && matchStatus && matchTanggal ? '' : 'none';
+            if (matchSearch && matchStatus && matchTanggal) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
         });
+        
+        console.log('Visible Count:', visibleCount);
+        console.log('Total Rows:', rows.length);
         
         // Update counter
         updateCounter();

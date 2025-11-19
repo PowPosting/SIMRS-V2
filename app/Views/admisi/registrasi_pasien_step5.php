@@ -141,7 +141,7 @@
 
 /* Modern Final Confirmation Card */
 .final-confirmation {
-    background: linear-gradient(135deg, #6ea8fe 0%, #a685e2 100%);
+    background-color: #007BFF;
     color: #fff;
     border: none;
     border-radius: 13px;
@@ -175,7 +175,7 @@
 }
 
 
-.final-confirmation select.form-control,
+.final-confirmation select.form-control,{
     background: #fff;
     border: 1.5px solid #d1d5db;
     border-radius: 10px;
@@ -192,7 +192,7 @@
 }
 .final-confirmation select.form-control:focus,
 .final-confirmation input.form-control:focus {
-    border-color: #7b2ff2;
+    border-color: #28A745;
     outline: none;
     box-shadow: 0 0 0 2px #b3c6ff44;
     background: #f7f7ff;
@@ -200,15 +200,15 @@
     font-size: 1em;
     color: #222;
 }
-}
+
 
 .final-confirmation .form-group {
     margin-bottom: 1.1rem;
 }
 
 .final-confirmation .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: #7b2ff2;
-    border-color: #7b2ff2;
+    background-color: #000000ff;
+    border-color: #ffffffff;
 }
 
 .final-confirmation .custom-control-label {
@@ -218,7 +218,7 @@
 }
 
 .final-confirmation .form-check-input {
-    accent-color: #7b2ff2;
+    accent-color: #28A745;
     margin-right: 12px;
 }
 
@@ -233,7 +233,7 @@
 }
 
 .final-confirmation .btn-light {
-    background: linear-gradient(90deg, #7b2ff2 0%, #4f8cff 100%);
+    background-color: #28A745;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -244,8 +244,7 @@
     transition: background 0.2s, color 0.2s;
 }
 .final-confirmation .btn-light:hover {
-    background: linear-gradient(90deg, #4f8cff 0%, #7b2ff2 100%);
-    color: #fff;
+    background-color: #28A745;
 }
 
 .final-confirmation .btn-outline-light {
@@ -428,8 +427,6 @@
                             <div class="form-group mb-4">
                                 <label class="font-weight-bold">Daftar Dokter yang Tersedia Hari Ini</label>
                                 <div id="daftar-dokter-available">
-                                    <div class="text-muted">Silakan pilih poliklinik untuk melihat daftar dokter.</div>
-                                </div>
                             </div>
                             
                             <?php if (session('error')): ?>
@@ -544,9 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } else if (poliId) {
             daftarDokterDiv.innerHTML = '<div class="text-danger">Tidak ada dokter tersedia hari ini di poliklinik ini.</div>';
-        } else {
-            daftarDokterDiv.innerHTML = '<div class="text-muted">Silakan pilih poliklinik untuk melihat daftar dokter.</div>';
-        }
+        } 
     }
 
     function validateForm() {

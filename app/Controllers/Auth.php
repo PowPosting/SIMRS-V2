@@ -119,7 +119,6 @@ class Auth extends BaseController
             'alamat' => 'permit_empty|max_length[255]'
         ];
 
-        // Add password validation only if password is provided
         if ($this->request->getPost('password')) {
             $rules['password'] = 'min_length[6]';
             $rules['confirm_password'] = 'matches[password]';
@@ -139,7 +138,7 @@ class Auth extends BaseController
             'alamat' => $this->request->getPost('alamat')
         ];
 
-        // Update password only if provided
+        
         if ($this->request->getPost('password')) {
             $updateData['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
         }

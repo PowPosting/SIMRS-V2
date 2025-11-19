@@ -3,7 +3,7 @@
 <?= $this->section('styles') ?>
 <style>
     .page-header-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: #007BFF;
         color: white;
         border-radius: 15px;
         padding: 2rem;
@@ -27,7 +27,7 @@
         transition: all 0.3s ease;
     }
     .section-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: #007BFF;
         color: white;
         padding: 1.5rem;
         border-bottom: none;
@@ -69,8 +69,8 @@
     }
 
     .form-control:focus {
-        border-color: #667eea !important;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+        border-color: #007BFF !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
         outline: none !important;
     }
 

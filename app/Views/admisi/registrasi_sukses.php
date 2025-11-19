@@ -22,7 +22,7 @@
 }
 
 .success-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #007BFF;
     padding: 3rem 2rem 2rem;
     text-align: center;
     color: white;

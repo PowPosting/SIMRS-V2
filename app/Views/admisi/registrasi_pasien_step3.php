@@ -196,13 +196,13 @@ label {
                                     <label for="agama">Agama</label>
                                     <select class="form-control" id="agama" name="agama">
                                         <option value="">Pilih Agama</option>
-                                        <option value="Islam">Islam</option>
-                                        <option value="Kristen Protestan">Kristen Protestan</option>
-                                        <option value="Kristen Katolik">Kristen Katolik</option>
-                                        <option value="Hindu">Hindu</option>
-                                        <option value="Buddha">Buddha</option>
-                                        <option value="Khonghucu">Khonghucu</option>
-                                        <option value="Lainnya">Lainnya</option>
+                                        <option value="Islam" <?= ($step3_data['agama'] ?? '') == 'Islam' ? 'selected' : '' ?>>Islam</option>
+                                        <option value="Kristen Protestan" <?= ($step3_data['agama'] ?? '') == 'Kristen Protestan' ? 'selected' : '' ?>>Kristen Protestan</option>
+                                        <option value="Kristen Katolik" <?= ($step3_data['agama'] ?? '') == 'Kristen Katolik' ? 'selected' : '' ?>>Kristen Katolik</option>
+                                        <option value="Hindu" <?= ($step3_data['agama'] ?? '') == 'Hindu' ? 'selected' : '' ?>>Hindu</option>
+                                        <option value="Buddha" <?= ($step3_data['agama'] ?? '') == 'Buddha' ? 'selected' : '' ?>>Buddha</option>
+                                        <option value="Khonghucu" <?= ($step3_data['agama'] ?? '') == 'Khonghucu' ? 'selected' : '' ?>>Khonghucu</option>
+                                        <option value="Lainnya" <?= ($step3_data['agama'] ?? '') == 'Lainnya' ? 'selected' : '' ?>>Lainnya</option>
                                     </select>
                                 </div>
                             </div>
@@ -211,19 +211,13 @@ label {
                                     <label for="golongan_darah">Golongan Darah</label>
                                     <select class="form-control" id="golongan_darah" name="golongan_darah">
                                         <option value="">Pilih Golongan Darah</option>
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="AB">AB</option>
-                                        <option value="O">O</option>
-                                        <option value="A+">A+</option>
-                                        <option value="A-">A-</option>
-                                        <option value="B+">B+</option>
-                                        <option value="B-">B-</option>
-                                        <option value="AB+">AB+</option>
-                                        <option value="AB-">AB-</option>
-                                        <option value="O+">O+</option>
-                                        <option value="O-">O-</option>
-                                        <option value="Tidak Tahu">Tidak Tahu</option>
+                                        <?php
+                                        $goldarOptions = ['A', 'B', 'AB', 'O', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Tidak Tahu'];
+                                        foreach ($goldarOptions as $opt) {
+                                            $selected = ($step3_data['golongan_darah'] ?? '') == $opt ? 'selected' : '';
+                                            echo "<option value='$opt' $selected>$opt</option>";
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -235,25 +229,20 @@ label {
                                     <label for="pendidikan_terakhir">Pendidikan Terakhir</label>
                                     <select class="form-control" id="pendidikan_terakhir" name="pendidikan_terakhir">
                                         <option value="">Pilih Pendidikan Terakhir</option>
-                                        <option value="Tidak Sekolah">Tidak Sekolah</option>
-                                        <option value="SD">SD</option>
-                                        <option value="SMP">SMP</option>
-                                        <option value="SMA/SMK">SMA/SMK</option>
-                                        <option value="D1">D1</option>
-                                        <option value="D2">D2</option>
-                                        <option value="D3">D3</option>
-                                        <option value="D4">D4</option>
-                                        <option value="S1">S1</option>
-                                        <option value="S2">S2</option>
-                                        <option value="S3">S3</option>
-                                        <option value="Lainnya">Lainnya</option>
+                                        <?php
+                                        $pendidikanOptions = ['Tidak Sekolah', 'SD', 'SMP', 'SMA/SMK', 'D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3', 'Lainnya'];
+                                        foreach ($pendidikanOptions as $opt) {
+                                            $selected = ($step3_data['pendidikan_terakhir'] ?? '') == $opt ? 'selected' : '';
+                                            echo "<option value='$opt' $selected>$opt</option>";
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="kewarganegaraan">Kewarganegaraan</label>
-                                    <input type="text" class="form-control" id="kewarganegaraan" name="kewarganegaraan" placeholder="Contoh: Indonesia" value="Indonesia">
+                                    <input type="text" class="form-control" id="kewarganegaraan" name="kewarganegaraan" placeholder="Contoh: Indonesia" value="<?= $step3_data['kewarganegaraan'] ?? 'Indonesia' ?>">
                                 </div>
                             </div>
                         </div>
@@ -262,13 +251,13 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="suku">Suku</label>
-                                    <input type="text" class="form-control" id="suku" name="suku" placeholder="Contoh: Jawa, Batak, Minang, dll">
+                                    <input type="text" class="form-control" id="suku" name="suku" placeholder="Contoh: Jawa, Batak, Minang, dll" value="<?= $step3_data['suku'] ?? '' ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nama_di_kartu_pasien">Nama Di Kartu Pasien</label>
-                                    <input type="text" class="form-control" id="nama_di_kartu_pasien" name="nama_di_kartu_pasien" placeholder="Akan diisi otomatis dari nama lengkap">
+                                    <input type="text" class="form-control" id="nama_di_kartu_pasien" name="nama_di_kartu_pasien" placeholder="Akan diisi otomatis dari nama lengkap" value="<?= $step3_data['nama_di_kartu_pasien'] ?? '' ?>">
                                     <small class="form-text text-muted">Nama ini akan diambil dari data step 1</small>
                                 </div>
                             </div>
@@ -278,7 +267,7 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="no_telepon_rumah">No Telepon Rumah</label>
-                                    <input type="text" class="form-control" id="no_telepon_rumah" name="no_telepon_rumah" placeholder="Contoh: 021-1234567">
+                                    <input type="text" class="form-control" id="no_telepon_rumah" name="no_telepon_rumah" placeholder="Contoh: 021-1234567" value="<?= $step3_data['no_telepon_rumah'] ?? '' ?>">
                                 </div>
                             </div>
                         </div>
@@ -287,7 +276,7 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="pekerjaan">Pekerjaan</label>
-                                    <input type="text" class="form-control" id="pekerjaan" name="pekerjaan" placeholder="Contoh: Pegawai Swasta, Wiraswasta, PNS, dll">
+                                    <input type="text" class="form-control" id="pekerjaan" name="pekerjaan" placeholder="Contoh: Pegawai Swasta, Wiraswasta, PNS, dll" value="<?= $step3_data['pekerjaan'] ?? '' ?>">
                                 </div>
                             </div>
                         </div>

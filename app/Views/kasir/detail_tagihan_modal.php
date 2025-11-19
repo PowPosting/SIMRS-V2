@@ -9,7 +9,12 @@
             <small class="text-muted"><?= esc($pasien['no_rm'] ?? '-') ?> • <?= esc($pasien['nama_dokter'] ?? 'Dr. -') ?></small>
         </div>
         <div class="ms-auto">
-            <span class="badge bg-warning">Belum Dibayar</span>
+            <?php 
+            $status = $tagihan_info['status'] ?? 'pending';
+            $badgeClass = $status === 'paid' ? 'bg-success' : 'bg-warning';
+            $statusText = $status === 'paid' ? 'Sudah Dibayar' : 'Belum Dibayar';
+            ?>
+            <span class="badge <?= $badgeClass ?>"><?= $statusText ?></span>
         </div>
     </div>
     
@@ -19,6 +24,72 @@
         </div>
         <div class="col-6">
             <span class="text-muted">Gender:</span> <?= ($pasien['jenis_kelamin'] ?? '-') === 'L' ? 'Laki-laki' : (($pasien['jenis_kelamin'] ?? '-') === 'P' ? 'Perempuan' : '-') ?>
+        </div>
+    </div>
+</div>
+
+<!-- Informasi Tagihan -->
+<div class="mb-4">
+    <h6 class="text-primary mb-3">
+        <i class="fas fa-file-invoice me-2"></i>Informasi Tagihan
+    </h6>
+    
+    <div class="row">
+        <div class="col-6">
+            <div class="mb-2">
+                <small class="text-muted d-block">Nama Pasien:</small>
+                <strong><?= esc($pasien['nama_pasien'] ?? '-') ?></strong>
+            </div>
+            <div class="mb-2">
+                <small class="text-muted d-block">No. RM:</small>
+                <strong><?= esc($pasien['no_rm'] ?? '-') ?></strong>
+            </div>
+            <div class="mb-2">
+                <small class="text-muted d-block">Tanggal Lahir:</small>
+                <strong><?php 
+                if (isset($pasien['tanggal_lahir']) && !empty($pasien['tanggal_lahir'])) {
+                    echo date('d/m/Y', strtotime($pasien['tanggal_lahir']));
+                } else {
+                    echo '-';
+                }
+                ?></strong>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="mb-2">
+                <small class="text-muted d-block">No. Tagihan:</small>
+                <strong><?= esc($tagihan_info['no_tagihan'] ?? '-') ?></strong>
+            </div>
+            <div class="mb-2">
+                <small class="text-muted d-block">Jenis Layanan:</small>
+                <strong><?= esc($tagihan_info['jenis_layanan'] ?? 'Rawat Jalan') ?></strong>
+            </div>
+            <div class="mb-2">
+                <small class="text-muted d-block">Metode Bayar:</small>
+                <strong><?php 
+                $metode = isset($tagihan_info['metode_pembayaran']) ? $tagihan_info['metode_pembayaran'] : '';
+                $status = isset($tagihan_info['status']) ? $tagihan_info['status'] : 'pending';
+                
+                if (empty($metode) || $metode === '-') {
+                    if ($status === 'pending') {
+                        echo '<span class="text-muted">Belum dibayar</span>';
+                    } else {
+                        echo '<span class="text-muted">-</span>';
+                    }
+                } else {
+                    $metodeMap = [
+                        'tunai' => 'Tunai',
+                        'cash' => 'Tunai',
+                        'transfer' => 'Transfer Bank',
+                        'debit' => 'Kartu Debit',
+                        'credit' => 'Kartu Kredit',
+                        'qris' => 'QRIS'
+                    ];
+                    $metodeLower = strtolower(trim($metode));
+                    echo esc(isset($metodeMap[$metodeLower]) ? $metodeMap[$metodeLower] : ucfirst($metode));
+                }
+                ?></strong>
+            </div>
         </div>
     </div>
 </div>
@@ -102,14 +173,24 @@
         <button type="button" class="btn btn-outline-secondary" onclick="cetakStruk()">
             <i class="fas fa-print me-1"></i>Cetak Struk
         </button>
+        <?php if (($tagihan_info['status'] ?? 'pending') === 'pending'): ?>
         <button type="button" class="btn btn-success" onclick="bayarSekarang()">
             <i class="fas fa-credit-card me-1"></i>Bayar Sekarang
         </button>
+        <?php else: ?>
+        <button type="button" class="btn btn-secondary" disabled>
+            <i class="fas fa-check me-1"></i>Sudah Dibayar
+        </button>
+        <?php endif; ?>
     </div>
     
     <small class="text-muted d-block mt-2">
         <i class="fas fa-info-circle me-1"></i>
-        Pembayaran dapat dilakukan tunai, transfer, atau kartu debit
+        <?php if (($tagihan_info['status'] ?? 'pending') === 'pending'): ?>
+        Pembayaran hanya dapat dilakukan dengan tunai pada saat ini.
+        <?php else: ?>
+        Tagihan ini sudah lunas
+        <?php endif; ?>
     </small>
 </div>
 

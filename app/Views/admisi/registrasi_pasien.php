@@ -220,7 +220,7 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nama_lengkap">Nama Lengkap Pasien <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="<?= old('nama_lengkap') ?>" required>
+                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="<?= old('nama_lengkap', $step1_data['nama_lengkap'] ?? '') ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -231,15 +231,15 @@ label {
                                     <label for="jenis_kelamin">Jenis Kelamin <span class="text-danger">*</span></label>
                                     <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
                                         <option value="">Pilih Jenis Kelamin</option>
-                                        <option value="L">Laki-laki</option>
-                                        <option value="P">Perempuan</option>
+                                        <option value="L" <?= ($step1_data['jenis_kelamin'] ?? '') == 'L' ? 'selected' : '' ?>>Laki-laki</option>
+                                        <option value="P" <?= ($step1_data['jenis_kelamin'] ?? '') == 'P' ? 'selected' : '' ?>>Perempuan</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tempat_lahir">Tempat Lahir <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" required>
+                                    <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" value="<?= $step1_data['tempat_lahir'] ?? '' ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -248,14 +248,19 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_lahir">Tanggal Lahir <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
+                                    <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" value="<?= $step1_data['tanggal_lahir'] ?? '' ?>" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nomor_identitas">Nomor KTP/SIM <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nomor_identitas" name="nomor_identitas" required autocomplete="off">
+                                    <input type="text" class="form-control <?= session()->has('errors') && isset(session('errors')['nomor_identitas']) ? 'is-invalid' : '' ?>" id="nomor_identitas" name="nomor_identitas" required autocomplete="off" value="<?= old('nomor_identitas', $step1_data['nomor_identitas'] ?? '') ?>">
                                     <small id="nomor_identitas_feedback" class="form-text"></small>
+                                    <?php if (session()->has('errors') && isset(session('errors')['nomor_identitas'])): ?>
+                                        <div class="invalid-feedback d-block">
+                                            <?= session('errors')['nomor_identitas'] ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -264,13 +269,13 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email">
+                                    <input type="email" class="form-control" id="email" name="email" value="<?= $step1_data['email'] ?? '' ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nomor_hp">Nomor HP/WA <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" required>
+                                    <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" value="<?= $step1_data['nomor_hp'] ?? '' ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -281,10 +286,10 @@ label {
                                     <label for="status_perkawinan">Status Perkawinan <span class="text-danger">*</span></label>
                                     <select class="form-control" id="status_perkawinan" name="status_perkawinan" required autocomplete="off">
                                         <option value="">Pilih Status Perkawinan</option>
-                                        <option value="menikah" <?= (old('status_perkawinan') == 'menikah') ? 'selected' : '' ?>>Menikah</option>
-                                        <option value="belum_menikah" <?= (old('status_perkawinan') == 'belum_menikah') ? 'selected' : '' ?>>Belum Menikah</option>
-                                        <option value="janda" <?= (old('status_perkawinan') == 'janda') ? 'selected' : '' ?>>Janda</option>
-                                        <option value="duda" <?= (old('status_perkawinan') == 'duda') ? 'selected' : '' ?>>Duda</option>
+                                        <option value="menikah" <?= (old('status_perkawinan', $step1_data['status_perkawinan'] ?? '') == 'menikah') ? 'selected' : '' ?>>Menikah</option>
+                                        <option value="belum_menikah" <?= (old('status_perkawinan', $step1_data['status_perkawinan'] ?? '') == 'belum_menikah') ? 'selected' : '' ?>>Belum Menikah</option>
+                                        <option value="janda" <?= (old('status_perkawinan', $step1_data['status_perkawinan'] ?? '') == 'janda') ? 'selected' : '' ?>>Janda</option>
+                                        <option value="duda" <?= (old('status_perkawinan', $step1_data['status_perkawinan'] ?? '') == 'duda') ? 'selected' : '' ?>>Duda</option>
                                     </select>
                                 </div>
                             </div>

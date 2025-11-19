@@ -212,9 +212,9 @@
             <h2>STRUK PEMBAYARAN</h2>
             <div class="subtitle">SIMRS - Sistem Informasi Manajemen Rumah Sakit</div>
             <div class="klinik-info">
-                <div>Klinik Hamori</div>
-                <div>Jl. Kesehatan No. 123, Kota</div>
-                <div>Telp: (021) 1234-5678</div>
+                <div>RS Hamori</div>
+                <div>Jl.Pagaden Ds.Jabong, Kota Subang</div>
+                <div>Telp: 0260-4250 888</div>
             </div>
         </div>
         

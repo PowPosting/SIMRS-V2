@@ -233,7 +233,7 @@
 
 <style>
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #007BFF;
 }
 
 .border-left-primary {

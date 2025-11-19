@@ -240,7 +240,8 @@
                         <label class="form-label">Metode Pembayaran</label>
                         <select class="form-control form-control-lg" id="metodeBayar" required>
                             <option value="">Pilih Metode Pembayaran</option>
-                            <option value="cash">💵 Cash/Tunai</option>
+                            <option value="tunai">💵 Cash/Tunai</option>
+                            
                         </select>
                     </div>
 

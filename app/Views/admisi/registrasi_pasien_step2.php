@@ -200,7 +200,7 @@ label {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="alamat_lengkap">Alamat Lengkap <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="alamat_lengkap" name="alamat_lengkap" rows="3" required placeholder="Masukkan alamat lengkap (nama jalan, nomor rumah, dll)"><?= old('alamat_lengkap') ?></textarea>
+                                    <textarea class="form-control" id="alamat_lengkap" name="alamat_lengkap" rows="3" required placeholder="Masukkan alamat lengkap (nama jalan, nomor rumah, dll)"><?= old('alamat_lengkap', $step2_data['alamat_lengkap'] ?? '') ?></textarea>
                                     <small class="form-text text-muted">Masukkan alamat lengkap termasuk nama jalan dan nomor rumah</small>
                                 </div>
                             </div>
@@ -211,7 +211,7 @@ label {
                                 <div class="form-group">
                                     <label for="kode_pos">Kode Pos <span class="text-danger">*</span></label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="kode_pos" name="kode_pos" maxlength="5" pattern="[0-9]{5}" placeholder="Contoh: 12345" value="<?= old('kode_pos', isset($alamat_data) ? $alamat_data['kode_pos'] : '') ?>" required>
+                                        <input type="text" class="form-control" id="kode_pos" name="kode_pos" maxlength="5" pattern="[0-9]{5}" placeholder="Contoh: 12345" value="<?= old('kode_pos', $step2_data['kode_pos'] ?? '') ?>" required>
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-outline-primary" id="btn-cari-kodepos">
                                                 <i class="fas fa-search"></i> Cari
@@ -224,7 +224,7 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="kelurahan">Kelurahan/Desa <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="kelurahan" name="kelurahan" required placeholder="Nama kelurahan/desa" value="<?= old('kelurahan', isset($alamat_data) ? $alamat_data['kelurahan'] : '') ?>">
+                                    <input type="text" class="form-control" id="kelurahan" name="kelurahan" required placeholder="Nama kelurahan/desa" value="<?= old('kelurahan', $step2_data['kelurahan'] ?? '') ?>">
                                 </div>
                             </div>
                         </div>
@@ -232,13 +232,13 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="kecamatan">Kecamatan <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="kecamatan" name="kecamatan" required placeholder="Nama kecamatan" value="<?= old('kecamatan', isset($alamat_data) ? $alamat_data['kecamatan'] : '') ?>">
+                                    <input type="text" class="form-control" id="kecamatan" name="kecamatan" required placeholder="Nama kecamatan" value="<?= old('kecamatan', $step2_data['kecamatan'] ?? '') ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="kabupaten_kota">Kabupaten/Kota <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="kabupaten_kota" name="kabupaten_kota" required placeholder="Nama kabupaten/kota" value="<?= old('kabupaten_kota', isset($alamat_data) ? $alamat_data['kabupaten_kota'] : '') ?>">
+                                    <input type="text" class="form-control" id="kabupaten_kota" name="kabupaten_kota" required placeholder="Nama kabupaten/kota" value="<?= old('kabupaten_kota', $step2_data['kabupaten_kota'] ?? '') ?>">
                                 </div>
                             </div>
                         </div>
@@ -247,7 +247,7 @@ label {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="provinsi">Provinsi <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="provinsi" name="provinsi" required placeholder="Nama provinsi" value="<?= old('provinsi', $alamat_data['provinsi'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="provinsi" name="provinsi" required placeholder="Nama provinsi" value="<?= old('provinsi', $step2_data['provinsi'] ?? '') ?>">
                                 </div>
                             </div>
                         </div>

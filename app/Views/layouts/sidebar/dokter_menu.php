@@ -12,13 +12,6 @@
         <span class="nav-text">Hasil Pemeriksaan SOAP</span>
     </a>
 </li>
-<!-- Daftar Dokter -->
-<li class="nav-item">
-    <a href="<?= base_url('admin/datadokter') ?>" class="nav-link" data-toggle="tooltip" data-placement="right" title="Data Dokter">
-        <i class="fa-solid fa-list-ul nav-icon"></i>
-        <span class="nav-text">Data Dokter</span>
-    </a>
-</li>
 
 <!-- Sub Header - Data Medis -->
 <li class="nav-header" style="font-size: 0.85em; color: #6c757d;">Data Medis</li>

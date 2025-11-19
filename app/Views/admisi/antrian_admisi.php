@@ -211,12 +211,5 @@
             ?>
         </div>
     </div>
-    
-    <script>
-        // Auto close after print
-        window.onafterprint = function() {
-            window.close();
-        }
-    </script>
 </body>
 </html>

@@ -68,7 +68,7 @@
 
 <style>
 .bg-gradient-success {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    background-color: #007BFF;
 }
 
 .border-left-primary {

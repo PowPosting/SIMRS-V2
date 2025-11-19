@@ -38,18 +38,18 @@
                     <div class="col-md-2">
                         <div class="filter-group">
                             <label class="filter-label">Tanggal Dari</label>
-                            <input type="date" class="form-control" id="tanggalDari" value="<?= date('Y-m-d', strtotime('-7 days')) ?>">
+                            <input type="date" class="form-control" id="tanggalDari" value="">
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="filter-group">
                             <label class="filter-label">Tanggal Sampai</label>
-                            <input type="date" class="form-control" id="tanggalSampai" value="<?= date('Y-m-d') ?>">
+                            <input type="date" class="form-control" id="tanggalSampai" value="">
                         </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-end">
                         <div class="d-flex gap-2 w-100">
-                            <button type="button" class="btn btn-primary flex-fill" onclick="filterRiwayat()">
+                            <button type="button" class="btn btn-primary" onclick="filterRiwayat()">
                                 <i class="bi bi-search me-1"></i>Filter
                             </button>
                             <button type="button" class="btn btn-outline-secondary" onclick="resetFilter()">
@@ -271,37 +271,102 @@ function filterRiwayat() {
 
 function resetFilter() {
     document.getElementById('cariPasien').value = '';
-    document.getElementById('tanggalDari').value = '<?= date('Y-m-d', strtotime('-7 days')) ?>';
-    document.getElementById('tanggalSampai').value = '<?= date('Y-m-d') ?>';
+    document.getElementById('tanggalDari').value = '';
+    document.getElementById('tanggalSampai').value = '';
     
     // Show all rows
     const rows = document.querySelectorAll('#riwayatTable tbody tr');
+    let totalCount = 0;
+    let totalPendapatan = 0;
+    
     rows.forEach(row => {
-        row.style.display = '';
+        if (row.cells.length > 1) { // Skip empty state row
+            row.style.display = '';
+            totalCount++;
+            
+            // Hitung total pendapatan
+            const totalTagihan = row.cells[3].textContent.trim();
+            const nilai = totalTagihan.replace(/[^\d]/g, '');
+            if (nilai) {
+                totalPendapatan += parseInt(nilai);
+            }
+        }
     });
     
-    // Reset counter
-    document.getElementById('totalRiwayat').textContent = `Total: <?= count($riwayat_pembayaran ?? []) ?> transaksi`;
+    // Reset counter dan total
+    document.getElementById('totalRiwayat').textContent = `Total: ${totalCount} transaksi`;
+    document.getElementById('totalTransaksi').textContent = totalCount;
+    document.getElementById('totalPendapatan').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(totalPendapatan);
 }
 
 function exportData() {
-    // Implementasi export ke Excel/PDF
+    // Get filter values
+    const tanggalDari = document.getElementById('tanggalDari').value;
+    const tanggalSampai = document.getElementById('tanggalSampai').value;
+    const cariPasien = document.getElementById('cariPasien').value;
+    
+    // Build URL with query parameters
+    let url = '<?= base_url('kasir/export-excel') ?>';
+    const params = new URLSearchParams();
+    
+    if (tanggalDari) params.append('tanggal_dari', tanggalDari);
+    if (tanggalSampai) params.append('tanggal_sampai', tanggalSampai);
+    if (cariPasien) params.append('search', cariPasien);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    // Show loading
     Swal.fire({
-        title: 'Export Data',
-        text: 'Pilih format file untuk export',
+        title: 'Mengekspor Data',
+        html: '<i class="bi bi-hourglass-split"></i> Sedang memproses data ke Excel...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    // Export to Excel
+    window.location.href = url;
+    
+    // Close loading after delay
+    setTimeout(() => {
+        Swal.close();
+    }, 2000);
+}
+
+function exportSemuaData() {
+    // Konfirmasi
+    Swal.fire({
+        title: 'Export Semua Data?',
+        text: 'Akan mengekspor semua riwayat pembayaran tanpa filter',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: '<i class="bi bi-file-earmark-excel me-1"></i>Excel',
-        cancelButtonText: '<i class="bi bi-file-earmark-pdf me-1"></i>PDF',
-        showDenyButton: true,
-        denyButtonText: 'Batal'
+        confirmButtonText: 'Ya, Export',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#198754'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Export to Excel
+            // Show loading
+            Swal.fire({
+                title: 'Mengekspor Data',
+                html: '<i class="bi bi-hourglass-split"></i> Sedang memproses semua data ke Excel...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Export all data (no filter parameters)
             window.location.href = '<?= base_url('kasir/export-excel') ?>';
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Export to PDF
-            window.location.href = '<?= base_url('kasir/export-pdf') ?>';
+            
+            // Close loading after delay
+            setTimeout(() => {
+                Swal.close();
+            }, 2000);
         }
     });
 }

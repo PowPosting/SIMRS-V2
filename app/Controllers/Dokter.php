@@ -144,6 +144,30 @@ class Dokter extends BaseController
 
         // Ambil data obat dari tabel obat
         $list_obat = $db->table('obat')->get()->getResultArray();
+        
+        // Ambil data tanda vital dari pemeriksaan_awal berdasarkan id_antrian
+        $tanda_vital = null;
+        
+        // Jika antrian poli punya id_antrian_perawat, gunakan itu
+        if (isset($antrian['id_antrian_perawat']) && !empty($antrian['id_antrian_perawat'])) {
+            $tanda_vital = $db->table('pemeriksaan_awal')
+                ->where('id_antrian', $antrian['id_antrian_perawat'])
+                ->get()
+                ->getFirstRow('array');
+        }
+        
+        // Jika tidak ada, coba cari berdasarkan no_rm dan tanggal hari ini
+        if (!$tanda_vital) {
+            $tanda_vital = $db->table('pemeriksaan_awal pa')
+                ->join('antrian a', 'a.id = pa.id_antrian', 'left')
+                ->where('a.no_rm', $antrian['no_rm'])
+                ->where('DATE(pa.created_at)', date('Y-m-d'))
+                ->select('pa.*')
+                ->orderBy('pa.created_at', 'DESC')
+                ->get()
+                ->getFirstRow('array');
+        }
+        
         $data = [
             'title' => 'Pemeriksaan Dokter - SIMRS',
             'pageTitle' => 'Pemeriksaan Dokter',
@@ -153,6 +177,7 @@ class Dokter extends BaseController
             'waktu_pemeriksaan' => date('d-m-Y H:i'),
             'antrian' => $antrian,
             'list_obat' => $list_obat,
+            'tanda_vital' => $tanda_vital,
         ];
 
         return view('dokter/pemeriksaan_soap', $data);
