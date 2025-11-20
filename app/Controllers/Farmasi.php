@@ -84,7 +84,7 @@ class Farmasi extends BaseController
 
     public function simpanObat()
     {
-        // Logic to save new or edited medicine
+        
         $db = \Config\Database::connect();
         $data = [
             'kode_obat' => $this->request->getPost('kode_obat'),
@@ -213,10 +213,6 @@ class Farmasi extends BaseController
         return redirect()->to('/farmasi/permintaan-obat');
     }
 
-    /**
-     * Complete medicine request and update patient queue status
-     * When all medicine requests for today are completed, patient status changes to 'Menunggu Kasir'
-     */
     public function selesaiPermintaan($id)
     {
         $resepModel = new \App\Models\ResepModel();

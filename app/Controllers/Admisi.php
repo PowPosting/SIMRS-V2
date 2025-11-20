@@ -554,7 +554,7 @@ class Admisi extends BaseController
         return view('admisi/registrasi_sukses', $data);
     }
 
-    // Helper function untuk generate nomor RM
+    // generate nomor RM
     private function generateNoRM()
     {
         $prefix = 'RM' . date('Ym');
@@ -578,7 +578,7 @@ class Admisi extends BaseController
 
     private function generateNoAntrian($idPoli)
     {
-        $prefix = chr(64 + $idPoli); // A untuk poli 1, B untuk poli 2, dst
+        $prefix = chr(64 + $idPoli); // 
         $date = date('Y-m-d');
         
         // Loop untuk memastikan nomor antrian unik
@@ -589,7 +589,7 @@ class Admisi extends BaseController
             $lastAntrian = $this->antrianModel->getLastAntrian($idPoli, $date);
             
             if ($lastAntrian) {
-                $counter = (int)substr($lastAntrian, 1, 3); // Ambil 3 digit setelah prefix
+                $counter = (int)substr($lastAntrian, 1, 3); 
             } else {
                 $counter = 0;
             }

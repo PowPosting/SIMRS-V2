@@ -35,7 +35,7 @@
                                     <td><?= esc($row['dokter'] ?? '-') ?></td>
                                     <td><?= esc($row['waktu_pemeriksaan'] ?? '-') ?></td>
                                     <td>
-                                        <a href="<?= base_url('dokter/detailpemeriksaanpasien/' . $row['id_pemeriksaan']) ?>" class="btn btn-sm btn-info">Detail</a>
+                                        <a href="<?= base_url('dokter/detailpemeriksaanpasien/' . $row['id_pemeriksaan']) ?>" class="btn btn-sm btn-primary">Detail</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

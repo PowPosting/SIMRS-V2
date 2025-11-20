@@ -19,7 +19,7 @@
                             <th>Spesialisasi</th>
                             <th>Email</th>
                             <th>Telepon</th>
-                            <th>Status</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -45,15 +45,7 @@
                                     </td>
                                     <td><?= esc($dokter['email'] ?? '-') ?></td>
                                     <td><?= esc($dokter['telepon'] ?? '-') ?></td>
-                                    <td>
-                                        <?php 
-                                        $status = $dokter['status'] ?? 'aktif';
-                                        $badgeClass = $status === 'aktif' ? 'badge-success' : 'badge-secondary';
-                                        ?>
-                                        <span class="badge <?= $badgeClass ?>">
-                                            <?= ucfirst($status) ?>
-                                        </span>
-                                    </td>
+                                    
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
