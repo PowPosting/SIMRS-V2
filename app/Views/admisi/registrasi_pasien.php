@@ -253,7 +253,7 @@ label {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="nomor_identitas">Nomor KTP/SIM <span class="text-danger">*</span></label>
+                                    <label for="nomor_identitas">Nomor KTP/NIK/SIM <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control <?= session()->has('errors') && isset(session('errors')['nomor_identitas']) ? 'is-invalid' : '' ?>" id="nomor_identitas" name="nomor_identitas" required autocomplete="off" value="<?= old('nomor_identitas', $step1_data['nomor_identitas'] ?? '') ?>">
                                     <small id="nomor_identitas_feedback" class="form-text"></small>
                                     <?php if (session()->has('errors') && isset(session('errors')['nomor_identitas'])): ?>

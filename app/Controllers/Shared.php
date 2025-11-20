@@ -118,7 +118,6 @@ class Shared extends BaseController
                 'data' => $pasien
             ]);
         } catch (\Exception $e) {
-            log_message('error', '[getDetailPasien] ' . $e->getMessage());
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat memuat data'

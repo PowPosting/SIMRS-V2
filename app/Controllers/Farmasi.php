@@ -232,7 +232,6 @@ class Farmasi extends BaseController
             }
             
             $no_rm = $resep[0]['no_rm'];
-            log_message('info', 'Completing medicine request ID: ' . $id . ' for patient: ' . $no_rm);
             
             // Update status permintaan menjadi 'completed'
             $updated = $resepModel->updateStatus($id, 'completed', [
@@ -269,7 +268,6 @@ class Farmasi extends BaseController
                         throw new \Exception('Gagal mengupdate stok obat');
                     }
                     
-                    log_message('info', 'Updated stock for medicine ID: ' . $resepData['id_obat'] . ' from ' . $currentObat['stok'] . ' to ' . $newStok);
                 }
             } else {
                 // Untuk obat manual (tanpa id_obat), coba cari berdasarkan nama obat
@@ -285,7 +283,6 @@ class Farmasi extends BaseController
                         
                         // Pastikan stok tidak negatif
                         if ($newStok < 0) {
-                            log_message('warning', 'Insufficient stock for manual medicine: ' . $resepData['nama_obat'] . '. Available: ' . $matchingObat['stok'] . ', requested: ' . $resepData['jumlah']);
                         } else {
                             // Update stok obat
                             $stokUpdated = $db->table('obat')
@@ -293,7 +290,6 @@ class Farmasi extends BaseController
                                 ->update(['stok' => $newStok, 'updated_at' => date('Y-m-d H:i:s')]);
                             
                             if ($stokUpdated) {
-                                log_message('info', 'Updated stock for manual medicine: ' . $resepData['nama_obat'] . ' from ' . $matchingObat['stok'] . ' to ' . $newStok);
                             }
                         }
                     }
@@ -307,7 +303,6 @@ class Farmasi extends BaseController
                 'DATE(r.tanggal_resep)' => date('Y-m-d')
             ]);
             
-            log_message('info', 'Remaining pending medicine requests for ' . $no_rm . ': ' . count($pendingResep));
             
             // Jika semua permintaan obat sudah selesai, update status antrian ke 'Menunggu Kasir'
             if (empty($pendingResep)) {
@@ -370,7 +365,6 @@ class Farmasi extends BaseController
                         throw new \Exception('Gagal membuat tagihan untuk pasien');
                     }
                     
-                    log_message('info', 'Created billing for patient ' . $no_rm . ' with total: ' . $total_biaya);
                 }
                 
                 // Update status antrian pasien menjadi 'Menunggu Kasir' (menggunakan id_antrian_perawat)
@@ -387,9 +381,7 @@ class Farmasi extends BaseController
                         ->where('id', $antrianPoli['id_antrian_perawat'])
                         ->update(['status' => 'Menunggu Kasir']);
                     
-                    log_message('info', 'Updated antrian id=' . $antrianPoli['id_antrian_perawat'] . ' status to Menunggu Kasir for no_rm: ' . $no_rm . ', rows affected: ' . $antrianUpdated);
                 } else {
-                    log_message('warning', 'No antrian_poli or id_antrian_perawat found for no_rm: ' . $no_rm . ' today');
                 }
                 $successMessage = 'Permintaan obat telah selesai diproses. Tagihan telah dibuat. Status pasien diubah ke Menunggu Kasir.';
             } else {
@@ -406,7 +398,6 @@ class Farmasi extends BaseController
             
         } catch (\Exception $e) {
             $db->transRollback();
-            log_message('error', 'Failed to complete medicine request: ' . $e->getMessage());
             $this->session->setFlashdata('error', 'Gagal menyelesaikan permintaan obat: ' . $e->getMessage());
         }
         
@@ -447,7 +438,6 @@ class Farmasi extends BaseController
                             ->update(['stok' => $newStok, 'updated_at' => date('Y-m-d H:i:s')]);
                         
                         if ($stokUpdated) {
-                            log_message('info', 'Returned stock for medicine ID: ' . $resepData['id_obat'] . ' from ' . $currentObat['stok'] . ' to ' . $newStok);
                         }
                     }
                 } else {
@@ -467,7 +457,6 @@ class Farmasi extends BaseController
                                 ->update(['stok' => $newStok, 'updated_at' => date('Y-m-d H:i:s')]);
                             
                             if ($stokUpdated) {
-                                log_message('info', 'Returned stock for manual medicine: ' . $resepData['nama_obat'] . ' from ' . $matchingObat['stok'] . ' to ' . $newStok);
                             }
                         }
                     }
@@ -500,7 +489,6 @@ class Farmasi extends BaseController
             
         } catch (\Exception $e) {
             $db->transRollback();
-            log_message('error', 'Failed to cancel medicine request: ' . $e->getMessage());
             $this->session->setFlashdata('error', 'Gagal membatalkan permintaan obat: ' . $e->getMessage());
         }
         
@@ -1019,7 +1007,6 @@ class Farmasi extends BaseController
         $templatePath = APPPATH . 'Templates/excel/template_laporan_farmasi.xlsx';
         
         if (!file_exists($templatePath)) {
-            log_message('error', 'Template tidak ditemukan: ' . $templatePath);
             return $this->response->setStatusCode(500)->setJSON([
                 'success' => false,
                 'message' => 'Template Excel tidak ditemukan'
@@ -1113,7 +1100,6 @@ class Farmasi extends BaseController
             exit;
             
         } catch (\Exception $e) {
-            log_message('error', 'Export Excel error: ' . $e->getMessage());
             return $this->response->setStatusCode(500)->setJSON([
                 'success' => false,
                 'message' => 'Gagal export Excel: ' . $e->getMessage()

@@ -102,7 +102,6 @@ class RekamMedis extends BaseController
             ]);
 
         } catch (\Exception $e) {
-            log_message('error', '[RekamMedis::getPasienList] Error: ' . $e->getMessage());
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Gagal mengambil data: ' . $e->getMessage()

@@ -290,9 +290,7 @@ class Dokter extends BaseController
     public function simpanPemeriksaanSoap()
     {
 
-        log_message('debug', 'SOAP SUBMIT: method=' . $this->request->getMethod() . ' POST=' . json_encode($this->request->getPost()));
         if (strtolower($this->request->getMethod()) !== 'post') {
-            log_message('error', 'SOAP ERROR: Metode tidak valid. Method=' . $this->request->getMethod() . ' URI=' . current_url());
             return $this->response->setStatusCode(405, 'Metode tidak valid');
         }
 
@@ -351,18 +349,13 @@ class Dokter extends BaseController
 
             // Update status antrian jika id_antrian dikirim
             $id_antrian = $this->request->getPost('id_antrian');
-            log_message('info', '[Dokter::simpanPemeriksaanSoap] id_antrian: ' . ($id_antrian ?? 'NULL'));
-            log_message('info', '[Dokter::simpanPemeriksaanSoap] Jumlah resep: ' . $jumlahResep);
-            log_message('info', '[Dokter::simpanPemeriksaanSoap] Status selanjutnya: ' . $statusSelanjutnya);
             
             if ($id_antrian) {
                 // Update di antrian_poli
                 $db->table('antrian_poli')->where('id', $id_antrian)->update(['status' => $statusSelanjutnya]);
-                log_message('info', '[Dokter::simpanPemeriksaanSoap] Updated antrian_poli id=' . $id_antrian);
                 
                 // Ambil id_antrian_perawat dari antrian_poli untuk update antrian utama
                 $antrianPoli = $db->table('antrian_poli')->where('id', $id_antrian)->get()->getFirstRow('array');
-                log_message('info', '[Dokter::simpanPemeriksaanSoap] Antrian poli data: ' . json_encode($antrianPoli));
                 
                 if ($antrianPoli && isset($antrianPoli['id_antrian_perawat'])) {
                     // Update antrian utama berdasarkan ID langsung (lebih reliable)
@@ -370,12 +363,9 @@ class Dokter extends BaseController
                         ->where('id', $antrianPoli['id_antrian_perawat'])
                         ->update(['status' => $statusSelanjutnya]);
                     
-                    log_message('info', '[Dokter::simpanPemeriksaanSoap] Updated antrian id=' . $antrianPoli['id_antrian_perawat'] . ' to "' . $statusSelanjutnya . '", rows affected: ' . $updated);
                 } else {
-                    log_message('warning', '[Dokter::simpanPemeriksaanSoap] Antrian poli not found or id_antrian_perawat missing');
                 }
             } else {
-                log_message('warning', '[Dokter::simpanPemeriksaanSoap] id_antrian is NULL');
             }
 
             $db->transComplete();
@@ -401,7 +391,6 @@ class Dokter extends BaseController
         // Ambil data pasien
         $pasien = $db->table('pasien')->where('no_rekam_medis', $no_rm)->get()->getFirstRow('array');
         if (!$pasien) {
-            log_message('warning', 'Pasien tidak ditemukan untuk no_rm: ' . $no_rm);
             return 0;
         }
 
@@ -477,8 +466,6 @@ class Dokter extends BaseController
         $id_dokter = $this->session->get('id');
         $userRole = $this->session->get('role');
         
-        // Debug: pastikan id yang diterima benar
-        // log_message('debug', 'detailPemeriksaanPasien id: ' . print_r($id, true));
         if ($id) {
             $builder = $db->table('pemeriksaan_soap');
             $builder->select('pemeriksaan_soap.id as id_pemeriksaan, pemeriksaan_soap.*, pasien.nama_lengkap, pasien.jenis_kelamin, pasien.tanggal_lahir, pasien.no_rekam_medis, users.nama_lengkap as dokter, poliklinik.nama as poli');

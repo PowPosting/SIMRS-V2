@@ -56,7 +56,6 @@ class Perawat extends ResourceController
             // Log CURDATE untuk debugging
             $curdateQuery = $this->db->query("SELECT CURDATE() as today");
             $today = $curdateQuery->getRow()->today;
-            log_message('info', '[getAntrianPendaftaran] CURDATE: ' . $today);
             
             // Gunakan raw query untuk menghindari masalah collation
             $sql = "SELECT 
@@ -75,13 +74,10 @@ class Perawat extends ResourceController
                   AND DATE(a.created_at) = CURDATE()
                 ORDER BY a.created_at ASC";
             
-            log_message('info', '[getAntrianPendaftaran] Query: ' . $sql);
             
             $query = $this->db->query($sql);
             $data = $query->getResultArray();
             
-            log_message('info', '[getAntrianPendaftaran] Total rows: ' . count($data));
-            log_message('info', '[getAntrianPendaftaran] Data: ' . json_encode($data));
             
             // Convert created_at to ISO 8601 for timeago.js
             // Data di database sudah dalam timezone Asia/Jakarta
@@ -95,12 +91,8 @@ class Perawat extends ResourceController
             }
             
             // Log current builder state
-            log_message('debug', '[Perawat::getAntrianPendaftaran] Builder state before execute');
             
             // Debug logs
-            log_message('debug', '[Perawat::getAntrianPendaftaran] SQL: ' . $sql);
-            log_message('debug', '[Perawat::getAntrianPendaftaran] Data count: ' . count($data));
-            log_message('debug', '[Perawat::getAntrianPendaftaran] Data: ' . json_encode($data));
             
             $response = [
                 'data' => $data,
@@ -112,11 +104,9 @@ class Perawat extends ResourceController
                 ]
             ];
             
-            log_message('debug', 'Response: ' . json_encode($response));
             
             return $this->response->setJSON($response);
         } catch (\Exception $e) {
-            log_message('error', '[Perawat::getAntrianPendaftaran] Error: ' . $e->getMessage());
             return $this->response->setStatusCode(500)->setJSON([
                 'error' => true,
                 'message' => $e->getMessage()
@@ -156,12 +146,10 @@ class Perawat extends ResourceController
                 'tinggi_badan' => $this->request->getPost('tinggi_badan'),
                 'keluhan' => $this->request->getPost('keluhan'),
             ];
-            log_message('debug', '[Perawat::simpanPemeriksaan] Data masuk: ' . json_encode($data));
             
             // CEK DUPLIKASI: Cek apakah antrian ini sudah pernah diperiksa
             $existingPemeriksaan = $this->pemeriksaanModel->where('id_antrian', $data['id_antrian'])->first();
             if ($existingPemeriksaan) {
-                log_message('warning', '[Perawat::simpanPemeriksaan] Duplikasi terdeteksi untuk id_antrian: ' . $data['id_antrian']);
                 if ($this->request->isAJAX()) {
                     return $this->response->setJSON([
                         'success' => false,
@@ -219,11 +207,9 @@ class Perawat extends ResourceController
                         ->countAllResults();
                     
                     if ($exists == 0) {
-                        log_message('info', '[Perawat::simpanPemeriksaan] Generated unique no_antrian: ' . $noAntrianPoli . ' for poli ' . $kodePoli);
                         break;
                     }
                     
-                    log_message('warning', '[Perawat::simpanPemeriksaan] Nomor antrian ' . $noAntrianPoli . ' sudah ada, mencoba nomor berikutnya');
                     $attempt++;
                     
                 } while ($attempt < $maxAttempts);
@@ -231,7 +217,6 @@ class Perawat extends ResourceController
                 if ($attempt >= $maxAttempts) {
                     // Fallback menggunakan timestamp jika gagal
                     $noAntrianPoli = $kodePoli . substr(time(), -3);
-                    log_message('error', '[Perawat::simpanPemeriksaan] Gagal generate nomor unik setelah ' . $maxAttempts . ' percobaan. Menggunakan fallback: ' . $noAntrianPoli);
                 }
 
                 // Insert ke antrian_poli
@@ -253,7 +238,6 @@ class Perawat extends ResourceController
             }
         } catch (\Exception $e) {
             $this->db->transRollback();
-            log_message('error', '[Perawat::simpanPemeriksaan] Error: ' . $e->getMessage());
             if ($this->request->isAJAX()) {
                 return $this->response->setJSON([
                     'success' => false,
@@ -311,7 +295,6 @@ class Perawat extends ResourceController
             return redirect()->to(base_url('perawat/antrianPendaftaran'))->with('error', 'Data antrian tidak ditemukan');
         }
         // Tidak update status antrian di sini!
-        log_message('debug', '[Perawat::tandaVitalPasien] Data ke view: ' . print_r($antrian, true));
         return view('perawat/tanda_vital_pasien', ['antrian' => $antrian]);
     }
 
@@ -400,9 +383,6 @@ class Perawat extends ResourceController
             ->getRowArray();
 
         // Debug logging
-        log_message('info', '[cetakAntrianPoli] No Antrian: ' . $no_antrian . ', Date: ' . $today);
-        log_message('info', '[cetakAntrianPoli] Query Result: ' . json_encode($antrianPoli));
-        log_message('info', '[cetakAntrianPoli] Last Query: ' . $this->db->getLastQuery());
 
         if (!$antrianPoli) {
             echo '<script>alert("Data antrian tidak ditemukan!"); window.close();</script>';

@@ -107,7 +107,6 @@ class Admisi extends BaseController
             ]);
             
         } catch (\Exception $e) {
-            log_message('error', 'Error saat mencari kode pos: ' . $e->getMessage());
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mencari data kode pos'
@@ -123,7 +122,6 @@ class Admisi extends BaseController
         $fromReset = $this->request->getGet('reset');
         if ($fromReset === 'true') {
             $this->session->remove(['pasien_step1', 'pasien_step2', 'pasien_step3', 'pasien_step4', 'registration_data']);
-            log_message('info', '[registrasiPasien] Session dibersihkan untuk pendaftaran baru');
         }
         
         $data['step1_data'] = $this->session->get('pasien_step1') ?? [];
@@ -159,28 +157,20 @@ class Admisi extends BaseController
         $file = $this->request->getFile('foto-identitas');
         $validation = \Config\Services::validation();
         $errors = [];
-        log_message('debug', '[REGISTRASI] Mulai validasi file upload. Ada file? ' . ($file ? 'YA' : 'TIDAK'));
         if (!$file || !$file->isValid()) {
-            log_message('error', '[REGISTRASI] File tidak valid atau tidak ada. isValid: ' . ($file ? ($file->isValid() ? 'YA' : 'TIDAK') : 'N/A'));
             $errors['foto-identitas'] = 'Dokumen identitas wajib diupload';
         } elseif (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'application/pdf'])) {
-            log_message('error', '[REGISTRASI] Format file salah: ' . $file->getMimeType());
             $errors['foto-identitas'] = 'Format file harus JPG, PNG, atau PDF';
         } elseif ($file->getSize() > 2 * 1024 * 1024) { // 2MB
-            log_message('error', '[REGISTRASI] File terlalu besar: ' . $file->getSize());
             $errors['foto-identitas'] = 'Ukuran file maksimal 2MB';
-        } else {
-            log_message('debug', '[REGISTRASI] File upload valid: ' . $file->getName() . ', size: ' . $file->getSize() . ', type: ' . $file->getMimeType());
         }
         if (!empty($errors)) {
-            log_message('error', '[REGISTRASI] Error validasi file: ' . json_encode($errors));
             return redirect()->back()->withInput()->with('errors', $errors);
         }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-        log_message('debug', 'POST data step 1 after validation: ' . json_encode($this->request->getPost()));
 
         // Simpan file ke folder writable/uploads
         $newName = uniqid('identitas_') . '.' . $file->getExtension();
@@ -236,7 +226,6 @@ class Admisi extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            log_message('error', 'Validasi gagal step2: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -249,11 +238,7 @@ class Admisi extends BaseController
             'kode_pos' => $this->request->getPost('kode_pos')
         ];
 
-        log_message('debug', 'Step2 POST: ' . json_encode($this->request->getPost()));
-        log_message('debug', 'Step2 Data to session: ' . json_encode($data));
-
         $this->session->set('pasien_step2', $data);
-        log_message('debug', 'Step2 session after set: ' . json_encode($this->session->get('pasien_step2')));
         return redirect()->to('admisi/registrasi-pasien/step3');
     }
 
@@ -373,24 +358,12 @@ class Admisi extends BaseController
     // Finalisasi pendaftaran
     public function saveStep5()
     {
-        // Hapus debug output agar tidak tampil di browser
         $rules = [
             'id_poli' => 'required|numeric',
             'konfirmasi_data' => 'required|in_list[1]'
         ];
-        
-        //
-
-        // Log data yang diterima
-        log_message('debug', '=== START SAVING STEP 5 ===');
-        log_message('debug', 'POST Data: ' . json_encode($this->request->getPost()));
-        log_message('debug', 'Session Data Step 1: ' . json_encode($this->session->get('pasien_step1')));
-        log_message('debug', 'Session Data Step 2: ' . json_encode($this->session->get('pasien_step2')));
-        log_message('debug', 'Session Data Step 3: ' . json_encode($this->session->get('pasien_step3')));
-        log_message('debug', 'Session Data Step 4: ' . json_encode($this->session->get('pasien_step4')));
 
         if (!$this->validate($rules)) {
-            log_message('error', 'Validation Errors: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
     
@@ -400,11 +373,6 @@ class Admisi extends BaseController
             !$this->session->has('pasien_step2') || 
             !$this->session->has('pasien_step3') || 
             !$this->session->has('pasien_step4')) {
-            log_message('error', 'Missing session data. Available sessions: ' . 
-                'step1=' . ($this->session->has('pasien_step1') ? 'yes' : 'no') . ', ' .
-                'step2=' . ($this->session->has('pasien_step2') ? 'yes' : 'no') . ', ' .
-                'step3=' . ($this->session->has('pasien_step3') ? 'yes' : 'no') . ', ' .
-                'step4=' . ($this->session->has('pasien_step4') ? 'yes' : 'no'));
             return redirect()->to('admisi/registrasi-pasien')->with('error', 'Data registrasi tidak lengkap. Silakan ulangi dari awal.');
         }
 
@@ -431,9 +399,6 @@ class Admisi extends BaseController
         // Simpan ke database
         try {
             $this->db->transStart();
-            
-            // Debug output
-            echo "Debug: Mencoba menyimpan data...<br>";
             
             // 1. Data untuk tabel pasien
             $dataPasien = [
@@ -462,34 +427,22 @@ class Admisi extends BaseController
                 'kode_pos' => $pasienData['kode_pos']
             ];
 
-            // Log data yang akan disimpan
-            log_message('debug', 'Data Pasien yang akan disimpan: ' . json_encode($dataPasien));
-            log_message('debug', 'Data Alamat yang akan disimpan: ' . json_encode($alamatData));
-
-            // Log data yang akan disimpan
-            log_message('debug', 'Mencoba menyimpan data pasien: ' . json_encode($dataPasien));
-            
             // 1. Simpan data pasien
             if (!$this->pasienModel->insert($dataPasien)) {
                 $errorMessage = 'Gagal menyimpan data pasien: ' . json_encode($this->pasienModel->errors());
-                log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
             
             // Ambil ID pasien yang baru saja disimpan
             $pasienId = $this->db->insertID();
-            log_message('debug', 'Berhasil menyimpan data pasien dengan ID: ' . $pasienId);
             
             // 2. Simpan data alamat
             $alamatData['pasien_id'] = $pasienId;
-            log_message('debug', 'Mencoba menyimpan data alamat: ' . json_encode($alamatData));
             
             if (!$this->alamatPasienModel->insert($alamatData)) {
                 $errorMessage = 'Gagal menyimpan data alamat pasien: ' . json_encode($this->alamatPasienModel->errors());
-                log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
-            log_message('debug', 'Berhasil menyimpan data alamat');
             
             // Simpan info medis pasien
             $infoMedisData = [
@@ -499,10 +452,8 @@ class Admisi extends BaseController
             $infoMedisModel = new \App\Models\InfoMedisPasienModel();
             if (!$infoMedisModel->insert($infoMedisData)) {
                 $errorMessage = 'Gagal menyimpan info medis pasien: ' . json_encode($infoMedisModel->errors());
-                log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
-            log_message('debug', 'Berhasil insert info_medis_pasien');
 
             // Simpan info tambahan pasien
             $infoTambahanData = [
@@ -519,10 +470,8 @@ class Admisi extends BaseController
             }
             if (!$infoTambahanModel->insert($infoTambahanData)) {
                 $errorMessage = 'Gagal menyimpan info tambahan pasien: ' . json_encode($infoTambahanModel->errors());
-                log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
-            log_message('debug', 'Berhasil insert info_tambahan_pasien');
 
             // Simpan data kontak darurat
             $kontakData = [
@@ -535,7 +484,6 @@ class Admisi extends BaseController
 
             if (!$this->db->table('kontak_darurat')->insert($kontakData)) {
                 $errorMessage = 'Gagal menyimpan data kontak darurat: ' . json_encode($this->db->error());
-                log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
 
@@ -544,8 +492,6 @@ class Admisi extends BaseController
             if (empty($noAntrian)) {
                 throw new \Exception('Gagal generate nomor antrian');
             }
-
-            log_message('debug', 'Nomor antrian generated: ' . $noAntrian);
 
             // Gunakan timezone Asia/Jakarta untuk konsistensi
             $dateTime = new \DateTime('now', new \DateTimeZone('Asia/Jakarta'));
@@ -559,9 +505,6 @@ class Admisi extends BaseController
                 'created_at' => $dateTime->format('Y-m-d H:i:s')
             ];
 
-            // Log data antrian yang akan disimpan
-            log_message('info', '[saveStep5] Data antrian: ' . json_encode($antrianData));
-
             // Inisialisasi model antrian
             $antrianModel = new \App\Models\AntrianModel();
 
@@ -569,20 +512,12 @@ class Admisi extends BaseController
             
             if (!$insertResult) {
                 $errorMessage = 'Gagal menyimpan data antrian: ' . json_encode($antrianModel->errors());
-                log_message('error', $errorMessage);
                 throw new \Exception($errorMessage);
             }
-            
-            log_message('info', '[saveStep5] Berhasil insert antrian dengan ID: ' . $insertResult);
-            
-            // Verifikasi data yang tersimpan
-            $savedData = $antrianModel->find($insertResult);
-            log_message('info', '[saveStep5] Data tersimpan di DB: ' . json_encode($savedData));
             
             // Commit transaction if all is well
             if ($this->db->transStatus() === false) {
                 $this->db->transRollback();
-                log_message('error', 'Transaction Error: ' . json_encode($this->db->error()));
                 throw new \Exception('Database transaction failed');
             }
             $this->db->transCommit();
@@ -601,8 +536,6 @@ class Admisi extends BaseController
             
         } catch (\Exception $e) {
             $this->db->transRollback();
-            log_message('error', 'Error detail: ' . $e->getMessage());
-            log_message('error', 'Error trace: ' . $e->getTraceAsString());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
         }
     }
@@ -648,16 +581,12 @@ class Admisi extends BaseController
         $prefix = chr(64 + $idPoli); // A untuk poli 1, B untuk poli 2, dst
         $date = date('Y-m-d');
         
-        log_message('info', '[generateNoAntrian] Generating for poli: ' . $idPoli . ', prefix: ' . $prefix . ', date: ' . $date);
-        
         // Loop untuk memastikan nomor antrian unik
         $maxAttempts = 100;
         $attempt = 0;
         
         do {
             $lastAntrian = $this->antrianModel->getLastAntrian($idPoli, $date);
-            
-            log_message('info', '[generateNoAntrian] Last antrian found: ' . ($lastAntrian ?? 'NULL'));
             
             if ($lastAntrian) {
                 $counter = (int)substr($lastAntrian, 1, 3); // Ambil 3 digit setelah prefix
@@ -674,31 +603,24 @@ class Admisi extends BaseController
                 ->first();
             
             if (!$exists) {
-                log_message('info', '[generateNoAntrian] Generated unique no_antrian: ' . $newNoAntrian);
                 return $newNoAntrian;
             }
             
-            log_message('warning', '[generateNoAntrian] Nomor antrian ' . $newNoAntrian . ' sudah ada, mencoba nomor berikutnya');
             $attempt++;
             
         } while ($attempt < $maxAttempts);
         
         // Jika gagal setelah banyak percobaan, gunakan timestamp
         $fallbackNo = $prefix . substr(time(), -3);
-        log_message('error', '[generateNoAntrian] Gagal generate nomor unik setelah ' . $maxAttempts . ' percobaan. Menggunakan fallback: ' . $fallbackNo);
         return $fallbackNo;
     }
     public function pasienHariIni()
     {
         $today = date('Y-m-d');
         
-        // Log untuk debugging
-        log_message('info', '[pasienHariIni] Today: ' . $today);
-        
         // Cek timezone database
         $timezoneQuery = $this->db->query("SELECT NOW() as now, CURDATE() as curdate, @@session.time_zone as tz");
         $timezoneInfo = $timezoneQuery->getRow();
-        log_message('info', '[pasienHariIni] DB NOW: ' . $timezoneInfo->now . ', CURDATE: ' . $timezoneInfo->curdate . ', TZ: ' . $timezoneInfo->tz);
         
         // Gunakan raw SQL untuk ambil antrian terbaru per pasien hari ini (dari tabel antrian saja)
         $sql = "SELECT 
@@ -723,18 +645,9 @@ class Admisi extends BaseController
                 ) latest_antrian ON latest_antrian.max_id = a.id
                 ORDER BY a.created_at DESC";
         
-        log_message('info', '[pasienHariIni] Query: ' . $sql);
-        
         $query = $this->db->query($sql);
         $pasien_hari_ini = $query->getResultArray();
         
-        log_message('info', '[pasienHariIni] Total rows: ' . count($pasien_hari_ini));
-        
-        // Debug: Log status setiap pasien
-        foreach ($pasien_hari_ini as $p) {
-            log_message('info', '[pasienHariIni] Pasien: ' . $p['no_rekam_medis'] . ' - Status: ' . ($p['status'] ?? 'NULL'));
-        }
-
         // Summary cards
         $total_pasien_hari_ini = count($pasien_hari_ini);
         $pasien_laki_laki = 0;
@@ -906,24 +819,15 @@ class Admisi extends BaseController
             'created_at' => $dateTime->format('Y-m-d H:i:s')
         ];
         
-        // Log data yang akan disimpan
-        log_message('info', '[daftarUlangPasien] Data antrian: ' . json_encode($antrianData));
-        
         $insertResult = $this->antrianModel->insert($antrianData);
         
         if (!$insertResult) {
-            log_message('error', '[daftarUlangPasien] Gagal insert antrian. Errors: ' . json_encode($this->antrianModel->errors()));
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Gagal menyimpan data antrian.'
             ]);
         }
         
-        log_message('info', '[daftarUlangPasien] Berhasil insert antrian dengan ID: ' . $insertResult);
-        
-        // Verifikasi data yang tersimpan
-        $savedData = $this->antrianModel->find($insertResult);
-        log_message('info', '[daftarUlangPasien] Data tersimpan di DB: ' . json_encode($savedData));
         return $this->response->setJSON([
             'success' => true,
             'no_antrian' => $no_antrian
@@ -1008,13 +912,8 @@ class Admisi extends BaseController
      */
     public function updatePasien($id)
     {
-        log_message('info', '[updatePasien] Method dipanggil untuk ID: ' . $id);
-        log_message('info', '[updatePasien] Request Method: ' . $this->request->getMethod());
-        log_message('info', '[updatePasien] POST Data: ' . json_encode($this->request->getPost()));
-        
         // Check if request is POST
         if (!$this->request->is('post')) {
-            log_message('error', '[updatePasien] Bukan POST request');
             return redirect()->back()->with('error', 'Invalid request method');
         }
         
@@ -1025,11 +924,8 @@ class Admisi extends BaseController
 
         // Validasi input data
         if (!$this->validasiDataPasien()) {
-            log_message('error', '[updatePasien] Validasi gagal: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-
-        log_message('info', '[updatePasien] Validasi berhasil, memulai transaction');
         
         // Mulai database transaction
         $this->db->transStart();
@@ -1039,7 +935,6 @@ class Admisi extends BaseController
             if (!$this->updateDataUtamaPasien($id)) {
                 $this->db->transRollback();
                 $errors = $this->pasienModel->errors();
-                log_message('error', '[updatePasien] Gagal update data utama: ' . json_encode($errors));
                 return redirect()->back()->withInput()->with('error', 'Gagal mengupdate data pasien: ' . (isset($errors['email']) ? $errors['email'] : 'Data tidak valid'));
             }
             
@@ -1060,17 +955,13 @@ class Admisi extends BaseController
 
             // Cek status transaction
             if ($this->db->transStatus() === false) {
-                log_message('error', '[updatePasien] Transaction gagal untuk pasien ID: ' . $id);
                 return redirect()->back()->withInput()->with('error', 'Gagal mengupdate data pasien. Silakan coba lagi.');
             }
 
-            log_message('info', '[updatePasien] Data pasien berhasil diupdate. ID: ' . $id);
             return redirect()->to('admisi/datapasien')->with('success', 'Data pasien berhasil diupdate');
 
         } catch (\Exception $e) {
             $this->db->transRollback();
-            log_message('error', '[updatePasien] Exception: ' . $e->getMessage());
-            log_message('error', '[updatePasien] Trace: ' . $e->getTraceAsString());
             return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -1096,7 +987,6 @@ class Admisi extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            log_message('error', 'Validasi pasien gagal: ' . json_encode($this->validator->getErrors()));
             return false;
         }
 
@@ -1126,25 +1016,7 @@ class Admisi extends BaseController
             'email' => $this->request->getPost('email')
         ];
 
-        log_message('info', '[updateDataUtamaPasien] Data yang akan diupdate: ' . json_encode($pasienData));
-        log_message('info', '[updateDataUtamaPasien] ID Pasien: ' . $id);
-        
-        // Cek data pasien sebelum update
-        $existingData = $this->pasienModel->find($id);
-        log_message('info', '[updateDataUtamaPasien] Data sebelum update: ' . json_encode($existingData));
-        
         $result = $this->pasienModel->update($id, $pasienData);
-        
-        // Log error jika ada
-        if (!$result) {
-            $errors = $this->pasienModel->errors();
-            log_message('error', '[updateDataUtamaPasien] Model errors: ' . json_encode($errors));
-            $dbError = $this->db->error();
-            log_message('error', '[updateDataUtamaPasien] DB Error: ' . json_encode($dbError));
-        }
-        
-        log_message('info', '[updateDataUtamaPasien] Update result: ' . ($result ? 'success' : 'failed'));
-        log_message('info', '[updateDataUtamaPasien] Affected rows: ' . $this->db->affectedRows());
         
         return $result;
     }
@@ -1290,11 +1162,6 @@ class Admisi extends BaseController
             ->limit(1)
             ->get()
             ->getRowArray();
-
-        // Debug logging
-        log_message('info', '[printAntrian] No Antrian: ' . $no_antrian . ', Date: ' . $today);
-        log_message('info', '[printAntrian] Query Result: ' . json_encode($antrian));
-        log_message('info', '[printAntrian] Last Query: ' . $db->getLastQuery());
 
         if (!$antrian) {
             echo '<script>alert("Data antrian tidak ditemukan!"); window.close();</script>';

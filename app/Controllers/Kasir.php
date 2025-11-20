@@ -93,13 +93,11 @@ class Kasir extends BaseController {
     
     public function detailTagihan($idPasien, $tanggal)
     {
-        log_message('info', "detailTagihan called with idPasien: $idPasien, tanggal: $tanggal");
         
         try {
             $tagihanModel = new TagihanModel();
             $db = \Config\Database::connect();
             
-            log_message('info', "Models initialized successfully");
             
             // Cari tagihan berdasarkan no_rm dan tanggal (bisa pending atau lunas)
             $tagihan = $tagihanModel->builder()
@@ -110,7 +108,6 @@ class Kasir extends BaseController {
                 ->get()
                 ->getRowArray();
             
-            log_message('info', "Tagihan query executed. Result: " . json_encode($tagihan));
             
             // Flag untuk menandai pasien tanpa resep
             $tanpaResep = false;
@@ -127,7 +124,6 @@ class Kasir extends BaseController {
                     ->getRowArray();
                 
                 if (!$antrian) {
-                    log_message('error', "Tagihan atau antrian not found for idPasien: $idPasien, tanggal: $tanggal");
                     return $this->response->setJSON([
                         'success' => false,
                         'message' => 'Data tidak ditemukan'
@@ -151,25 +147,20 @@ class Kasir extends BaseController {
                     'detail_tagihan' => null
                 ];
                 
-                log_message('info', "Pasien tanpa resep, created temporary tagihan: " . json_encode($tagihan));
             } else {
                 // Cek apakah tagihan ini dari farmasi (ada detail_tagihan) atau manual
                 if (empty($tagihan['detail_tagihan']) || $tagihan['detail_tagihan'] === 'null') {
                     // Tagihan kosong tanpa detail - berarti pasien tanpa resep
                     $tanpaResep = true;
-                    log_message('info', "Tagihan found but no detail_tagihan - marked as tanpa resep");
                 } else {
                     // Tagihan dengan detail - pasien dengan resep
                     $tanpaResep = false;
-                    log_message('info', "Tagihan found with detail_tagihan - marked as dengan resep");
                 }
             }
             
-            log_message('info', "Tagihan found, parsing detail_tagihan");
             
             // Parse detail tagihan dari JSON
             $detail_tagihan = json_decode($tagihan['detail_tagihan'], true) ?? [];
-            log_message('info', "Detail tagihan parsed: " . json_encode($detail_tagihan));
             
             // Pisahkan obat dan biaya standar
             $resep_list = [];
@@ -190,17 +181,14 @@ class Kasir extends BaseController {
                     ];
                     $total_obat += $item['subtotal'];
                     
-                    log_message('info', "Processed obat item: " . $item['nama_obat'] . " with price: " . $harga);
                 }
             }
             
-            log_message('info', "Resep list processed. Total obat: $total_obat");
             
             // Data pasien dan dokter - ambil dari resep terkait atau langsung dari pasien
             $resepModel = new \App\Models\ResepModel();
             $pasienModel = new \App\Models\PasienModel();
             
-            log_message('info', "Additional models initialized");
             
             // Ambil data pasien berdasarkan no_rm
             $pasienInfo = $pasienModel->builder()
@@ -212,7 +200,6 @@ class Kasir extends BaseController {
                 ->get()
                 ->getRowArray();
             
-            log_message('info', "Pasien info query executed: " . json_encode($pasienInfo));
             
             // Hitung umur jika ada tanggal lahir
             $umur = '-';
@@ -222,7 +209,6 @@ class Kasir extends BaseController {
                 $umur = $sekarang->diff($lahir)->y . ' tahun';
             }
             
-            log_message('info', "Age calculated: $umur");
             
             $data = [
                 'resep_list' => $resep_list,
@@ -250,7 +236,6 @@ class Kasir extends BaseController {
                 ]
             ];
             
-            log_message('info', "Data array prepared successfully");
             
             // Jika request AJAX (untuk modal), tentukan jenis modal
             if ($this->request->isAJAX()) {
@@ -258,7 +243,6 @@ class Kasir extends BaseController {
                 $viewType = $this->request->getGet('view') ?? 'detail';
                 
                 if ($viewType === 'simple') {
-                    log_message('info', "Processing simple view type");
                     // Simple detail view for riwayat pembayaran
                     $userModel = new \App\Models\UserModel();
                     $kasirInfo = $userModel->find($tagihan['kasir_id'] ?? 1);
@@ -326,22 +310,17 @@ class Kasir extends BaseController {
                         ]
                     ];
                     
-                    log_message('info', "Simple data prepared, returning JSON");
                     return $this->response->setJSON($simpleData);
                 }
                 
                 // Default detailed view for kasir page
-                log_message('info', "Processing detailed view, returning modal view");
                 return view('kasir/detail_tagihan_modal', $data);
             }
             
             // Jika bukan AJAX (halaman penuh), gunakan view dengan layout
-            log_message('info', "Non-AJAX request, returning full page view");
             return view('kasir/detail_tagihan', $data);
             
         } catch (\Exception $e) {
-            log_message('error', "Exception in detailTagihan: " . $e->getMessage());
-            log_message('error', "Stack trace: " . $e->getTraceAsString());
             return $this->response->setJSON(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
     }
@@ -361,9 +340,6 @@ class Kasir extends BaseController {
             $metodeBayar = $request->getPost('metodeBayar');
             $totalTagihan = $request->getPost('totalTagihan');
             
-            // Debug logging
-            log_message('info', "Proses Pembayaran Data: idPasien=$idPasien, tanggal=$tanggal, jumlahBayar=$jumlahBayar, metodeBayar=$metodeBayar, totalTagihan=$totalTagihan");
-            
             // Normalisasi metode pembayaran sesuai dengan enum database
             $metodeMap = [
                 'cash' => 'tunai',
@@ -372,7 +348,6 @@ class Kasir extends BaseController {
             ];
             
             $metodeBayarNormalized = isset($metodeMap[strtolower($metodeBayar)]) ? $metodeMap[strtolower($metodeBayar)] : 'tunai';
-            log_message('info', "Metode Bayar original: $metodeBayar, normalized: $metodeBayarNormalized");
             
             // Validasi input
             if (!$idPasien || !$tanggal || !$jumlahBayar || !$metodeBayar) {
@@ -418,7 +393,6 @@ class Kasir extends BaseController {
                     'status' => 'pending'
                 ];
                 
-                log_message('info', "Created new tagihan for pasien tanpa resep: " . json_encode($tagihan));
             } else {
                 $totalBiaya = $tagihan['total_biaya'];
             }
@@ -441,22 +415,12 @@ class Kasir extends BaseController {
                 'keterangan' => $isNewTagihan ? 'Pembayaran Konsultasi & Admin - ' . ucfirst($metodeBayarNormalized) : 'Pembayaran berhasil - ' . ucfirst($metodeBayarNormalized)
             ];
             
-            log_message('info', "=== PROSES PEMBAYARAN ===");
-            log_message('info', "Update Data: " . json_encode($updateData));
-            log_message('info', "Tagihan ID to update: " . $tagihan['id_tagihan']);
-            log_message('info', "Metode Bayar dari POST: " . $metodeBayar);
-            log_message('info', "Total Biaya: " . $totalBiaya);
-            log_message('info', "Jumlah Bayar (float): " . floatval($jumlahBayar));
-            log_message('info', "Kembalian (calculated): " . $kembalian);
             
             $updateResult = $tagihanModel->update($tagihan['id_tagihan'], $updateData);
             
-            log_message('info', "Update Result: " . ($updateResult ? 'SUCCESS' : 'FAILED'));
             
             // Verifikasi data tersimpan
             $verifyTagihan = $tagihanModel->find($tagihan['id_tagihan']);
-            log_message('info', "Verifikasi setelah update - metode_pembayaran: " . ($verifyTagihan['metode_pembayaran'] ?? 'NULL'));
-            log_message('info', "Verifikasi data lengkap: " . json_encode($verifyTagihan));
             
             if ($updateResult) {
                 // Update status antrian pasien menjadi 'Selesai' (menggunakan id_antrian_perawat)
@@ -472,9 +436,7 @@ class Kasir extends BaseController {
                         ->where('id', $antrianPoli['id_antrian_perawat'])
                         ->update(['status' => 'Selesai']);
                     
-                    log_message('info', "Updated antrian id=" . $antrianPoli['id_antrian_perawat'] . " status to Selesai for no_rm: " . $idPasien);
                 } else {
-                    log_message('warning', "No antrian_poli or id_antrian_perawat found for no_rm: " . $idPasien);
                 }
                 
                 
@@ -544,7 +506,6 @@ class Kasir extends BaseController {
     public function exportExcel()
     {
         try {
-            log_message('info', '========== EXPORT EXCEL STARTED ==========');
             
             $tagihanModel = new TagihanModel();
             
@@ -553,7 +514,6 @@ class Kasir extends BaseController {
             $tanggalSampai = $this->request->getGet('tanggal_sampai');
             $search = $this->request->getGet('search');
             
-            log_message('info', 'Filters - Dari: ' . ($tanggalDari ?? 'NULL') . ', Sampai: ' . ($tanggalSampai ?? 'NULL') . ', Search: ' . ($search ?? 'NULL'));
             
             // Build query
             $builder = $tagihanModel->builder()
@@ -580,32 +540,18 @@ class Kasir extends BaseController {
             
             $riwayat_pembayaran = $builder->get()->getResultArray();
             
-            log_message('info', 'Query executed - Total records: ' . count($riwayat_pembayaran));
-            
-            if (count($riwayat_pembayaran) > 0) {
-                log_message('info', 'Sample first record: ' . json_encode($riwayat_pembayaran[0]));
-                // Log semua data untuk debug
-                foreach ($riwayat_pembayaran as $idx => $record) {
-                    log_message('info', "Record #$idx - No.RM: {$record['no_rm']}, Nama: {$record['nama_pasien']}, Kasir: {$record['nama_kasir']}, Tanggal: {$record['tanggal_bayar']}");
-                }
-            }
-            
             // Load template Excel
             $templatePath = APPPATH . 'Templates/excel/template_riwayat_pembayaran.xlsx';
             
-            log_message('info', 'Template path: ' . $templatePath);
             
             if (!file_exists($templatePath)) {
-                log_message('error', 'Template not found at: ' . $templatePath);
                 throw new \Exception('Template Excel tidak ditemukan di: ' . $templatePath);
             }
             
-            log_message('info', 'Loading template...');
             $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
             $spreadsheet = $reader->load($templatePath);
             $sheet = $spreadsheet->getActiveSheet();
             
-            log_message('info', 'Template loaded successfully');
             
             // Replace periode placeholder
             $periode = 'Semua Data';
@@ -617,7 +563,6 @@ class Kasir extends BaseController {
             // Remove sample data row (row 6)
             $sheet->removeRow(6);
             
-            log_message('info', 'Sample row removed, starting data insertion...');
             
             // Insert data rows starting from row 6
             $row = 6;
@@ -628,7 +573,6 @@ class Kasir extends BaseController {
             foreach ($riwayat_pembayaran as $data) {
                 // Skip jika data tidak valid
                 if (empty($data['no_rm']) || empty($data['tanggal_bayar'])) {
-                    log_message('warning', 'Skipping invalid record: ' . json_encode($data));
                     $skippedCount++;
                     continue;
                 }
@@ -639,7 +583,6 @@ class Kasir extends BaseController {
                     $namaKasir = 'System';
                 }
                 
-                log_message('info', "Inserting row $row: No={$no}, RM={$data['no_rm']}, Pasien={$data['nama_pasien']}, Kasir={$namaKasir}");
                 
                 $sheet->setCellValue('A' . $row, $no);
                 $sheet->setCellValue('B' . $row, date('d/m/Y H:i', strtotime($data['tanggal_bayar'])));
@@ -680,7 +623,6 @@ class Kasir extends BaseController {
                 $no++;
             }
             
-            log_message('info', 'Data inserted successfully. Valid rows: ' . ($row - 6) . ', Skipped: ' . $skippedCount . ', Total pendapatan: ' . $totalPendapatan);
             
             // Total row - update placeholder values
             $totalRow = $row;
@@ -715,7 +657,6 @@ class Kasir extends BaseController {
             $sheet->setCellValue('A' . $printRow, 'Dicetak pada: ' . date('d/m/Y H:i:s'));
             $sheet->mergeCells('A' . $printRow . ':G' . $printRow);
             
-            log_message('info', 'Preparing file for download...');
             
             // Set filename
             $filename = 'Riwayat_Pembayaran_' . date('d-m-Y_His') . '.xlsx';
@@ -727,16 +668,12 @@ class Kasir extends BaseController {
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             header('Cache-Control: max-age=0');
             
-            log_message('info', 'Writing file: ' . $filename);
             
             $writer->save('php://output');
             
-            log_message('info', '========== EXPORT EXCEL COMPLETED ==========');
             exit;
             
         } catch (\Exception $e) {
-            log_message('error', 'Export Excel Error: ' . $e->getMessage());
-            log_message('error', 'Stack trace: ' . $e->getTraceAsString());
             throw $e;
         }
     }
@@ -841,7 +778,6 @@ class Kasir extends BaseController {
             return view('kasir/print_tagihan', $data);
             
         } catch (\Exception $e) {
-            log_message('error', "Exception in printTagihan: " . $e->getMessage());
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Tagihan tidak ditemukan');
         }
     }
